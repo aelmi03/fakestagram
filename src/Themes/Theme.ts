@@ -3,15 +3,19 @@ import { DefaultTheme } from "styled-components";
 const Theme: DefaultTheme = {
   palette: {
     primary: {
-      main: "FFFFFF",
+      main: "#fafafa",
       contrastText: "#000000",
     },
+    primaryLight: "#ffffff",
     secondary: {
       main: "#0095f6",
       contrastText: "#FFFFFF",
     },
+    common: {
+      white: "#FFFFFF",
+      black: "#000000",
+    },
     lightRed: "#efefef",
-    neutral: "#ed4956",
   },
   primaryFont: `Montserrat sans-serif`,
 };
