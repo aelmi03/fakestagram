@@ -14,8 +14,10 @@ const Theme: DefaultTheme = {
     common: {
       white: "#FFFFFF",
       black: "#000000",
+      grey: "#dbdbdb",
     },
-    lightRed: "#efefef",
+    darkGrey: "#efefef",
+    lightRed: "#ed4956",
   },
   primaryFont: `Montserrat sans-serif`,
 };

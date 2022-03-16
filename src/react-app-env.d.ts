@@ -12,9 +12,11 @@ declare module "styled-components" {
       secondary: IPallette;
       lightRed: string;
       primaryLight: string;
+      darkGrey: string;
       common: {
         black: string;
         white: string;
+        grey: string;
       };
     };
     primaryFont: string;

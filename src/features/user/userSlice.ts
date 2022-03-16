@@ -4,9 +4,7 @@ import { RootState } from "../../app/store";
 type User = {
   name: string;
 };
-const initialUser: User = {
-  name: "placeholder",
-};
+const initialUser: User = {} as User;
 export const userSlice = createSlice({
   name: "user",
   initialState: initialUser,
