@@ -6,6 +6,7 @@ const StyledInput = styled.input`
   padding: 0.7rem 0.5rem;
   font-family: sans-serif;
   font-size: 1.3rem;
+  position: relative;
   background-color: ${({ theme }) => theme.palette.primary.main};
 `;
 

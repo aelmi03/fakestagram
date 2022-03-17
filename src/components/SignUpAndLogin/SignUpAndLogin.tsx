@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import Login from "./Login";
+import Signup from "./Signup";
 import Switch from "./Switch";
 
 const SignUpAndLogin = () => {
   return (
     <SignUpAndLoginWrapper>
-      <Login />
+      <Signup />
       <Switch />
     </SignUpAndLoginWrapper>
   );

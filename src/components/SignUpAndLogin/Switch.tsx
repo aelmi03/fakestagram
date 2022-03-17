@@ -13,7 +13,7 @@ const SwitchWrapper = styled.div`
   width: min(100%, 350px);
   display: flex;
   justify-content: center;
-  padding: 2rem;
+  padding: 3rem;
 `;
 const SwitchText = styled.p`
   font-size: 1.45rem;
@@ -22,6 +22,7 @@ const SwitchText = styled.p`
 
 const SwitchLink = styled.a`
   font-size: 1.45rem;
+  cursor: pointer;
   font-family: sans-serif;
   color: ${({ theme }) => theme.palette.secondary.main};
   font-family: ${({ theme }) => theme.palette.secondary.main};
