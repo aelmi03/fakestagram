@@ -2,15 +2,19 @@ import FormContainer from "./FormContainer";
 import Heading from "./Heading";
 import StyledInput from "./StyledInput";
 import FormButton from "./FormButton";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 const Signup = () => {
   const formRef = useRef<HTMLFormElement>(null);
   const [emailAddress, setEmailAddress] = useState("");
   const [fullName, setFullName] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [validForm, setValidForm] = useState(false);
+  useEffect(() => {
+    setValidForm(!formRef.current?.checkValidity());
+  }, [emailAddress, password, userName, fullName]);
   return (
-    <FormContainer action="" ref={formRef}>
+    <FormContainer ref={formRef}>
       <Heading>Fakestagram</Heading>
       <StyledInput
         placeholder="Email Address"
@@ -38,7 +42,7 @@ const Signup = () => {
         value={password}
         onChange={(e) => setPassword(e.currentTarget.value)}
       />
-      <FormButton disabled={true}>Sign up</FormButton>
+      <FormButton disabled={validForm}>Sign up</FormButton>
     </FormContainer>
   );
 };
