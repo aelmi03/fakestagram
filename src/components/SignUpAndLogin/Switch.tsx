@@ -13,7 +13,11 @@ const SwitchWrapper = styled.div`
   width: min(100%, 350px);
   display: flex;
   justify-content: center;
-  padding: 3rem;
+  padding: 2.4rem;
+  @media only screen and (min-width: 350px) {
+    background-color: ${({ theme }) => theme.palette.common.white};
+    border: 1px solid ${({ theme }) => theme.palette.common.grey};
+  }
 `;
 const SwitchText = styled.p`
   font-size: 1.45rem;

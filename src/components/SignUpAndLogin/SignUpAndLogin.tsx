@@ -18,7 +18,11 @@ const SignUpAndLoginWrapper = styled.div`
   display: grid;
   justify-items: center;
   align-content: center;
+  gap: 1.3rem;
   background-color: ${({ theme }) => theme.palette.common.white};
+  @media only screen and (max-width: 600px) {
+    background-color: ${({ theme }) => theme.palette.primary.main};
+  }
 `;
 
 export default SignUpAndLogin;

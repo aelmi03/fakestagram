@@ -4,12 +4,12 @@ import StyledInput from "./StyledInput";
 import FormButton from "./FormButton";
 const Signup = () => {
   return (
-    <FormContainer>
+    <FormContainer action="game">
       <Heading>Fakestagram</Heading>
-      <StyledInput placeholder="Email Address" />
-      <StyledInput placeholder="Full name" />
-      <StyledInput placeholder="Username" />
-      <StyledInput placeholder="Password" />
+      <StyledInput placeholder="Email Address" required type="email" />
+      <StyledInput placeholder="Full name" required />
+      <StyledInput placeholder="Username" required />
+      <StyledInput placeholder="Password" type="password" required />
       <FormButton>Sign up</FormButton>
     </FormContainer>
   );

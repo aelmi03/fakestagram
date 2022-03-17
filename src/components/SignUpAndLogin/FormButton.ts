@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
 const FormButton = styled.button`
-  width: 90%;
-  font-family: ${({ theme }) => theme.primaryFont};
-  font-size: 1.5rem;
+  width: 84%;
+  font-family: sans-serif;
+  font-size: 1.35rem;
   text-align: center;
   padding: 0.7rem;
   font-weight: bold;
