@@ -1,5 +1,5 @@
 import FormContainer from "./FormContainer";
-import Heading from "./Heading";
+import Heading from "../utils/Heading";
 import StyledInput from "./StyledInput";
 import FormButton from "./FormButton";
 import React, { useRef, useState, useEffect } from "react";

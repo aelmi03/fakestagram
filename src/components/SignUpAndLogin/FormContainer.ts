@@ -11,6 +11,9 @@ const FormContainer = styled.form`
   @media only screen and (min-width: 350px) {
     border: 1px solid ${({ theme }) => theme.palette.common.grey};
   }
+  > :first-child {
+    margin-bottom: 2rem;
+  }
 `;
 
 export default FormContainer;
