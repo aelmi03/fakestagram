@@ -3,8 +3,10 @@ import styled from "styled-components";
 const StyledInput = styled.input`
   width: 80%;
   border: 1px solid ${({ theme }) => theme.palette.common.grey};
-  padding: 0.8rem;
+  padding: 0.7rem 0.5rem;
   font-family: sans-serif;
+  font-size: 1.3rem;
+  background-color: ${({ theme }) => theme.palette.primary.main};
 `;
 
 export default StyledInput;

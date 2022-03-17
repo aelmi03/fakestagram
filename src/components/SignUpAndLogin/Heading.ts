@@ -1,9 +1,11 @@
 import styled from "styled-components";
 
 const Heading = styled.h1`
-  font-family: 2.5rem;
+  font-size: 4.5rem;
+  font-weight: 700;
   font-family: "Dancing Script", cursive;
   color: ${({ theme }) => theme.palette.common.black};
+  margin-bottom: 2rem;
 `;
 
 export default Heading;

@@ -19,7 +19,7 @@ const Theme: DefaultTheme = {
     darkGrey: "#efefef",
     lightRed: "#ed4956",
   },
-  primaryFont: `Montserrat sans-serif`,
+  primaryFont: `Montserrat, sans-serif`,
 };
 
 export default Theme;

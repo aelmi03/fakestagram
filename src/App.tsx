@@ -1,7 +1,8 @@
 import React from "react";
+import SignUpAndLogin from "./components/SignUpAndLogin/SignUpAndLogin";
 
 function App() {
-  return <div></div>;
+  return <SignUpAndLogin />;
 }
 
 export default App;

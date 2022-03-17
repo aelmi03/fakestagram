@@ -1,7 +1,12 @@
 import styled from "styled-components";
+import Login from "./Login";
 
 const SignUpAndLogin = () => {
-  return <SignUpAndLoginWrapper></SignUpAndLoginWrapper>;
+  return (
+    <SignUpAndLoginWrapper>
+      <Login />
+    </SignUpAndLoginWrapper>
+  );
 };
 
 const SignUpAndLoginWrapper = styled.div`
@@ -10,7 +15,7 @@ const SignUpAndLoginWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: ${({ theme }) => theme.palette.primary.main};
+  background-color: ${({ theme }) => theme.palette.common.white};
 `;
 
 export default SignUpAndLogin;
