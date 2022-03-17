@@ -10,6 +10,10 @@ const FormButton = styled.button`
   margin-top: 1rem;
   background-color: ${({ theme }) => theme.palette.secondary.main};
   color: ${({ theme }) => theme.palette.secondary.contrastText};
+  :disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
 `;
 
 export default FormButton;
