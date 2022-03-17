@@ -1,10 +1,17 @@
 import styled from "styled-components";
 
-const Switch = () => {
+interface IProps {
+  onClick: () => void;
+  status: string;
+}
+const Switch = ({ onClick, status }: IProps) => {
   return (
     <SwitchWrapper>
       <SwitchText>
-        Have an account? <SwitchLink> Log in</SwitchLink>
+        {status === "Log In" ? "Don't have an account? " : "Have an account? "}{" "}
+        <SwitchLink onClick={onClick}>
+          {status === "Log In" ? "Sign up" : "Log in"}
+        </SwitchLink>
       </SwitchText>
     </SwitchWrapper>
   );
@@ -20,12 +27,12 @@ const SwitchWrapper = styled.div`
   }
 `;
 const SwitchText = styled.p`
-  font-size: 1.45rem;
+  font-size: 1.4rem;
   font-family: sans-serif;
 `;
 
 const SwitchLink = styled.a`
-  font-size: 1.45rem;
+  font-size: 1.4rem;
   cursor: pointer;
   font-family: sans-serif;
   color: ${({ theme }) => theme.palette.secondary.main};
