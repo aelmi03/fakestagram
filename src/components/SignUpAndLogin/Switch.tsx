@@ -21,7 +21,7 @@ const SwitchWrapper = styled.div`
   display: flex;
   justify-content: center;
   padding: 2.4rem;
-  @media only screen and (min-width: 350px) {
+  @media only screen and (min-width: 540px) {
     background-color: ${({ theme }) => theme.palette.common.white};
     border: 1px solid ${({ theme }) => theme.palette.common.grey};
   }

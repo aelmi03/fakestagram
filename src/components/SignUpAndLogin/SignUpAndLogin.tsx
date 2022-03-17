@@ -29,7 +29,7 @@ const SignUpAndLoginWrapper = styled.div`
   align-content: center;
   gap: 1.3rem;
   background-color: ${({ theme }) => theme.palette.common.white};
-  @media only screen and (max-width: 600px) {
+  @media only screen and (min-width: 540px) {
     background-color: ${({ theme }) => theme.palette.primary.main};
   }
 `;

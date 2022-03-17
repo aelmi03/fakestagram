@@ -8,7 +8,7 @@ const FormContainer = styled.form`
   gap: 0.8rem;
   width: min(100%, 350px);
   background-color: ${({ theme }) => theme.palette.common.white};
-  @media only screen and (min-width: 350px) {
+  @media only screen and (min-width: 540px) {
     border: 1px solid ${({ theme }) => theme.palette.common.grey};
   }
   > :first-child {
