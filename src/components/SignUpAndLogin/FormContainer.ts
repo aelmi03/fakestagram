@@ -5,7 +5,7 @@ const FormContainer = styled.div`
   padding: 2rem;
   flex-flow: column nowrap;
   align-items: center;
-  gap: 1rem;
+  gap: 0.5rem;
   width: min(100%, 350px);
   background-color: ${({ theme }) => theme.palette.common.white};
 `;
