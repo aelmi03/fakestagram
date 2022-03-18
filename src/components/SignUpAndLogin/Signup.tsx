@@ -4,6 +4,13 @@ import StyledInput from "./StyledInput";
 import FormButton from "./FormButton";
 import React, { useRef, useState, useEffect } from "react";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  query,
+  collection,
+  getDocs,
+  getFirestore,
+  where,
+} from "firebase/firestore";
 import WarningText from "../utils/WarningText";
 
 const Signup = () => {
@@ -14,21 +21,29 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [validForm, setValidForm] = useState(false);
   const [warningText, setWarningText] = useState("");
-  const signUp = (e: React.FormEvent<HTMLFormElement>) => {
+  const signUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const auth = getAuth();
-    createUserWithEmailAndPassword(auth, emailAddress, password)
-      .then((userCredential) => {
-        // Signed in
-        const user = userCredential.user;
-        // ...
-      })
-      .catch(() => {
-        setWarningText(
-          "Email address already associated with a fakestagram account"
-        );
-        // ..
-      });
+    const usersQuery = query(
+      collection(getFirestore(), "users"),
+      where("username", "==", `${userName}`)
+    );
+    const userDocs = await getDocs(usersQuery);
+    console.log(userDocs.docs);
+    if (userDocs.docs.length === 1) {
+      setWarningText("Username is taken, please choose another one");
+      return;
+    }
+    try {
+      const user = (
+        await createUserWithEmailAndPassword(getAuth(), emailAddress, password)
+      ).user;
+    } catch (e) {
+      console.log(e);
+      setWarningText(
+        "Email address is already associated with a fakestagram account"
+      );
+      return;
+    }
   };
   useEffect(() => {
     setValidForm(!formRef.current?.checkValidity());
@@ -60,6 +75,7 @@ const Signup = () => {
         type="password"
         required
         value={password}
+        minLength={6}
         onChange={(e) => setPassword(e.currentTarget.value)}
       />
       <WarningText>{warningText}</WarningText>

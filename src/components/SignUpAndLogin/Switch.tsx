@@ -36,7 +36,7 @@ const SwitchLink = styled.a`
   cursor: pointer;
   font-family: sans-serif;
   color: ${({ theme }) => theme.palette.secondary.main};
-  font-family: ${({ theme }) => theme.palette.secondary.main};
+  width: auto;
 `;
 
 export default Switch;
