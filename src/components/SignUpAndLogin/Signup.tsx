@@ -57,18 +57,21 @@ const Signup = () => {
         type="email"
         value={emailAddress}
         onChange={(e) => setEmailAddress(e.currentTarget.value)}
+        title="Email address"
       />
       <StyledInput
         placeholder="Full name"
         required
         value={fullName}
         onChange={(e) => setFullName(e.currentTarget.value)}
+        title="Full name"
       />
       <StyledInput
         placeholder="Username"
         required
         value={userName}
         onChange={(e) => setUserName(e.currentTarget.value)}
+        title="Username"
       />
       <StyledInput
         placeholder="Password"
@@ -77,6 +80,7 @@ const Signup = () => {
         value={password}
         minLength={6}
         onChange={(e) => setPassword(e.currentTarget.value)}
+        title="Password (minimum of 6 characters)"
       />
       <WarningText>{warningText}</WarningText>
       <FormButton disabled={validForm} type="submit">

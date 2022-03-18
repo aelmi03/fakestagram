@@ -9,6 +9,7 @@ const Login = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [validForm, setValidForm] = useState(false);
+  const [warningText, setWarningText] = useState("");
   useEffect(() => {
     setValidForm(!formRef.current?.checkValidity());
   }, [emailAddress, password]);
@@ -21,6 +22,7 @@ const Login = () => {
         type="email"
         value={emailAddress}
         onChange={(e) => setEmailAddress(e.currentTarget.value)}
+        title="Email address"
       />
       <StyledInput
         placeholder="Password"
@@ -28,8 +30,9 @@ const Login = () => {
         required
         value={password}
         onChange={(e) => setPassword(e.currentTarget.value)}
+        title="Password (minimum of 6 characters)"
       />
-      <WarningText>That username is already taken</WarningText>
+      <WarningText>{warningText}</WarningText>
       <FormButton disabled={validForm}>Log in</FormButton>
     </FormContainer>
   );
