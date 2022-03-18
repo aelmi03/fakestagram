@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const FormContainer = styled.form`
   display: grid;
-  padding: 4rem 2rem;
+  padding: 4rem 4rem;
   align-items: center;
   justify-items: center;
   gap: 0.8rem;

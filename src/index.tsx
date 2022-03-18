@@ -19,3 +19,5 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
+
+// Learn more about service workers: https://bit.ly/CRA-PWA

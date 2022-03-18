@@ -4,6 +4,8 @@ import StyledInput from "./StyledInput";
 import FormButton from "./FormButton";
 import React, { useRef, useState, useEffect } from "react";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import FlexContainer from "../utils/FlexContainer";
+import Label from "../utils/Label";
 import {
   query,
   collection,
@@ -51,37 +53,53 @@ const Signup = () => {
   return (
     <FormContainer ref={formRef} onSubmit={signUp}>
       <Heading>Fakestagram</Heading>
-      <StyledInput
-        placeholder="Email Address"
-        required
-        type="email"
-        value={emailAddress}
-        onChange={(e) => setEmailAddress(e.currentTarget.value)}
-        title="Email address"
-      />
-      <StyledInput
-        placeholder="Full name"
-        required
-        value={fullName}
-        onChange={(e) => setFullName(e.currentTarget.value)}
-        title="Full name"
-      />
-      <StyledInput
-        placeholder="Username"
-        required
-        value={userName}
-        onChange={(e) => setUserName(e.currentTarget.value)}
-        title="Username"
-      />
-      <StyledInput
-        placeholder="Password"
-        type="password"
-        required
-        value={password}
-        minLength={6}
-        onChange={(e) => setPassword(e.currentTarget.value)}
-        title="Password (minimum of 6 characters)"
-      />
+      <FlexContainer direction="column" alignItems="start" gap="0.3rem">
+        <Label htmlFor="email">Email Address</Label>
+        <StyledInput
+          placeholder="Johndoe@gmail.com"
+          required
+          id="email"
+          type="email"
+          value={emailAddress}
+          onChange={(e) => setEmailAddress(e.currentTarget.value)}
+          title="Email address"
+        />
+      </FlexContainer>
+      <FlexContainer direction="column" alignItems="start" gap="0.3rem">
+        <Label htmlFor="full name">Full Name</Label>
+        <StyledInput
+          placeholder="John Doe"
+          required
+          id="full name"
+          value={fullName}
+          onChange={(e) => setFullName(e.currentTarget.value)}
+          title="Full name"
+        />
+      </FlexContainer>
+
+      <FlexContainer direction="column" alignItems="start" gap="0.3rem">
+        <Label htmlFor="username">Username</Label>
+        <StyledInput
+          placeholder="JohnDoe23"
+          required
+          id="username"
+          value={userName}
+          onChange={(e) => setUserName(e.currentTarget.value)}
+          title="Username"
+        />
+      </FlexContainer>
+      <FlexContainer direction="column" alignItems="start" gap="0.3rem">
+        <Label htmlFor="password">Password (minimum of 6 characters)</Label>
+        <StyledInput
+          type="password"
+          required
+          id="password"
+          value={password}
+          minLength={6}
+          onChange={(e) => setPassword(e.currentTarget.value)}
+          title="Password (minimum of 6 characters)"
+        />
+      </FlexContainer>
       <WarningText>{warningText}</WarningText>
       <FormButton disabled={validForm} type="submit">
         Sign up

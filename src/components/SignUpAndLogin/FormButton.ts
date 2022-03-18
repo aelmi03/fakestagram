@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const FormButton = styled.button`
-  width: 84%;
+  width: 100%;
   font-family: sans-serif;
   font-size: 1.35rem;
   text-align: center;

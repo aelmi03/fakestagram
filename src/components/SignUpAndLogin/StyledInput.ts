@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const StyledInput = styled.input`
-  width: 84%;
+  width: 100%;
   border: 1px solid ${({ theme }) => theme.palette.common.grey};
   padding: 0.7rem 0.5rem;
   font-family: sans-serif;
