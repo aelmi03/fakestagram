@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import WarningText from "../utils/WarningText";
 import Label from "../utils/Label";
 import FlexContainer from "../utils/FlexContainer";
+import { signInWithEmailAndPassword, getAuth, AuthError } from "firebase/auth";
+import { FirebaseError } from "firebase/app";
 
 const Login = () => {
   const formRef = useRef<HTMLFormElement>(null);
@@ -16,8 +18,26 @@ const Login = () => {
   useEffect(() => {
     setValidForm(!formRef.current?.checkValidity());
   }, [emailAddress, password]);
+  const signIn = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      await signInWithEmailAndPassword(getAuth(), emailAddress, password);
+      console.log("signed in :))");
+    } catch (error: any) {
+      const realError = error as FirebaseError;
+      if (realError.message.includes("(auth/user-not-found).")) {
+        setWarningText(
+          "The email address you entered doesn't belong to an account. Please check your email address and try again."
+        );
+      } else {
+        setWarningText(
+          "Sorry, your password was incorrect. Please double-check your password."
+        );
+      }
+    }
+  };
   return (
-    <FormContainer ref={formRef}>
+    <FormContainer ref={formRef} onSubmit={signIn}>
       <Heading>Fakestagram</Heading>
       <FlexContainer direction="column" alignItems="start" gap="0.3rem">
         <Label htmlFor="email">Email Address</Label>
@@ -39,6 +59,7 @@ const Login = () => {
           id="password"
           required
           value={password}
+          minLength={6}
           onChange={(e) => setPassword(e.currentTarget.value)}
           title="Password (minimum of 6 characters)"
         />

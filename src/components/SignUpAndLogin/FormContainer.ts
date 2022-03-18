@@ -5,7 +5,7 @@ const FormContainer = styled.form`
   padding: 4rem 4rem;
   align-items: center;
   justify-items: center;
-  gap: 0.8rem;
+  gap: 1rem;
   width: min(100%, 350px);
   background-color: ${({ theme }) => theme.palette.common.white};
   @media only screen and (min-width: 540px) {
