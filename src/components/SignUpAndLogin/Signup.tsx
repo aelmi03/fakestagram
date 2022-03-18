@@ -3,31 +3,56 @@ import Heading from "../utils/Heading";
 import StyledInput from "./StyledInput";
 import FormButton from "./FormButton";
 import React, { useRef, useState, useEffect } from "react";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, User } from "firebase/auth";
 import FlexContainer from "../utils/FlexContainer";
 import Label from "../utils/Label";
+import { setUser } from "../../features/user/userSlice";
 import {
   query,
   collection,
   getDocs,
   getFirestore,
   where,
+  doc,
+  setDoc,
 } from "firebase/firestore";
 import WarningText from "../utils/WarningText";
+import { useAppDispatch } from "../../app/hooks";
 
 const Signup = () => {
+  const dispatch = useAppDispatch();
+
   const formRef = useRef<HTMLFormElement>(null);
   const [emailAddress, setEmailAddress] = useState("");
   const [fullName, setFullName] = useState("");
-  const [userName, setUserName] = useState("");
+  const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [validForm, setValidForm] = useState(false);
   const [warningText, setWarningText] = useState("");
+  function addUserToDB(user: User) {
+    const userRef = doc(getFirestore(), "users", `${user.uid}`);
+    setDoc(userRef, {
+      fullName,
+      username,
+      id: user.uid,
+      profilePicture:
+        "https://firebasestorage.googleapis.com/v0/b/fakestagram-b535c.appspot.com/o/defaultProfile.jpg?alt=media&token=17d8452b-8df2-4b7d-8671-0c6fa2698703",
+    });
+    dispatch(
+      setUser({
+        fullName,
+        username,
+        id: user.uid,
+        profilePicture:
+          "https://firebasestorage.googleapis.com/v0/b/fakestagram-b535c.appspot.com/o/defaultProfile.jpg?alt=media&token=17d8452b-8df2-4b7d-8671-0c6fa2698703",
+      })
+    );
+  }
   const signUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const usersQuery = query(
       collection(getFirestore(), "users"),
-      where("username", "==", `${userName}`)
+      where("username", "==", `${username}`)
     );
     const userDocs = await getDocs(usersQuery);
     console.log(userDocs.docs);
@@ -39,6 +64,7 @@ const Signup = () => {
       const user = (
         await createUserWithEmailAndPassword(getAuth(), emailAddress, password)
       ).user;
+      addUserToDB(user);
     } catch (e) {
       console.log(e);
       setWarningText(
@@ -49,7 +75,7 @@ const Signup = () => {
   };
   useEffect(() => {
     setValidForm(!formRef.current?.checkValidity());
-  }, [emailAddress, password, userName, fullName]);
+  }, [emailAddress, password, username, fullName]);
   return (
     <FormContainer ref={formRef} onSubmit={signUp}>
       <Heading>Fakestagram</Heading>
@@ -85,7 +111,7 @@ const Signup = () => {
           placeholder="JohnDoe23"
           required
           id="username"
-          value={userName}
+          value={username}
           onChange={(e) =>
             setUserName(
               e.currentTarget.value.replace(/\s/g, "").replace(/\W/g, "")
