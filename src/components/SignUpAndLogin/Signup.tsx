@@ -72,7 +72,9 @@ const Signup = () => {
           required
           id="full name"
           value={fullName}
-          onChange={(e) => setFullName(e.currentTarget.value)}
+          onChange={(e) =>
+            setFullName(e.currentTarget.value.replace(/[^a-zA-Z ]/g, ""))
+          }
           title="Full name"
         />
       </FlexContainer>
@@ -84,7 +86,11 @@ const Signup = () => {
           required
           id="username"
           value={userName}
-          onChange={(e) => setUserName(e.currentTarget.value)}
+          onChange={(e) =>
+            setUserName(
+              e.currentTarget.value.replace(/\s/g, "").replace(/\W/g, "")
+            )
+          }
           title="Username"
         />
       </FlexContainer>
