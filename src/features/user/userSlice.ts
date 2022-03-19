@@ -7,15 +7,18 @@ export type User = {
   id: string;
   profilePicture: string;
 };
-const initialUser: User = {} as User;
+const initialUser: User = {
+  fullName: "",
+  username: "",
+  id: "",
+  profilePicture: "",
+} as User;
 export const userSlice = createSlice({
   name: "user",
   initialState: initialUser,
   reducers: {
     setUser(state, action: PayloadAction<User>) {
-      console.log("User signed in");
-      console.log(action.payload);
-      state = action.payload;
+      return action.payload;
     },
   },
 });
