@@ -1,37 +1,28 @@
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import { ThemeProvider } from "styled-components";
 import Theme from "../../Themes/Theme";
-import React from "react";
 import userEvent from "@testing-library/user-event";
 import Signup from "../../components/SignUpAndLogin/Signup";
 import { store } from "../../app/store";
 import { Provider } from "react-redux";
-import { getAuth, createUserWithEmailAndPassword, User } from "firebase/auth";
-import {
-  query,
-  collection,
-  getDocs,
-  getFirestore,
-  where,
-  doc,
-  setDoc,
-} from "firebase/firestore";
+
 let mockEmailAlreadyExists = false;
 jest.mock("firebase/auth", () => {
   return {
+    getAuth: jest.fn(),
     createUserWithEmailAndPassword: async () => {
       if (mockEmailAlreadyExists) {
         return Promise.reject();
       }
       return {
         user: {
-          uid: 123,
+          uid: "123",
         },
       };
     },
   };
 });
-let mockNumberOfPeopleWithThatUsername: number = 0;
+let mockNumberOfPeopleWithThatUsername = 0;
 jest.mock("firebase/firestore", () => {
   return {
     query: jest.fn(),
@@ -60,6 +51,7 @@ describe("Sign up component", () => {
       </ThemeProvider>
     );
     mockNumberOfPeopleWithThatUsername = 0;
+    mockEmailAlreadyExists = false;
   });
   it("The submit button is disabled until the form is properly filled out", () => {
     const signUpButton = screen.getByRole("button", { name: "Sign up" });
@@ -129,6 +121,7 @@ describe("Sign up component", () => {
         /Email address is already associated with a fakestagram account/i
       )
     ).not.toBeInTheDocument();
+
     mockEmailAlreadyExists = true;
     await act(async () => {
       userEvent.type(emailInput, "johndoe@gmail.com");
@@ -142,5 +135,30 @@ describe("Sign up component", () => {
         /Email address is already associated with a fakestagram account/i
       )
     ).toBeInTheDocument();
+  });
+  it("Sets the user in the redux store to the created user if everything is filled out properly and there are no errors", async () => {
+    const signUpButton = screen.getByRole("button", { name: "Sign up" });
+    const emailInput = screen.getByLabelText("Email Address");
+    const fullNameInput = screen.getByLabelText("Full Name");
+    const usernameInput = screen.getByLabelText("Username");
+    const passwordInput = screen.getByLabelText(
+      "Password (minimum of 6 characters)"
+    );
+    await act(async () => {
+      userEvent.type(emailInput, "johndoe@gmail.com");
+      userEvent.type(fullNameInput, "John Doe");
+      userEvent.type(usernameInput, "johnDoe23");
+      userEvent.type(passwordInput, "johndoe24");
+      userEvent.click(signUpButton);
+    });
+    setTimeout(() => {
+      expect(store.getState().user).toEqual({
+        fullName: "johndoe@gmail.com",
+        username: "John Doe",
+        profilePicture:
+          "https://firebasestorage.googleapis.com/v0/b/fakestagram-b535c.appspot.com/o/defaultProfile.jpg?alt=media&token=17d8452b-8df2-4b7d-8671-0c6fa2698703",
+        id: "123",
+      });
+    }, 300);
   });
 });

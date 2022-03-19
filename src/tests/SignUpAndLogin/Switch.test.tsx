@@ -2,7 +2,6 @@ import Switch from "../../components/SignUpAndLogin/Switch";
 import { render, screen } from "@testing-library/react";
 import { ThemeProvider } from "styled-components";
 import Theme from "../../Themes/Theme";
-import React from "react";
 import userEvent from "@testing-library/user-event";
 
 describe("Switch component", () => {
