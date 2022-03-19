@@ -21,7 +21,6 @@ import { useAppDispatch } from "../../app/hooks";
 
 const Signup = () => {
   const dispatch = useAppDispatch();
-
   const formRef = useRef<HTMLFormElement>(null);
   const [emailAddress, setEmailAddress] = useState("");
   const [fullName, setFullName] = useState("");
@@ -30,6 +29,8 @@ const Signup = () => {
   const [validForm, setValidForm] = useState(false);
   const [warningText, setWarningText] = useState("");
   function addUserToDB(user: User) {
+    console.log("ADDING USER TO DB");
+
     const userRef = doc(getFirestore(), "users", `${user.uid}`);
     setDoc(userRef, {
       fullName,
@@ -54,17 +55,22 @@ const Signup = () => {
       collection(getFirestore(), "users"),
       where("username", "==", `${username}`)
     );
+    console.log("WE MESSED UP");
+
     const userDocs = await getDocs(usersQuery);
-    console.log(userDocs.docs);
     if (userDocs.docs.length === 1) {
       setWarningText("Username is taken, please choose another one");
       return;
     }
+
     try {
+      console.log("ONE USER LOL");
+
       const user = (
         await createUserWithEmailAndPassword(getAuth(), emailAddress, password)
       ).user;
       addUserToDB(user);
+      setWarningText("");
     } catch (e) {
       console.log(e);
       setWarningText(
@@ -133,7 +139,7 @@ const Signup = () => {
         />
       </FlexContainer>
       <WarningText>{warningText}</WarningText>
-      <FormButton disabled={validForm} type="submit">
+      <FormButton disabled={validForm} type="submit" name="Sign Up">
         Sign up
       </FormButton>
     </FormContainer>

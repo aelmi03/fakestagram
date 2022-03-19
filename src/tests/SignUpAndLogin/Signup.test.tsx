@@ -144,7 +144,7 @@ describe("Sign up component", () => {
     const passwordInput = screen.getByLabelText(
       "Password (minimum of 6 characters)"
     );
-    await act(async () => {
+    act(() => {
       userEvent.type(emailInput, "johndoe@gmail.com");
       userEvent.type(fullNameInput, "John Doe");
       userEvent.type(usernameInput, "johnDoe23");

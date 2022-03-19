@@ -37,6 +37,7 @@ const Login = () => {
       const user = (
         await signInWithEmailAndPassword(getAuth(), emailAddress, password)
       ).user;
+      setWarningText("");
       getUserFromDB(user);
     } catch (error: any) {
       const realError = error as FirebaseError;
