@@ -7,7 +7,6 @@ import { ThemeProvider } from "styled-components";
 import GlobalStyle from "./Themes/GlobalStyle";
 import Theme from "./Themes/Theme";
 import "./firebase";
-
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={Theme}>

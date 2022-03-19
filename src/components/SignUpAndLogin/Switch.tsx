@@ -8,8 +8,8 @@ const Switch = ({ onClick, status }: IProps) => {
   return (
     <SwitchWrapper>
       <SwitchText>
-        {status === "Log In" ? "Don't have an account? " : "Have an account? "}{" "}
-        <SwitchLink onClick={onClick}>
+        {status === "Log In" ? "Don't have an account? " : "Have an account? "}
+        <SwitchLink onClick={onClick} data-testid="form link">
           {status === "Log In" ? "Sign up" : "Log in"}
         </SwitchLink>
       </SwitchText>
