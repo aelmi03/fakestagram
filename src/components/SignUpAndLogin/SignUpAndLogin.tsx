@@ -5,7 +5,7 @@ import Signup from "./Signup";
 import Switch from "./Switch";
 
 const SignUpAndLogin = () => {
-  const [status, setStatus] = useState("Sign Up");
+  const [status, setStatus] = useState("Log In");
   const changeStatus = () => {
     if (status === "Sign Up") {
       setStatus("Log In");
