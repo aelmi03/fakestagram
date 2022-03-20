@@ -29,7 +29,6 @@ const Signup = () => {
   const [disabledButton, setDisabledButton] = useState(true);
   const [warningText, setWarningText] = useState("");
   function addUserToDB(user: User) {
-    console.log("ADDING USER TO DB");
     const userRef = doc(getFirestore(), "users", `${user.uid}`);
 
     setDoc(userRef, {
@@ -39,8 +38,7 @@ const Signup = () => {
       profilePicture:
         "https://firebasestorage.googleapis.com/v0/b/fakestagram-b535c.appspot.com/o/defaultProfile.jpg?alt=media&token=17d8452b-8df2-4b7d-8671-0c6fa2698703",
     });
-    console.log("full-name", fullName);
-    console.log("user-name", username);
+
     dispatch(
       setUser({
         fullName,
@@ -71,7 +69,7 @@ const Signup = () => {
       ).user;
       addUserToDB(user);
       setWarningText("");
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
       setWarningText(
         "Email address is already associated with a fakestagram account"
