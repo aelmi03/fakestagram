@@ -154,7 +154,6 @@ describe("Login component", () => {
     await act(async () => {
       userEvent.click(logInButton);
     });
-    console.log(mockUser, "mock-user");
     await new Promise((resolve) => setTimeout(resolve, 100));
     expect(store.getState().user).toEqual(mockUser);
   });
