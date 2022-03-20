@@ -1,4 +1,4 @@
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import { ThemeProvider } from "styled-components";
 import Theme from "../../Themes/Theme";
 import userEvent from "@testing-library/user-event";
@@ -61,7 +61,6 @@ describe("Sign up component", () => {
     const passwordInput = screen.getByLabelText(
       "Password (minimum of 6 characters)"
     );
-    screen.debug();
     expect(signUpButton).toBeDisabled();
     userEvent.type(emailInput, "johndoegmail.com");
     userEvent.type(fullNameInput, "John Doe");
@@ -85,7 +84,6 @@ describe("Sign up component", () => {
     userEvent.type(fullNameInput, "John Doe");
     userEvent.type(usernameInput, "johnDoe23");
     userEvent.type(passwordInput, "johndoe24");
-    screen.debug();
     await act(async () => {
       userEvent.click(signUpButton);
     });

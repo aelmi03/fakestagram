@@ -1,5 +1,5 @@
 import SignUpAndLogin from "../../components/SignUpAndLogin";
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { ThemeProvider } from "styled-components";
 import Theme from "../../Themes/Theme";
 import userEvent from "@testing-library/user-event";

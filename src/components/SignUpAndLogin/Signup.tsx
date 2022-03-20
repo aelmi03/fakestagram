@@ -50,7 +50,6 @@ const Signup = () => {
     );
   }
   const signUp = async (e: React.FormEvent<HTMLFormElement>) => {
-    console.log("WASSSUPPPP");
     e.preventDefault();
     const usersQuery = query(
       collection(getFirestore(), "users"),
@@ -70,7 +69,6 @@ const Signup = () => {
       addUserToDB(user);
       setWarningText("");
     } catch (e: any) {
-      console.log(e);
       setWarningText(
         "Email address is already associated with a fakestagram account"
       );
