@@ -64,7 +64,7 @@ beforeEach(() => {
   mockPasswordIsIncorrect = false;
 });
 describe("Login component", () => {
-  it.skip("The login button is disabled until the form is properly filled out", async () => {
+  it("The login button is disabled until the form is properly filled out", async () => {
     const logInButton = screen.getByRole("button", { name: "Log in" });
     const emailInput = screen.getByLabelText("Email Address");
     const passwordInput = screen.getByLabelText(
@@ -88,7 +88,7 @@ describe("Login component", () => {
     userEvent.clear(passwordInput);
     expect(logInButton).toBeDisabled();
   });
-  it.skip("The user will see text telling them the email address doesn't exist if they enter a email address not linked to an account", async () => {
+  it("The user will see text telling them the email address doesn't exist if they enter a email address not linked to an account", async () => {
     const logInButton = screen.getByRole("button", { name: "Log in" });
     const emailInput = screen.getByLabelText("Email Address");
     const passwordInput = screen.getByLabelText(
@@ -139,5 +139,23 @@ describe("Login component", () => {
         "Sorry, your password was incorrect. Please double-check your password."
       )
     ).toBeInTheDocument();
+  });
+  it("will set the user in the redux store after the user successfully signs in", async () => {
+    const logInButton = screen.getByRole("button", { name: "Log in" });
+    const emailInput = screen.getByLabelText("Email Address");
+    const passwordInput = screen.getByLabelText(
+      "Password (minimum of 6 characters)"
+    );
+
+    userEvent.type(emailInput, "johndoe@gmail.com");
+    userEvent.type(passwordInput, "johndoe123");
+    mockUser = { ...store.getState().user };
+    mockUser.username = "JohnDoeTheMocker";
+    await act(async () => {
+      userEvent.click(logInButton);
+    });
+    console.log(mockUser, "mock-user");
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(store.getState().user).toEqual(mockUser);
   });
 });
