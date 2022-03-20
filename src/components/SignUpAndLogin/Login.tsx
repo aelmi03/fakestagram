@@ -21,7 +21,7 @@ const Login = () => {
   const formRef = useRef<HTMLFormElement>(null);
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
-  const [validForm, setValidForm] = useState(false);
+  const [disabledButton, setDisabledButton] = useState(false);
   const [warningText, setWarningText] = useState("");
   const getUserFromDB = async (user: AuthUser) => {
     const userRef = doc(getFirestore(), `users/${user.uid}`);
@@ -29,8 +29,13 @@ const Login = () => {
     dispatch(setUser(userDoc.data() as User));
   };
   useEffect(() => {
-    setValidForm(!formRef.current?.checkValidity() || false);
+    if (formRef.current?.checkValidity() === true) {
+      setDisabledButton(false);
+    } else {
+      setDisabledButton(true);
+    }
   }, [emailAddress, password]);
+
   const signIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -81,7 +86,7 @@ const Login = () => {
         />
       </FlexContainer>
       <WarningText>{warningText}</WarningText>
-      <FormButton disabled={validForm} name="Log in">
+      <FormButton disabled={disabledButton} name="Log in">
         Log in
       </FormButton>
     </FormContainer>
