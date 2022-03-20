@@ -1,4 +1,4 @@
-import { act, render, screen } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import { ThemeProvider } from "styled-components";
 import Theme from "../../Themes/Theme";
 import userEvent from "@testing-library/user-event";
@@ -53,7 +53,7 @@ describe("Sign up component", () => {
     mockNumberOfPeopleWithThatUsername = 0;
     mockEmailAlreadyExists = false;
   });
-  it("The submit button is disabled until the form is properly filled out", () => {
+  it("The sign up button is disabled until the form is properly filled out", () => {
     const signUpButton = screen.getByRole("button", { name: "Sign up" });
     const emailInput = screen.getByLabelText("Email Address");
     const fullNameInput = screen.getByLabelText("Full Name");
@@ -61,12 +61,14 @@ describe("Sign up component", () => {
     const passwordInput = screen.getByLabelText(
       "Password (minimum of 6 characters)"
     );
+    screen.debug();
     expect(signUpButton).toBeDisabled();
-    userEvent.type(emailInput, "johndoe @gmail.com");
+    userEvent.type(emailInput, "johndoegmail.com");
     userEvent.type(fullNameInput, "John Doe");
     userEvent.type(usernameInput, "johnDoe23");
     userEvent.type(passwordInput, "johndoe1234");
     expect(signUpButton).toBeDisabled();
+    userEvent.clear(emailInput);
     userEvent.type(emailInput, "johndoe@gmail.com");
     expect(signUpButton).not.toBeDisabled();
   });
@@ -78,22 +80,21 @@ describe("Sign up component", () => {
     const passwordInput = screen.getByLabelText(
       "Password (minimum of 6 characters)"
     );
+
+    userEvent.type(emailInput, "johndoe@gmail.com");
+    userEvent.type(fullNameInput, "John Doe");
+    userEvent.type(usernameInput, "johnDoe23");
+    userEvent.type(passwordInput, "johndoe24");
+    screen.debug();
     await act(async () => {
-      userEvent.type(emailInput, "johndoe@gmail.com");
-      userEvent.type(fullNameInput, "John Doe");
-      userEvent.type(usernameInput, "johnDoe23");
-      userEvent.type(passwordInput, "johndoe24");
       userEvent.click(signUpButton);
     });
     expect(
       screen.queryByText(/Username is taken, please choose another one/i)
     ).not.toBeInTheDocument();
     mockNumberOfPeopleWithThatUsername = 1;
+
     await act(async () => {
-      userEvent.type(emailInput, "johndoe@gmail.com");
-      userEvent.type(fullNameInput, "John Doe");
-      userEvent.type(usernameInput, "johnDoe23");
-      userEvent.type(passwordInput, "johndoe24");
       userEvent.click(signUpButton);
     });
     expect(
@@ -109,13 +110,14 @@ describe("Sign up component", () => {
       "Password (minimum of 6 characters)"
     );
     mockEmailAlreadyExists = false;
+    userEvent.type(emailInput, "johndoe@gmail.com");
+    userEvent.type(fullNameInput, "John Doe");
+    userEvent.type(usernameInput, "johnDoe23");
+    userEvent.type(passwordInput, "johndoe24");
     await act(async () => {
-      userEvent.type(emailInput, "johndoe@gmail.com");
-      userEvent.type(fullNameInput, "John Doe");
-      userEvent.type(usernameInput, "johnDoe23");
-      userEvent.type(passwordInput, "johndoe24");
       userEvent.click(signUpButton);
     });
+
     expect(
       screen.queryByText(
         /Email address is already associated with a fakestagram account/i
@@ -124,10 +126,6 @@ describe("Sign up component", () => {
 
     mockEmailAlreadyExists = true;
     await act(async () => {
-      userEvent.type(emailInput, "johndoe@gmail.com");
-      userEvent.type(fullNameInput, "John Doe");
-      userEvent.type(usernameInput, "johnDoe23");
-      userEvent.type(passwordInput, "johndoe24");
       userEvent.click(signUpButton);
     });
     expect(
@@ -144,21 +142,19 @@ describe("Sign up component", () => {
     const passwordInput = screen.getByLabelText(
       "Password (minimum of 6 characters)"
     );
-    act(() => {
-      userEvent.type(emailInput, "johndoe@gmail.com");
-      userEvent.type(fullNameInput, "John Doe");
-      userEvent.type(usernameInput, "johnDoe23");
-      userEvent.type(passwordInput, "johndoe24");
-      userEvent.click(signUpButton);
+    userEvent.type(emailInput, "johndoe@gmail.com");
+    userEvent.type(fullNameInput, "John Doe");
+    userEvent.type(usernameInput, "johnDoe23");
+    userEvent.type(passwordInput, "johndoe24");
+    userEvent.click(signUpButton);
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    expect(store.getState().user).toEqual({
+      fullName: "John Doe",
+      username: "johnDoe23",
+      profilePicture:
+        "https://firebasestorage.googleapis.com/v0/b/fakestagram-b535c.appspot.com/o/defaultProfile.jpg?alt=media&token=17d8452b-8df2-4b7d-8671-0c6fa2698703",
+      id: "123",
     });
-    setTimeout(() => {
-      expect(store.getState().user).toEqual({
-        fullName: "johndoe@gmail.com",
-        username: "John Doe",
-        profilePicture:
-          "https://firebasestorage.googleapis.com/v0/b/fakestagram-b535c.appspot.com/o/defaultProfile.jpg?alt=media&token=17d8452b-8df2-4b7d-8671-0c6fa2698703",
-        id: "123",
-      });
-    }, 300);
   });
 });

@@ -29,7 +29,7 @@ const Login = () => {
     dispatch(setUser(userDoc.data() as User));
   };
   useEffect(() => {
-    setValidForm(!formRef.current?.checkValidity());
+    setValidForm(!formRef.current?.checkValidity() || false);
   }, [emailAddress, password]);
   const signIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -53,7 +53,7 @@ const Login = () => {
     }
   };
   return (
-    <FormContainer ref={formRef} onSubmit={signIn}>
+    <FormContainer ref={formRef} onSubmit={signIn} data-testid="form">
       <Heading>Fakestagram</Heading>
       <FlexContainer direction="column" alignItems="start" gap="0.3rem">
         <Label htmlFor="email">Email Address</Label>
@@ -68,7 +68,7 @@ const Login = () => {
         />
       </FlexContainer>
       <FlexContainer direction="column" alignItems="start" gap="0.3rem">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">Password (minimum of 6 characters)</Label>
         <StyledInput
           placeholder="Password"
           type="password"
@@ -81,7 +81,9 @@ const Login = () => {
         />
       </FlexContainer>
       <WarningText>{warningText}</WarningText>
-      <FormButton disabled={validForm}>Log in</FormButton>
+      <FormButton disabled={validForm} name="Log in">
+        Log in
+      </FormButton>
     </FormContainer>
   );
 };

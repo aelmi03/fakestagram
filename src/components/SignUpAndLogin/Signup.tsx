@@ -26,12 +26,12 @@ const Signup = () => {
   const [fullName, setFullName] = useState("");
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const [validForm, setValidForm] = useState(false);
+  const [disabledButton, setDisabledButton] = useState(true);
   const [warningText, setWarningText] = useState("");
   function addUserToDB(user: User) {
     console.log("ADDING USER TO DB");
-
     const userRef = doc(getFirestore(), "users", `${user.uid}`);
+
     setDoc(userRef, {
       fullName,
       username,
@@ -39,6 +39,8 @@ const Signup = () => {
       profilePicture:
         "https://firebasestorage.googleapis.com/v0/b/fakestagram-b535c.appspot.com/o/defaultProfile.jpg?alt=media&token=17d8452b-8df2-4b7d-8671-0c6fa2698703",
     });
+    console.log("full-name", fullName);
+    console.log("user-name", username);
     dispatch(
       setUser({
         fullName,
@@ -50,12 +52,12 @@ const Signup = () => {
     );
   }
   const signUp = async (e: React.FormEvent<HTMLFormElement>) => {
+    console.log("WASSSUPPPP");
     e.preventDefault();
     const usersQuery = query(
       collection(getFirestore(), "users"),
       where("username", "==", `${username}`)
     );
-    console.log("WE MESSED UP");
 
     const userDocs = await getDocs(usersQuery);
     if (userDocs.docs.length === 1) {
@@ -64,8 +66,6 @@ const Signup = () => {
     }
 
     try {
-      console.log("ONE USER LOL");
-
       const user = (
         await createUserWithEmailAndPassword(getAuth(), emailAddress, password)
       ).user;
@@ -80,8 +80,13 @@ const Signup = () => {
     }
   };
   useEffect(() => {
-    setValidForm(!formRef.current?.checkValidity());
+    if (formRef.current?.checkValidity() === true) {
+      setDisabledButton(false);
+    } else {
+      setDisabledButton(true);
+    }
   }, [emailAddress, password, username, fullName]);
+
   return (
     <FormContainer ref={formRef} onSubmit={signUp}>
       <Heading>Fakestagram</Heading>
@@ -139,7 +144,7 @@ const Signup = () => {
         />
       </FlexContainer>
       <WarningText>{warningText}</WarningText>
-      <FormButton disabled={validForm} type="submit" name="Sign Up">
+      <FormButton disabled={disabledButton} type="submit" name="Sign Up">
         Sign up
       </FormButton>
     </FormContainer>
