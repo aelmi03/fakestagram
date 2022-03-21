@@ -10,34 +10,38 @@ const Links = () => {
   const location = useLocation();
   return (
     <LinksContainer direction="row" gap="0.5rem">
-      <Link to="/home">
+      <StyledLink to="/home">
         {location.pathname.includes("home") ? (
           <AiFillHome />
         ) : (
           <AiOutlineHome />
         )}
-      </Link>
-      <Link to="/chats">
+      </StyledLink>
+      <StyledLink to="/chats">
         {location.pathname.includes("chats") ? <BsFillChatFill /> : <BsChat />}
-      </Link>
-      <FiSearch onClick={() => console.log("5")} />
+      </StyledLink>
+
+      <StyledLink to="/search">{<FiSearch />}</StyledLink>
       <AiOutlinePlusCircle />
 
-      <Link to="/profile">
+      <StyledLink to="/profile">
         {location.pathname.includes("profile") ? (
           <BsPersonFill />
         ) : (
           <BsPerson />
         )}
-      </Link>
+      </StyledLink>
     </LinksContainer>
   );
 };
 const LinksContainer = styled(FlexContainer)`
   svg {
-    height: 25px;
-    width: 25px;
+    height: 24px;
+    width: 24px;
     color: black;
+  }
+  * {
+    cursor: pointer;
   }
   position: fixed;
   bottom: 0;
@@ -45,5 +49,20 @@ const LinksContainer = styled(FlexContainer)`
   justify-content: space-evenly;
   border-top: 1px solid ${({ theme }) => theme.palette.common.grey};
   padding: 2rem 0rem;
+  @media only screen and (min-width: 768px) {
+    position: static;
+    border-top: none;
+    padding: 0rem;
+    align-items: center;
+    gap: 3rem;
+    a:nth-child(3) {
+      display: none;
+    }
+  }
+`;
+const StyledLink = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 export default Links;

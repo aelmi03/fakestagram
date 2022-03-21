@@ -8,15 +8,6 @@ const StyledInput = styled.input`
   font-size: 1.1rem;
   position: relative;
   background-color: ${({ theme }) => theme.palette.primary.main};
-  &:before {
-    content: "";
-    z-index: 2;
-    position: absolute;
-    background-color: black;
-    border: 3px solid white;
-    height: 300px;
-    width: 290px;
-  }
 `;
 
 export default StyledInput;
