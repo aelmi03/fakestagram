@@ -54,6 +54,7 @@ const LinksContainer = styled(FlexContainer)`
     border-top: none;
     padding: 0rem;
     align-items: center;
+    justify-content: start;
     gap: 3rem;
     a:nth-child(3) {
       display: none;

@@ -21,9 +21,12 @@ const NavbarWrapper = styled.nav`
   border-bottom: 1px solid ${({ theme }) => theme.palette.common.grey};
   background-color: ${({ theme }) => theme.palette.primaryLight};
   @media only screen and (min-width: 768px) {
-    grid-template-columns: max-content max-content max-content;
-    justify-content: space-evenly;
+    grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
+    gap: 3.5rem;
+  }
+  @media only screen and (min-width: 1024px) {
+    gap: 1rem;
   }
 `;
 const NavbarHeading = styled(Heading)`
@@ -35,7 +38,7 @@ const NavbarInput = styled(StyledInput)`
   font-size: 1.4rem;
   border-radius: 5px;
   padding: 0rem 2rem;
-  width: max(100%, 250px);
+  width: min(100%, 250px);
   display: none;
   border: none;
   @media only screen and (min-width: 768px) {
