@@ -5,11 +5,10 @@ import { getAuth } from "firebase/auth";
 import Main from "./components/Main";
 
 function App() {
-  const [authUser, loading] = useAuthState(getAuth());
-  if (!loading) {
+  const [authUser] = useAuthState(getAuth());
+  if (authUser) {
     return <Main />;
   }
   return <SignUpAndLogin />;
 }
-
 export default App;
