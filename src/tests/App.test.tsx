@@ -1,5 +1,4 @@
-import SignUpAndLogin from ".././components/SignUpAndLogin/";
-import { render, screen, act } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import App from "../App";
 
 let mockAuthUserValue: null | string;
