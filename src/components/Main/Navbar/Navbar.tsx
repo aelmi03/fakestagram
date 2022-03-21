@@ -12,9 +12,9 @@ const Navbar = () => {
 };
 const NavbarWrapper = styled.nav`
   display: grid;
-  grid-template-columns: 1fr 1fr;
-
-  padding: 2rem;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  padding: 1rem 0rem;
   width: 100%;
   border-bottom: 1px solid ${({ theme }) => theme.palette.common.grey};
   background-color: ${({ theme }) => theme.palette.primaryLight};
