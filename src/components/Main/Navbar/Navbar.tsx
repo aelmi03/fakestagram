@@ -2,8 +2,16 @@ import styled from "styled-components";
 import Heading from "../../utils/Heading";
 import Links from "./Links";
 import StyledInput from "../../SignUpAndLogin/StyledInput";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { getAuth } from "firebase/auth";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate(`/profile/${getAuth().currentUser!.uid}`);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <NavbarWrapper>
       <NavbarHeading>Fakestagram</NavbarHeading>

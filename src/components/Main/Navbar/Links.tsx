@@ -5,12 +5,12 @@ import { BsFillChatFill, BsChat, BsPerson, BsPersonFill } from "react-icons/bs";
 import { FiSearch } from "react-icons/fi";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
-
+import { getAuth } from "firebase/auth";
 const Links = () => {
   const location = useLocation();
   return (
     <LinksContainer direction="row" gap="0.5rem">
-      <StyledLink to="/home">
+      <StyledLink to="/home" data-testid="5">
         {location.pathname.includes("home") ? (
           <AiFillHome />
         ) : (
@@ -24,8 +24,10 @@ const Links = () => {
       <StyledLink to="/search">{<FiSearch />}</StyledLink>
       <AiOutlinePlusCircle />
 
-      <StyledLink to="/profile">
-        {location.pathname.includes("profile") ? (
+      <StyledLink to={`/profile/${getAuth().currentUser!.uid}`}>
+        {location.pathname.includes(
+          `profile/${getAuth()!.currentUser!.uid}`
+        ) ? (
           <BsPersonFill />
         ) : (
           <BsPerson />
