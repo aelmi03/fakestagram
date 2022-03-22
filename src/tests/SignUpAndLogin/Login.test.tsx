@@ -5,11 +5,9 @@ import userEvent from "@testing-library/user-event";
 import Login from "../../components/SignUpAndLogin/Login";
 import { store } from "../../app/store";
 import { Provider } from "react-redux";
-import { User } from "../../features/user/userSlice";
 
 let mockEmailAddressDoesNotExist: boolean;
 let mockPasswordIsIncorrect: boolean;
-let mockUser: User;
 jest.mock("firebase/auth", () => {
   return {
     signInWithEmailAndPassword: async () => {
@@ -35,17 +33,7 @@ jest.mock("firebase/auth", () => {
     User: jest.requireActual("firebase/auth").User,
   };
 });
-jest.mock("firebase/firestore", () => {
-  return {
-    getFirestore: jest.fn(),
-    getDoc: async () => {
-      return {
-        data: () => mockUser,
-      };
-    },
-    doc: jest.fn(),
-  };
-});
+
 beforeEach(() => {
   render(
     <ThemeProvider theme={Theme}>
