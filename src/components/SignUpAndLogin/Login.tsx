@@ -6,28 +6,16 @@ import { useEffect, useRef, useState } from "react";
 import WarningText from "../utils/WarningText";
 import Label from "../utils/Label";
 import FlexContainer from "../utils/FlexContainer";
-import {
-  signInWithEmailAndPassword,
-  getAuth,
-  User as AuthUser,
-} from "firebase/auth";
+import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
-import { useAppDispatch } from "../../app/hooks";
-import { setUser, User } from "../../features/user/userSlice";
 
 const Login = () => {
-  const dispatch = useAppDispatch();
   const formRef = useRef<HTMLFormElement>(null);
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [disabledButton, setDisabledButton] = useState(false);
   const [warningText, setWarningText] = useState("");
-  const getUserFromDB = async (user: AuthUser) => {
-    const userRef = doc(getFirestore(), `users/${user.uid}`);
-    const userDoc = await getDoc(userRef);
-    dispatch(setUser(userDoc.data() as User));
-  };
+
   useEffect(() => {
     if (formRef.current?.checkValidity() === true) {
       setDisabledButton(false);
@@ -39,11 +27,8 @@ const Login = () => {
   const signIn = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const user = (
-        await signInWithEmailAndPassword(getAuth(), emailAddress, password)
-      ).user;
+      await signInWithEmailAndPassword(getAuth(), emailAddress, password);
       setWarningText("");
-      getUserFromDB(user);
     } catch (error: any) {
       const realError = error as FirebaseError;
       if (realError.message.includes("(auth/user-not-found).")) {

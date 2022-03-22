@@ -134,21 +134,4 @@ describe("Login component", () => {
       )
     ).toBeInTheDocument();
   });
-  it("will set the user in the redux store after the user successfully signs in", async () => {
-    const logInButton = screen.getByRole("button", { name: "Log in" });
-    const emailInput = screen.getByLabelText("Email Address");
-    const passwordInput = screen.getByLabelText(
-      "Password (minimum of 6 characters)"
-    );
-
-    userEvent.type(emailInput, "johndoe@gmail.com");
-    userEvent.type(passwordInput, "johndoe123");
-    mockUser = { ...store.getState().user };
-    mockUser.username = "JohnDoeTheMocker";
-    await act(async () => {
-      userEvent.click(logInButton);
-    });
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    expect(store.getState().user).toEqual(mockUser);
-  });
 });

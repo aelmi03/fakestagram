@@ -132,30 +132,4 @@ describe("Sign up component", () => {
       )
     ).toBeInTheDocument();
   });
-  it("Sets the user in the redux store to the created user if everything is filled out properly and there are no errors", async () => {
-    const signUpButton = screen.getByRole("button", { name: "Sign up" });
-    const emailInput = screen.getByLabelText("Email Address");
-    const fullNameInput = screen.getByLabelText("Full Name");
-    const usernameInput = screen.getByLabelText("Username");
-    const passwordInput = screen.getByLabelText(
-      "Password (minimum of 6 characters)"
-    );
-    userEvent.type(emailInput, "johndoe@gmail.com");
-    userEvent.type(fullNameInput, "John Doe");
-    userEvent.type(usernameInput, "johnDoe23");
-    userEvent.type(passwordInput, "johndoe24");
-    userEvent.click(signUpButton);
-
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    expect(store.getState().user).toEqual({
-      fullName: "John Doe",
-      username: "johnDoe23",
-      profilePicture:
-        "https://firebasestorage.googleapis.com/v0/b/fakestagram-b535c.appspot.com/o/defaultProfile.jpg?alt=media&token=17d8452b-8df2-4b7d-8671-0c6fa2698703",
-      id: "123",
-      followers: [],
-      following: [],
-      biography: "",
-    });
-  });
 });

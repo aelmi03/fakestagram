@@ -1,12 +1,15 @@
 import Navbar from "./Navbar/Navbar";
 import styled from "styled-components";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Profile from "./Profile/Profile";
 const Main = () => {
   return (
     <MainWrapper>
       <Router>
         <Navbar />
-        <Routes></Routes>
+        <Routes>
+          <Route path="/profile/:userID" element={<Profile />} />
+        </Routes>
       </Router>
     </MainWrapper>
   );

@@ -10,7 +10,7 @@ import {
 } from "firebase/auth";
 import FlexContainer from "../utils/FlexContainer";
 import Label from "../utils/Label";
-import { setUser, User } from "../../features/user/userSlice";
+import { User } from "../../features/user/userSlice";
 import {
   query,
   collection,
@@ -21,10 +21,8 @@ import {
   setDoc,
 } from "firebase/firestore";
 import WarningText from "../utils/WarningText";
-import { useAppDispatch } from "../../app/hooks";
 
 const Signup = () => {
-  const dispatch = useAppDispatch();
   const formRef = useRef<HTMLFormElement>(null);
   const [emailAddress, setEmailAddress] = useState("");
   const [fullName, setFullName] = useState("");
@@ -45,8 +43,6 @@ const Signup = () => {
       biography: "",
     };
     setDoc(userRef, newUser);
-
-    dispatch(setUser(newUser));
   }
   const signUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -66,7 +62,6 @@ const Signup = () => {
         await createUserWithEmailAndPassword(getAuth(), emailAddress, password)
       ).user;
       addUserToDB(user);
-      setWarningText("");
     } catch (e: any) {
       setWarningText(
         "Email address is already associated with a fakestagram account"

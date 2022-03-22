@@ -17,12 +17,11 @@ const Links = () => {
           <AiOutlineHome />
         )}
       </StyledLink>
+      <StyledLink to="/search">{<FiSearch />}</StyledLink>
+      <AiOutlinePlusCircle />
       <StyledLink to="/chats">
         {location.pathname.includes("chats") ? <BsFillChatFill /> : <BsChat />}
       </StyledLink>
-
-      <StyledLink to="/search">{<FiSearch />}</StyledLink>
-      <AiOutlinePlusCircle />
 
       <StyledLink to={`/profile/${getAuth().currentUser!.uid}`}>
         {location.pathname.includes(
