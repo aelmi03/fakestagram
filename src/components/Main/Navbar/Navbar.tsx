@@ -42,7 +42,7 @@ const NavbarHeading = styled(Heading)`
 `;
 
 const NavbarInput = styled(StyledInput)`
-  background-color: ${({ theme }) => theme.palette.darkGrey};
+  background-color: ${({ theme }) => theme.palette.neutral};
   font-size: 1.4rem;
   border-radius: 5px;
   padding: 0rem 2rem;

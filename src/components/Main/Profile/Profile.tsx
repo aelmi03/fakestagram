@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { selectUser } from "../../../features/user/userSlice";
 import { useAppSelector } from "../../../app/hooks";
 import FlexContainer from "../../utils/FlexContainer";
+import ProfilePosts from "./ProfilePosts";
 
 const Profile = () => {
   const user = useAppSelector(selectUser);
@@ -35,12 +36,13 @@ const Profile = () => {
         <BoldInfo>{user.fullName}</BoldInfo>
         <ProfileInfo>I am a big adventurer of life</ProfileInfo>
       </FlexContainer>
+      <ProfilePosts />
     </ProfileWrapper>
   );
 };
 const ProfileWrapper = styled.div`
   display: flex;
-  padding: 1rem 0.8rem;
+  padding: 1rem 0.6rem;
   flex-flow: column nowrap;
   gap: 2rem;
 `;
@@ -67,7 +69,7 @@ const BoldInfo = styled(ProfileInfo)`
 const ProfileButton = styled.button`
   background-color: ${({ theme }) => theme.palette.primaryLight};
   border: 1px solid ${({ theme }) => theme.palette.common.grey};
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-family: ${({ theme }) => theme.primaryFont};
   padding: 0.6rem 0.8rem;
   font-weight: 600;

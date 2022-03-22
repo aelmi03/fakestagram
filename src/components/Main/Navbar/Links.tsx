@@ -48,8 +48,9 @@ const LinksContainer = styled(FlexContainer)`
   bottom: 0;
   width: 100%;
   justify-content: space-evenly;
-  border-top: 1px solid ${({ theme }) => theme.palette.common.grey};
+  border-top: 1px solid ${({ theme }) => theme.palette.neutral};
   padding: 2rem 0rem;
+  background-color: ${({ theme }) => theme.palette.primaryLight};
   @media only screen and (min-width: 768px) {
     position: static;
     border-top: none;
