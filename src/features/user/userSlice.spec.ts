@@ -6,6 +6,9 @@ describe("user reducer", () => {
     username: "",
     profilePicture: "",
     id: "",
+    followers: [],
+    following: [],
+    biography: "",
   };
   it("should have the proper intial state", () => {
     expect(userReducer(undefined, { type: "unkmown" })).toEqual(initialState);
@@ -16,6 +19,9 @@ describe("user reducer", () => {
       username: "JohnDoe23",
       profilePicture: "profilePictureURL",
       id: "123",
+      followers: ["qxlAXD241asd", "lqW12spmajWxAs"],
+      following: ["Alkmn241ASDq", "mAlK241SDxQ"],
+      biography: "Loving this adventure called life :)",
     };
     const user = userReducer(initialState, setUser(newUser));
 

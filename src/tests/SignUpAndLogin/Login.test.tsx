@@ -6,13 +6,7 @@ import Login from "../../components/SignUpAndLogin/Login";
 import { store } from "../../app/store";
 import { Provider } from "react-redux";
 import { User } from "../../features/user/userSlice";
-import {
-  signInWithEmailAndPassword,
-  getAuth,
-  User as AuthUser,
-} from "firebase/auth";
-import { FirebaseError } from "firebase/app";
-import { getFirestore, doc, getDoc } from "firebase/firestore";
+
 let mockEmailAddressDoesNotExist: boolean;
 let mockPasswordIsIncorrect: boolean;
 let mockUser: User;

@@ -153,6 +153,9 @@ describe("Sign up component", () => {
       profilePicture:
         "https://firebasestorage.googleapis.com/v0/b/fakestagram-b535c.appspot.com/o/defaultProfile.jpg?alt=media&token=17d8452b-8df2-4b7d-8671-0c6fa2698703",
       id: "123",
+      followers: [],
+      following: [],
+      biography: "",
     });
   });
 });

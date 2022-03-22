@@ -10,7 +10,7 @@ const Links = () => {
   const location = useLocation();
   return (
     <LinksContainer direction="row" gap="0.5rem">
-      <StyledLink to="/home" data-testid="5">
+      <StyledLink to="/home">
         {location.pathname.includes("home") ? (
           <AiFillHome />
         ) : (
