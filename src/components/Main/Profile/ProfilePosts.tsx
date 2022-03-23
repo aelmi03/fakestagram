@@ -62,14 +62,20 @@ const ProfilePostsWrapper = styled.div`
   width: 100%;
   justify-content: center;
   border-top: 1px solid ${({ theme }) => theme.palette.common.grey};
-  margin-bottom: 7rem;
+  margin-bottom: 5rem;
 `;
 const PostsContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, 32.8%);
+  grid-template-columns: repeat(auto-fit, 30.7%);
   width: 100%;
-  gap: 0.2rem;
+  gap: 0.6rem;
   justify-content: center;
+  @media only screen and (min-width: 768px) {
+    gap: 2.8rem;
+  }
+  @media only screen and (min-width: 1024px) {
+    grid-template-columns: repeat(auto-fit, 31.3%);
+  }
 `;
 const InfoText = styled.p`
   font-family: ${({ theme }) => theme.primaryFont};
