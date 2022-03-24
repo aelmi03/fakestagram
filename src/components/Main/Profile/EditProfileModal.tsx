@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import React, { useRef, useState } from "react";
 import ModalTitle from "../../utils/ModalTitle";
 import FlexContainer from "../../utils/FlexContainer";
 import ModalLabel from "../../utils/ModalLabel";
@@ -9,23 +10,58 @@ import Button from "../../utils/Button";
 
 const EditProfileModal = () => {
   const user = useAppSelector(selectUser);
+  const [profilePicture, setProfilePicture] = useState<string>(
+    user.profilePicture
+  );
+  const [fullName, setFullName] = useState<string>(user.fullName);
+  const [biography, setBiography] = useState<string>(user.biography);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const onFileChange = () => {
+    console.log("HEYY");
+    const reader = new FileReader();
+    reader.onload = function () {
+      setProfilePicture(reader.result as string);
+    };
+
+    if (inputRef?.current?.files) {
+      reader.readAsDataURL(inputRef.current.files[0]);
+    }
+  };
   return (
     <EditProfileWrapper>
       <EditProfileForm>
         <ModalTitle>Edit Profile</ModalTitle>
         <FlexContainer direction="column" gap="1.5rem" alignItems="center">
-          <EditProfilePicture src={user.profilePicture} alt="profile avatar" />
-          <ModalLabel>Profile Picture</ModalLabel>
-
-          <EditProfileFileInput type="file" />
+          <EditProfilePicture src={profilePicture} alt="profile avatar" />
+          <ModalLabel htmlFor="Profile Picture">Profile Picture</ModalLabel>
+          <EditProfileFileInput
+            type="file"
+            id="Profile Picture"
+            onChange={onFileChange}
+            ref={inputRef}
+          />
         </FlexContainer>
         <FlexContainer direction="row" gap="1rem" alignItems="center">
-          <ModalLabel>Full Name</ModalLabel>
-          <EditModalInput />
+          <ModalLabel htmlFor="Full Name">Full Name</ModalLabel>
+          <EditModalInput
+            id="Full Name"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              const target = e.target as HTMLInputElement;
+              setFullName(target.value);
+            }}
+            value={fullName}
+          />
         </FlexContainer>
         <FlexContainer direction="row" gap="1rem" alignItems="center">
-          <ModalLabel>Biography</ModalLabel>
-          <ModalTextArea />
+          <ModalLabel htmlFor="Biography">Biography</ModalLabel>
+          <ModalTextArea
+            id="Biography"
+            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+              const target = e.target as HTMLTextAreaElement;
+              setBiography(target.value);
+            }}
+            value={biography}
+          />
         </FlexContainer>
         <FlexContainer direction="row" gap="1rem" justifyContent="center">
           <Button color="red">Cancel</Button>
@@ -49,8 +85,8 @@ const EditProfileForm = styled.form`
   display: grid;
   justify-items: center;
   width: min(95%, 700px);
-  overflow: scroll;
-  max-height: 90vh;
+  overflow-y: scroll;
+  max-height: 95vh;
   gap: 4.5rem;
   background-color: ${({ theme }) => theme.palette.primaryLight};
   position: fixed;
@@ -102,5 +138,9 @@ const EditProfilePicture = styled.img`
   width: 110px;
   height: 110px;
   border-radius: 50%;
+  @media only screen and (min-width: 540px) {
+    width: 150px;
+    height: 150px;
+  }
 `;
 export default EditProfileModal;
