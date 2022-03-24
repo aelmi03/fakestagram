@@ -4,6 +4,7 @@ import { useAppSelector } from "../../../app/hooks";
 import ProfilePosts from "./ProfilePosts";
 import EditProfileModal from "./EditProfileModal";
 import { useState } from "react";
+import { getAuth, signOut } from "firebase/auth";
 
 const Profile = () => {
   const user = useAppSelector(selectUser);
@@ -13,7 +14,6 @@ const Profile = () => {
     e.stopPropagation();
     setShowEditProfileModal((prevBoolean) => !prevBoolean);
   };
-  console.log("Profile Compoennt", user);
   return (
     <ProfileWrapper>
       <ProfileDisplayContainer>
@@ -27,7 +27,9 @@ const Profile = () => {
               <ProfileButton onClick={toggleEditProfileModal}>
                 Edit Profile
               </ProfileButton>
-              <ProfileButton>Log out</ProfileButton>
+              <ProfileButton onClick={() => signOut(getAuth())}>
+                Log out
+              </ProfileButton>
             </ButtonsContainer>
           </ProfileInformationContainer>
           <ProfileUserInfo>
