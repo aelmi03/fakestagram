@@ -66,15 +66,12 @@ const ProfilePostsWrapper = styled.div`
 `;
 const PostsContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, 30.7%);
+  grid-template-columns: repeat(auto-fit, 30.5%);
   width: 100%;
   gap: 0.6rem;
   justify-content: center;
   @media only screen and (min-width: 768px) {
     gap: 2.8rem;
-  }
-  @media only screen and (min-width: 1024px) {
-    grid-template-columns: repeat(auto-fit, 31.3%);
   }
 `;
 const InfoText = styled.p`

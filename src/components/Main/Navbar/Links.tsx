@@ -54,7 +54,7 @@ const LinksContainer = styled(FlexContainer)`
   @media only screen and (min-width: 768px) {
     position: static;
     border-top: none;
-    padding: 0rem;
+    padding: 0rem 2rem;
     align-items: center;
     justify-content: start;
     gap: 3rem;

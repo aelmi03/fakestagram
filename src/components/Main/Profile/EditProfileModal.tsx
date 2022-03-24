@@ -15,8 +15,10 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { doc, getFirestore, updateDoc } from "firebase/firestore";
-
-const EditProfileModal = () => {
+interface IProps {
+  toggleEditProfileModal: (e: React.MouseEvent) => void;
+}
+const EditProfileModal = ({ toggleEditProfileModal }: IProps) => {
   const user = useAppSelector(selectUser);
   const [profilePicture, setProfilePicture] = useState<string>("");
   const [fullName, setFullName] = useState<string>("");
@@ -51,6 +53,7 @@ const EditProfileModal = () => {
   };
   const updateUserProfile = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    e.stopPropagation();
     if (fullName === "") {
       setWarningText("Please enter a valid full name that is not empty");
       return;
@@ -64,20 +67,20 @@ const EditProfileModal = () => {
           biography,
           profilePicture: publicImageUrl,
         });
-        console.log("updat3ed image");
       } else {
         await updateDoc(userDoc, {
           fullName,
           biography,
         });
       }
+      toggleEditProfileModal(e);
     } catch (e) {
       console.log(e);
     }
   };
   return (
-    <EditProfileWrapper>
-      <EditProfileForm>
+    <EditProfileWrapper onClick={toggleEditProfileModal}>
+      <EditProfileForm onClick={(e) => e.stopPropagation()}>
         <ModalTitle>Edit Profile</ModalTitle>
         <FlexContainer direction="column" gap="1.5rem" alignItems="center">
           <EditProfilePicture src={profilePicture} alt="profile avatar" />
@@ -95,6 +98,7 @@ const EditProfileModal = () => {
             <EditModalInput
               id="Full Name"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                e.stopPropagation();
                 const target = e.target as HTMLInputElement;
                 setFullName(target.value.replace(/[^a-zA-Z ]/g, ""));
               }}
@@ -112,13 +116,14 @@ const EditProfileModal = () => {
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
               const target = e.target as HTMLTextAreaElement;
               setBiography(target.value);
+              e.stopPropagation();
             }}
             value={biography}
           />
         </FlexContainer>
 
         <FlexContainer direction="row" gap="1rem" justifyContent="center">
-          <Button onClick={(e) => e.preventDefault()} color="red">
+          <Button onClick={toggleEditProfileModal} color="red">
             Cancel
           </Button>
           <Button onClick={updateUserProfile}>Save Changes</Button>

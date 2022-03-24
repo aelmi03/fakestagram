@@ -3,10 +3,17 @@ import { selectUser } from "../../../features/user/userSlice";
 import { useAppSelector } from "../../../app/hooks";
 import ProfilePosts from "./ProfilePosts";
 import EditProfileModal from "./EditProfileModal";
+import { useState } from "react";
 
 const Profile = () => {
   const user = useAppSelector(selectUser);
-
+  const [showEditProfileModal, setShowEditProfileModal] = useState(false);
+  const toggleEditProfileModal = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowEditProfileModal((prevBoolean) => !prevBoolean);
+  };
+  console.log("Profile Compoennt", user);
   return (
     <ProfileWrapper>
       <ProfileDisplayContainer>
@@ -14,10 +21,12 @@ const Profile = () => {
         <ProfileContainer>
           <ProfileInformationContainer>
             <OverflowContainer>
-              <ProfileName>abdiisthebestintheworl</ProfileName>
+              <ProfileName>{user.username}</ProfileName>
             </OverflowContainer>
             <ButtonsContainer>
-              <ProfileButton>Edit Profile</ProfileButton>
+              <ProfileButton onClick={toggleEditProfileModal}>
+                Edit Profile
+              </ProfileButton>
               <ProfileButton>Log out</ProfileButton>
             </ButtonsContainer>
           </ProfileInformationContainer>
@@ -34,23 +43,15 @@ const Profile = () => {
           </ProfileUserInfo>
           <InformationContainer>
             <BoldInfo>{user.fullName}</BoldInfo>
-            <ProfileInfo>
-              {" "}
-              i am the coolest i am the coolesti am the coolesti am the coolest
-              i am the coolest i am the coolest i am the coolest i am the
-              coolest i am the coolesti am the coolesti am the coolest i am the
-              coolest i am the coolest i am the coolest i am the coolest i am
-              the coolesti am the coolesti am the coolest i am the coolest i am
-              the coolest i am the coolest i am the coolest i am the coolesti am
-              the coolesti am the coolest i am the coolest i am the coolest i am
-              the coolest
-            </ProfileInfo>
+            <ProfileInfo>{user.biography}</ProfileInfo>
           </InformationContainer>
         </ProfileContainer>
       </ProfileDisplayContainer>
 
       <ProfilePosts />
-      <EditProfileModal />
+      {showEditProfileModal ? (
+        <EditProfileModal toggleEditProfileModal={toggleEditProfileModal} />
+      ) : null}
     </ProfileWrapper>
   );
 };
@@ -63,7 +64,7 @@ const ProfileWrapper = styled.div`
     padding: 2rem 2rem;
   }
   @media only screen and (min-width: 1024px) {
-    width: 90%;
+    width: 80%;
     align-content: center;
     margin: 0 auto;
     padding: 2rem 0rem;
