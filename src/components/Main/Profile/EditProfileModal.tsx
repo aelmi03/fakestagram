@@ -8,6 +8,13 @@ import { useAppSelector } from "../../../app/hooks";
 import { selectUser } from "../../../features/user/userSlice";
 import Button from "../../utils/Button";
 import WarningText from "../../utils/WarningText";
+import {
+  ref,
+  getStorage,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import { doc, getFirestore, updateDoc } from "firebase/firestore";
 
 const EditProfileModal = () => {
   const user = useAppSelector(selectUser);
@@ -32,14 +39,42 @@ const EditProfileModal = () => {
       reader.readAsDataURL(inputRef.current.files[0]);
     }
   };
+  const downloadImage = async () => {
+    const filePath = `${user.id}/profile-picture`;
+    console.log(filePath);
+    const newImageRef = ref(getStorage(), filePath);
+    console.log("ayo");
+    // 3 - Generate a public URL for the file.
+    await uploadBytesResumable(newImageRef, inputRef.current!.files![0]);
+    const publicImageUrl = await getDownloadURL(newImageRef);
+    return publicImageUrl;
+  };
   const updateUserProfile = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (fullName === "") {
       setWarningText("Please enter a valid full name that is not empty");
       return;
     }
+    try {
+      const userDoc = doc(getFirestore(), `users/${user.id}`);
+      if (inputRef.current?.files?.[0]) {
+        const publicImageUrl = await downloadImage();
+        await updateDoc(userDoc, {
+          fullName,
+          biography,
+          profilePicture: publicImageUrl,
+        });
+        console.log("updat3ed image");
+      } else {
+        await updateDoc(userDoc, {
+          fullName,
+          biography,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
-  console.log("lel");
   return (
     <EditProfileWrapper>
       <EditProfileForm>
@@ -70,7 +105,7 @@ const EditProfileModal = () => {
           <WarningText>{warningText}</WarningText>
         </FlexContainer>
 
-        <FlexContainer direction="row" gap="1rem" alignItems="center">
+        <FlexContainer direction="row" gap="1rem" alignItems="start">
           <ModalLabel htmlFor="Biography">Biography</ModalLabel>
           <ModalTextArea
             id="Biography"
@@ -116,7 +151,7 @@ const EditProfileForm = styled.form`
   transform: translate(-50%, -50%);
 
   @media only screen and (min-width: 540px) {
-    padding: 3rem 5rem;
+    padding: 2.5rem 5rem;
     justify-items: center;
   }
 `;
