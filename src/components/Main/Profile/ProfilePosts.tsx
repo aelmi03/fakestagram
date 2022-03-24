@@ -8,10 +8,10 @@ const ProfilePosts = () => {
     <ProfilePostsWrapper>
       <FlexContainer direction="row" justifyContent="space-evenly">
         <InfoContainer>
-          <BsGrid3X3 /> <InfoText>Posts</InfoText>
+          <BsGrid3X3 /> <InfoText>POSTS</InfoText>
         </InfoContainer>
         <InfoContainer>
-          <FaRegBookmark /> <InfoText>Saved Posts</InfoText>
+          <FaRegBookmark /> <InfoText>SAVED POSTS</InfoText>
         </InfoContainer>
       </FlexContainer>
       <PostsContainer>

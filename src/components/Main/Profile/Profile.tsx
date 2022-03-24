@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { selectUser } from "../../../features/user/userSlice";
 import { useAppSelector } from "../../../app/hooks";
-import FlexContainer from "../../utils/FlexContainer";
 import ProfilePosts from "./ProfilePosts";
 
 const Profile = () => {
@@ -12,16 +11,16 @@ const Profile = () => {
       <ProfileDisplayContainer>
         <ProfileImage src={user.profilePicture} />
         <ProfileContainer>
-          <ButtonsContainer>
+          <ProfileInformationContainer>
             <OverflowContainer>
-              <ProfileName>{user.username}</ProfileName>
+              <ProfileName>abdiisthebestintheworl</ProfileName>
             </OverflowContainer>
-            <FlexContainer direction="row" gap="1rem">
+            <ButtonsContainer>
               <ProfileButton>Edit Profile</ProfileButton>
               <ProfileButton>Log out</ProfileButton>
-            </FlexContainer>
-          </ButtonsContainer>
-          <FlexContainer direction="row" gap="1.5rem">
+            </ButtonsContainer>
+          </ProfileInformationContainer>
+          <ProfileUserInfo>
             <BoldInfo>
               0 <ProfileInfo>posts</ProfileInfo>
             </BoldInfo>
@@ -31,15 +30,19 @@ const Profile = () => {
             <BoldInfo>
               3 <ProfileInfo>following</ProfileInfo>
             </BoldInfo>
-          </FlexContainer>
+          </ProfileUserInfo>
           <InformationContainer>
             <BoldInfo>{user.fullName}</BoldInfo>
             <ProfileInfo>
-              I am the biggets dawg in a small pond im a shark on my mama
-              forreal I am the biggets dawg in a small pond im a shark on my
-              mama forreal I am the biggets dawg in a small pond im a shark on
-              my mama forreal I am the biggets dawg in a small pond im a shark
-              on my mama forreal
+              {" "}
+              i am the coolest i am the coolesti am the coolesti am the coolest
+              i am the coolest i am the coolest i am the coolest i am the
+              coolest i am the coolesti am the coolesti am the coolest i am the
+              coolest i am the coolest i am the coolest i am the coolest i am
+              the coolesti am the coolesti am the coolest i am the coolest i am
+              the coolest i am the coolest i am the coolest i am the coolesti am
+              the coolesti am the coolest i am the coolest i am the coolest i am
+              the coolest
             </ProfileInfo>
           </InformationContainer>
         </ProfileContainer>
@@ -53,7 +56,7 @@ const ProfileWrapper = styled.div`
   display: grid;
   padding: 1rem 0.6rem;
   gap: 2rem;
-  width: 100%;
+  width: 100vw;
   @media only screen and (min-width: 768px) {
     padding: 2rem 2rem;
   }
@@ -63,6 +66,12 @@ const ProfileWrapper = styled.div`
     margin: 0 auto;
     padding: 2rem 0rem;
   }
+`;
+const ButtonsContainer = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 1.5rem;
+  flex-grow: 1;
 `;
 const InformationContainer = styled.div`
   display: flex;
@@ -77,19 +86,31 @@ const InformationContainer = styled.div`
   @media only screen and (min-width: 540px) {
     right: 110px;
   }
-  @media only screen and (min-width: 540px) {
+  @media only screen and (min-width: 768px) {
+    width: 80%;
     position: static;
   }
 `;
-const ButtonsContainer = styled.div`
+const ProfileInformationContainer = styled.div`
   display: flex;
   gap: 1rem;
   flex-flow: column nowrap;
-
+  width: 100%;
   @media only screen and (min-width: 540px) {
     gap: 3rem;
     flex-flow: row nowrap;
     align-items: center;
+  }
+`;
+const ProfileUserInfo = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 1.5rem;
+  @media only screen and (min-width: 540px) {
+    gap: 2.5rem;
+  }
+  @media only screen and (min-width: 768px) {
+    gap: 4.2rem;
   }
 `;
 const ProfileDisplayContainer = styled.div`
@@ -117,12 +138,12 @@ const ProfileContainer = styled.div`
   display: flex;
   flex-flow: column nowrap;
   gap: 1.5rem;
-
-  @media only screen and (min-width: 768px) {
-    width: 70%;
+  width: auto;
+  @media only screen and (min-width: 540px) {
+    gap: 2rem;
   }
   @media only screen and (min-width: 1024px) {
-    width: 60%;
+    width: 65%;
   }
 `;
 const ProfileImage = styled.img`
@@ -161,7 +182,7 @@ const BoldInfo = styled(ProfileInfo)`
 const ProfileButton = styled.button`
   background-color: ${({ theme }) => theme.palette.primaryLight};
   border: 1px solid ${({ theme }) => theme.palette.common.grey};
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-family: ${({ theme }) => theme.primaryFont};
   padding: 0.4rem 0.6rem;
   font-weight: 600;
@@ -185,6 +206,7 @@ const ProfileName = styled.h2`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
   @media only screen and (min-width: 768px) {
     font-size: 2.7rem;
   }
@@ -195,6 +217,18 @@ const OverflowContainer = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  min-width: max-content;
+  width: 15ch;
+  @media only screen and (min-width: 375px) {
+    width: 24ch;
+  }
+  @media only screen and (min-width: 540px) {
+    width: 16ch;
+  }
+  @media only screen and (min-width: 768px) {
+    min-width: 25ch;
+  }
+  @media only screen and (min-width: 1024px) {
+    width: auto;
+  }
 `;
 export default Profile;
