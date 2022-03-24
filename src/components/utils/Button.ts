@@ -7,6 +7,10 @@ const Button = styled.button<{ color?: string }>`
   background-color: ${({ theme }) => theme.palette.secondary.main};
   color: ${({ theme }) => theme.palette.secondary.contrastText};
   padding: 0.8rem 2rem;
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.6;
+  }
   ${({ color }) =>
     color === "red" &&
     css`

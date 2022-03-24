@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import ModalTitle from "../../utils/ModalTitle";
 import FlexContainer from "../../utils/FlexContainer";
 import ModalLabel from "../../utils/ModalLabel";
@@ -7,17 +7,22 @@ import StyledInput from "../../SignUpAndLogin/StyledInput";
 import { useAppSelector } from "../../../app/hooks";
 import { selectUser } from "../../../features/user/userSlice";
 import Button from "../../utils/Button";
+import WarningText from "../../utils/WarningText";
 
 const EditProfileModal = () => {
   const user = useAppSelector(selectUser);
-  const [profilePicture, setProfilePicture] = useState<string>(
-    user.profilePicture
-  );
-  const [fullName, setFullName] = useState<string>(user.fullName);
-  const [biography, setBiography] = useState<string>(user.biography);
+  const [profilePicture, setProfilePicture] = useState<string>("");
+  const [fullName, setFullName] = useState<string>("");
+  const [biography, setBiography] = useState<string>("");
+  const [warningText, setWarningText] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    setProfilePicture(user.profilePicture);
+    setFullName(user.fullName);
+    setBiography(user.biography);
+  }, [user]);
+
   const onFileChange = () => {
-    console.log("HEYY");
     const reader = new FileReader();
     reader.onload = function () {
       setProfilePicture(reader.result as string);
@@ -27,6 +32,14 @@ const EditProfileModal = () => {
       reader.readAsDataURL(inputRef.current.files[0]);
     }
   };
+  const updateUserProfile = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (fullName === "") {
+      setWarningText("Please enter a valid full name that is not empty");
+      return;
+    }
+  };
+  console.log("lel");
   return (
     <EditProfileWrapper>
       <EditProfileForm>
@@ -41,17 +54,22 @@ const EditProfileModal = () => {
             ref={inputRef}
           />
         </FlexContainer>
-        <FlexContainer direction="row" gap="1rem" alignItems="center">
-          <ModalLabel htmlFor="Full Name">Full Name</ModalLabel>
-          <EditModalInput
-            id="Full Name"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              const target = e.target as HTMLInputElement;
-              setFullName(target.value);
-            }}
-            value={fullName}
-          />
+        <FlexContainer direction="column" gap="1rem">
+          <FlexContainer direction="row" gap="1rem" alignItems="center">
+            <ModalLabel htmlFor="Full Name">Full Name</ModalLabel>
+            <EditModalInput
+              id="Full Name"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const target = e.target as HTMLInputElement;
+                setFullName(target.value.replace(/[^a-zA-Z ]/g, ""));
+              }}
+              value={fullName}
+              maxLength={28}
+            />
+          </FlexContainer>
+          <WarningText>{warningText}</WarningText>
         </FlexContainer>
+
         <FlexContainer direction="row" gap="1rem" alignItems="center">
           <ModalLabel htmlFor="Biography">Biography</ModalLabel>
           <ModalTextArea
@@ -63,9 +81,12 @@ const EditProfileModal = () => {
             value={biography}
           />
         </FlexContainer>
+
         <FlexContainer direction="row" gap="1rem" justifyContent="center">
-          <Button color="red">Cancel</Button>
-          <Button>Save Changes</Button>
+          <Button onClick={(e) => e.preventDefault()} color="red">
+            Cancel
+          </Button>
+          <Button onClick={updateUserProfile}>Save Changes</Button>
         </FlexContainer>
       </EditProfileForm>
     </EditProfileWrapper>
@@ -99,9 +120,10 @@ const EditProfileForm = styled.form`
     justify-items: center;
   }
 `;
+
 const ModalTextArea = styled.textarea`
   flex-grow: 1;
-  padding: 0rem 0.3rem 8rem 0.3rem;
+  padding: 0.3rem 0.3rem 8rem 0.3rem;
   border: 1px solid ${({ theme }) => theme.palette.common.grey};
   font-family: ${({ theme }) => theme.primaryFont};
   font-size: 1.1rem;
