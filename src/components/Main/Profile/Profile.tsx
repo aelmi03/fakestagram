@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { selectUser } from "../../../features/user/userSlice";
 import { useAppSelector } from "../../../app/hooks";
 import ProfilePosts from "./ProfilePosts";
+import EditProfileModal from "./EditProfileModal";
 
 const Profile = () => {
   const user = useAppSelector(selectUser);
@@ -49,6 +50,7 @@ const Profile = () => {
       </ProfileDisplayContainer>
 
       <ProfilePosts />
+      <EditProfileModal />
     </ProfileWrapper>
   );
 };
