@@ -13,15 +13,17 @@ const EditProfileModal = () => {
     <EditProfileWrapper>
       <EditProfileForm>
         <ModalTitle>Edit Profile</ModalTitle>
-        <FlexContainer direction="column" gap="3rem" alignItems="center">
+        <FlexContainer direction="column" gap="1.5rem" alignItems="center">
           <EditProfilePicture src={user.profilePicture} alt="profile avatar" />
+          <ModalLabel>Profile Picture</ModalLabel>
+
           <EditProfileFileInput type="file" />
         </FlexContainer>
-        <FlexContainer direction="row" gap="1rem">
+        <FlexContainer direction="row" gap="1rem" alignItems="center">
           <ModalLabel>Full Name</ModalLabel>
           <EditModalInput />
         </FlexContainer>
-        <FlexContainer direction="row" gap="1rem">
+        <FlexContainer direction="row" gap="1rem" alignItems="center">
           <ModalLabel>Biography</ModalLabel>
           <ModalTextArea />
         </FlexContainer>
@@ -43,28 +45,46 @@ const EditProfileWrapper = styled.div`
 `;
 
 const EditProfileForm = styled.form`
-  padding: 2rem 1rem;
+  padding: 2rem 2rem;
   display: grid;
   justify-items: center;
-  width: min(95%, 600px);
+  width: min(95%, 700px);
+  overflow: scroll;
+  max-height: 90vh;
   gap: 4.5rem;
   background-color: ${({ theme }) => theme.palette.primaryLight};
   position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+
+  @media only screen and (min-width: 540px) {
+    padding: 3rem 5rem;
+    justify-items: center;
+  }
 `;
 const ModalTextArea = styled.textarea`
   flex-grow: 1;
-  padding: 2rem;
+  padding: 0rem 0.3rem 8rem 0.3rem;
   border: 1px solid ${({ theme }) => theme.palette.common.grey};
-  font-family: sans-serif;
+  font-family: ${({ theme }) => theme.primaryFont};
   font-size: 1.1rem;
   background-color: ${({ theme }) => theme.palette.primary.main};
+  resize: none;
+  @media only screen and (min-width: 540px) {
+    width: 80%;
+    flex-grow: 0;
+  }
 `;
 const EditModalInput = styled(StyledInput)`
   width: auto;
   flex-grow: 1;
+  font-family: ${({ theme }) => theme.primaryFont};
+
+  @media only screen and (min-width: 540px) {
+    width: 80%;
+    flex-grow: 0;
+  }
 `;
 
 const EditProfileFileInput = styled.input`
@@ -72,6 +92,10 @@ const EditProfileFileInput = styled.input`
   font-size: 1.3rem;
   width: 180px;
   font-family: ${({ theme }) => theme.primaryFont};
+  @media only screen and (min-width: 768px) {
+    font-size: 1.4rem;
+    width: 210px;
+  }
 `;
 
 const EditProfilePicture = styled.img`
