@@ -29,7 +29,8 @@ const EditProfileModal = ({ toggleEditProfileModal }: IProps) => {
     setProfilePicture(user.profilePicture);
     setFullName(user.fullName);
     setBiography(user.biography);
-  }, [user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onFileChange = () => {
     const reader = new FileReader();
@@ -43,10 +44,7 @@ const EditProfileModal = ({ toggleEditProfileModal }: IProps) => {
   };
   const downloadImage = async () => {
     const filePath = `${user.id}/profile-picture`;
-    console.log(filePath);
     const newImageRef = ref(getStorage(), filePath);
-    console.log("ayo");
-    // 3 - Generate a public URL for the file.
     await uploadBytesResumable(newImageRef, inputRef.current!.files![0]);
     const publicImageUrl = await getDownloadURL(newImageRef);
     return publicImageUrl;
@@ -79,7 +77,7 @@ const EditProfileModal = ({ toggleEditProfileModal }: IProps) => {
     }
   };
   return (
-    <EditProfileWrapper onClick={toggleEditProfileModal}>
+    <EditProfileWrapper onClick={toggleEditProfileModal} data-testid="Wrapper">
       <EditProfileForm onClick={(e) => e.stopPropagation()}>
         <ModalTitle>Edit Profile</ModalTitle>
         <FlexContainer direction="column" gap="1.5rem" alignItems="center">
@@ -96,10 +94,12 @@ const EditProfileModal = ({ toggleEditProfileModal }: IProps) => {
           <FlexContainer direction="row" gap="1rem" alignItems="center">
             <ModalLabel htmlFor="Full Name">Full Name</ModalLabel>
             <EditModalInput
+              data-testid="full name"
               id="Full Name"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 e.stopPropagation();
                 const target = e.target as HTMLInputElement;
+
                 setFullName(target.value.replace(/[^a-zA-Z ]/g, ""));
               }}
               value={fullName}
@@ -123,10 +123,12 @@ const EditProfileModal = ({ toggleEditProfileModal }: IProps) => {
         </FlexContainer>
 
         <FlexContainer direction="row" gap="1rem" justifyContent="center">
-          <Button onClick={toggleEditProfileModal} color="red">
+          <Button onClick={toggleEditProfileModal} color="red" name="Cancel">
             Cancel
           </Button>
-          <Button onClick={updateUserProfile}>Save Changes</Button>
+          <Button onClick={updateUserProfile} name="Save">
+            Save Changes
+          </Button>
         </FlexContainer>
       </EditProfileForm>
     </EditProfileWrapper>

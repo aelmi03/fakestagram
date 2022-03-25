@@ -30,6 +30,7 @@ jest.mock("firebase/firestore", () => {
   return {
     getFirestore: jest.fn(),
     doc: jest.fn(),
+    onSnapshot: jest.fn(),
     getDoc: async () => {
       return {
         data: () => mockUser,
