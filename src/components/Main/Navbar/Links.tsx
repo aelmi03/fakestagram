@@ -6,6 +6,7 @@ import { FiSearch } from "react-icons/fi";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { getAuth } from "firebase/auth";
+import AddPostModal from "./AddPostModal";
 const Links = () => {
   const location = useLocation();
   return (

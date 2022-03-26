@@ -1,0 +1,21 @@
+import styled from "styled-components";
+const ModalWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  input[type="file"]::file-selector-button {
+    border-radius: 5px;
+    background-color: ${({ theme }) => theme.palette.secondary.main};
+    color: ${({ theme }) => theme.palette.secondary.contrastText};
+    font-family: ${({ theme }) => theme.primaryFont};
+    border: none;
+    padding: 0.6rem 0.6rem;
+    cursor: pointer;
+  }
+`;
+
+export default ModalWrapper;

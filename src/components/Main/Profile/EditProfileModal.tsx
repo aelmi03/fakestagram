@@ -3,7 +3,6 @@ import React, { useRef, useState, useEffect } from "react";
 import ModalTitle from "../../utils/ModalTitle";
 import FlexContainer from "../../utils/FlexContainer";
 import ModalLabel from "../../utils/ModalLabel";
-import StyledInput from "../../SignUpAndLogin/StyledInput";
 import { useAppSelector } from "../../../app/hooks";
 import { selectUser } from "../../../features/user/userSlice";
 import Button from "../../utils/Button";
@@ -15,6 +14,11 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { doc, getFirestore, updateDoc } from "firebase/firestore";
+import HorizontalLine from "../../utils/HorizontalLine";
+import ModalWrapper from "../../utils/ModalWrapper";
+import ModalPicture from "../../utils/ModalPicture";
+import FileInput from "../../utils/StyledFileInput";
+import ModalInput from "../../utils/ModalInput";
 interface IProps {
   toggleEditProfileModal: (e: React.MouseEvent) => void;
 }
@@ -77,13 +81,16 @@ const EditProfileModal = ({ toggleEditProfileModal }: IProps) => {
     }
   };
   return (
-    <EditProfileWrapper onClick={toggleEditProfileModal} data-testid="Wrapper">
+    <ModalWrapper onClick={toggleEditProfileModal} data-testid="Wrapper">
       <EditProfileForm onClick={(e) => e.stopPropagation()}>
-        <ModalTitle>Edit Profile</ModalTitle>
+        <FlexContainer direction="column" gap="0.8rem" alignItems="center">
+          <ModalTitle>Edit Profile</ModalTitle>
+          <HorizontalLine />
+        </FlexContainer>
         <FlexContainer direction="column" gap="1.5rem" alignItems="center">
-          <EditProfilePicture src={profilePicture} alt="profile avatar" />
+          <ModalPicture src={profilePicture} alt="profile avatar" />
           <ModalLabel htmlFor="Profile Picture">Profile Picture</ModalLabel>
-          <EditProfileFileInput
+          <FileInput
             type="file"
             id="Profile Picture"
             onChange={onFileChange}
@@ -93,7 +100,7 @@ const EditProfileModal = ({ toggleEditProfileModal }: IProps) => {
         <FlexContainer direction="column" gap="1rem">
           <FlexContainer direction="row" gap="1rem" alignItems="center">
             <ModalLabel htmlFor="Full Name">Full Name</ModalLabel>
-            <EditModalInput
+            <ModalInput
               data-testid="full name"
               id="Full Name"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -131,17 +138,9 @@ const EditProfileModal = ({ toggleEditProfileModal }: IProps) => {
           </Button>
         </FlexContainer>
       </EditProfileForm>
-    </EditProfileWrapper>
+    </ModalWrapper>
   );
 };
-const EditProfileWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-`;
 
 const EditProfileForm = styled.form`
   padding: 2rem 2rem;
@@ -176,35 +175,5 @@ const ModalTextArea = styled.textarea`
     flex-grow: 0;
   }
 `;
-const EditModalInput = styled(StyledInput)`
-  width: auto;
-  flex-grow: 1;
-  font-family: ${({ theme }) => theme.primaryFont};
 
-  @media only screen and (min-width: 540px) {
-    width: 80%;
-    flex-grow: 0;
-  }
-`;
-
-const EditProfileFileInput = styled.input`
-  padding: 0.1rem;
-  font-size: 1.3rem;
-  width: 180px;
-  font-family: ${({ theme }) => theme.primaryFont};
-  @media only screen and (min-width: 768px) {
-    font-size: 1.4rem;
-    width: 210px;
-  }
-`;
-
-const EditProfilePicture = styled.img`
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  @media only screen and (min-width: 540px) {
-    width: 150px;
-    height: 150px;
-  }
-`;
 export default EditProfileModal;

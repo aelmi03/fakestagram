@@ -5,6 +5,7 @@ import StyledInput from "../../SignUpAndLogin/StyledInput";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
+import AddPostModal from "./AddPostModal";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const Navbar = () => {
       <NavbarHeading>Fakestagram</NavbarHeading>
       <NavbarInput placeholder="🔍 Search" />
       <Links />
+      <AddPostModal />
     </NavbarWrapper>
   );
 };

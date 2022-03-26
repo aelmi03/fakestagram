@@ -80,7 +80,7 @@ describe("EditProfileModal compoennt", () => {
     await act(async () => {
       userEvent.click(screen.getByRole("button", { name: /Save/ }));
     });
-    expect(updateDoc.mock.calls[0][1]).toEqual({
+    expect((updateDoc as jest.Mock).mock.calls[0][1]).toEqual({
       fullName: "John Doe",
       biography: "Love riding bicycles and going to the beach :)",
       profilePicture:
@@ -93,7 +93,7 @@ describe("EditProfileModal compoennt", () => {
     await act(async () => {
       userEvent.click(screen.getByRole("button", { name: /Save/ }));
     });
-    expect(updateDoc.mock.calls[0][1]).toEqual({
+    expect((updateDoc as jest.Mock).mock.calls[0][1]).toEqual({
       fullName: "John Doe",
       biography: "Love riding bicycles and going to the beach :)",
     });
