@@ -13,8 +13,13 @@ const ModalWrapper = styled.div`
     color: ${({ theme }) => theme.palette.secondary.contrastText};
     font-family: ${({ theme }) => theme.primaryFont};
     border: none;
+    font-size: 1.2rem;
     padding: 0.6rem 0.6rem;
     cursor: pointer;
+    @media only screen and (min-width: 411px) {
+      font-size: 1.4rem;
+      padding: 0.75rem 0.9rem;
+    }
   }
 `;
 

@@ -1,15 +1,33 @@
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import Button from "../../utils/Button";
 import FlexContainer from "../../utils/FlexContainer";
 import HorizontalLine from "../../utils/HorizontalLine";
 import ModalInput from "../../utils/ModalInput";
 import ModalLabel from "../../utils/ModalLabel";
-import ModalPicture from "../../utils/ModalPicture";
 import ModalTitle from "../../utils/ModalTitle";
 import ModalWrapper from "../../utils/ModalWrapper";
 import FileInput from "../../utils/StyledFileInput";
+import WarningText from "../../utils/WarningText";
 
 const AddPostModal = () => {
+  const [caption, setCaption] = useState("");
+  const [postPicture, setPostPicture] = useState(
+    "https://firebasestorage.googleapis.com/v0/b/fakestagram-b535c.appspot.com/o/post-placeholder.jpg?alt=media&token=aad29630-6606-4b09-9bc7-ebd83d990548"
+  );
+  const [captionWarningText, setCaptionWarningText] = useState("");
+  const [pictureWarningText, setPictureWarningText] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+  const onFileChange = () => {
+    const reader = new FileReader();
+    reader.onload = function () {
+      setPostPicture(reader.result as string);
+    };
+
+    if (inputRef?.current?.files) {
+      reader.readAsDataURL(inputRef.current.files[0]);
+    }
+  };
   return (
     <ModalWrapper>
       <AddPostForm onClick={(e) => e.stopPropagation()}>
@@ -18,23 +36,33 @@ const AddPostModal = () => {
           <HorizontalLine />
         </FlexContainer>
         <FlexContainer direction="column" gap="1.5rem" alignItems="center">
-          <ModalPicture
-            src={
-              "https://booleanstrings.com/wp-content/uploads/2021/10/profile-picture-circle-hd.png"
-            }
-            alt="profile avatar"
-          />
+          <PostPicture src={postPicture} alt="user's post" />
+          <WarningText>{pictureWarningText}</WarningText>
           <ModalLabel htmlFor="Profile Picture">Picture</ModalLabel>
-          <FileInput type="file" id="Profile Picture" />
+          <FileInput
+            type="file"
+            id="Profile Picture"
+            onChange={onFileChange}
+            ref={inputRef}
+          />
         </FlexContainer>
-        <FlexContainer
-          direction="row"
-          gap="1.5rem"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <ModalLabel htmlFor="caption">Caption</ModalLabel>
-          <ModalInput id="caption" />
+
+        <FlexContainer direction="column" gap="0.8rem">
+          <FlexContainer
+            direction="row"
+            gap="1.5rem"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <ModalLabel htmlFor="caption">Caption</ModalLabel>
+            <ModalInput
+              id="caption"
+              value={caption}
+              onChange={(e) => setCaption(e.target.value)}
+              maxLength={25}
+            />
+          </FlexContainer>
+          <WarningText>{captionWarningText}</WarningText>
         </FlexContainer>
         <FlexContainer direction="row" gap="1rem" justifyContent="center">
           <Button color="red" name="Cancel">
@@ -65,5 +93,20 @@ const AddPostForm = styled.form`
     justify-items: center;
   }
 `;
-
+const PostPicture = styled.img`
+  width: 250px;
+  height: 250px;
+  @media only screen and (min-width: 375px) {
+    width: 300px;
+    height: 300px;
+  }
+  @media only screen and (min-width: 540px) {
+    width: 350px;
+    height: 350px;
+  }
+  @media only screen and (min-width: 768px) {
+    width: 420px;
+    height: 420px;
+  }
+`;
 export default AddPostModal;
