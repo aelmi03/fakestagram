@@ -1,5 +1,14 @@
+import { doc, getFirestore } from "firebase/firestore";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
+import { useAppSelector } from "../../../app/hooks";
+import { selectUser } from "../../../features/user/userSlice";
 import Button from "../../utils/Button";
 import FlexContainer from "../../utils/FlexContainer";
 import HorizontalLine from "../../utils/HorizontalLine";
@@ -11,6 +20,7 @@ import FileInput from "../../utils/StyledFileInput";
 import WarningText from "../../utils/WarningText";
 
 const AddPostModal = () => {
+  const user = useAppSelector(selectUser);
   const [caption, setCaption] = useState("");
   const [postPicture, setPostPicture] = useState(
     "https://firebasestorage.googleapis.com/v0/b/fakestagram-b535c.appspot.com/o/post-placeholder.jpg?alt=media&token=aad29630-6606-4b09-9bc7-ebd83d990548"
@@ -22,10 +32,47 @@ const AddPostModal = () => {
     const reader = new FileReader();
     reader.onload = function () {
       setPostPicture(reader.result as string);
+      setPictureWarningText("");
     };
 
     if (inputRef?.current?.files) {
       reader.readAsDataURL(inputRef.current.files[0]);
+    }
+  };
+  const downloadImage = async () => {
+    const filePath = `${user.id}/`;
+    const newImageRef = ref(getStorage(), filePath);
+    await uploadBytesResumable(newImageRef, inputRef.current!.files![0]);
+    const publicImageUrl = await getDownloadURL(newImageRef);
+    return publicImageUrl;
+  };
+  const checkInputs = () => {
+    let isValid: boolean = true;
+    setCaptionWarningText(
+      !caption ? "Caption cannot be empty, please enter a valid caption" : ""
+    );
+    setPictureWarningText(
+      postPicture ===
+        "https://firebasestorage.googleapis.com/v0/b/fakestagram-b535c.appspot.com/o/post-placeholder.jpg?alt=media&token=aad29630-6606-4b09-9bc7-ebd83d990548"
+        ? "You must choose a picture to be able to post"
+        : ""
+    );
+    if (
+      !caption ||
+      postPicture ===
+        "https://firebasestorage.googleapis.com/v0/b/fakestagram-b535c.appspot.com/o/post-placeholder.jpg?alt=media&token=aad29630-6606-4b09-9bc7-ebd83d990548"
+    ) {
+      isValid = false;
+    }
+    return isValid;
+  };
+  const addPost = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (checkInputs() === false) return;
+    try {
+    } catch (e) {
+      console.log(e);
     }
   };
   return (
@@ -37,7 +84,6 @@ const AddPostModal = () => {
         </FlexContainer>
         <FlexContainer direction="column" gap="1.5rem" alignItems="center">
           <PostPicture src={postPicture} alt="user's post" />
-          <WarningText>{pictureWarningText}</WarningText>
           <ModalLabel htmlFor="Profile Picture">Picture</ModalLabel>
           <FileInput
             type="file"
@@ -45,6 +91,7 @@ const AddPostModal = () => {
             onChange={onFileChange}
             ref={inputRef}
           />
+          <WarningText>{pictureWarningText}</WarningText>
         </FlexContainer>
 
         <FlexContainer direction="column" gap="0.8rem">
@@ -68,7 +115,9 @@ const AddPostModal = () => {
           <Button color="red" name="Cancel">
             Cancel
           </Button>
-          <Button name="Post">Post</Button>
+          <Button name="Post" onClick={addPost}>
+            Post
+          </Button>
         </FlexContainer>
       </AddPostForm>
     </ModalWrapper>
@@ -101,11 +150,11 @@ const PostPicture = styled.img`
     height: 300px;
   }
   @media only screen and (min-width: 540px) {
-    width: 350px;
+    width: 370px;
     height: 350px;
   }
   @media only screen and (min-width: 768px) {
-    width: 420px;
+    width: 450px;
     height: 420px;
   }
 `;
