@@ -50,6 +50,7 @@ const LinksContainer = styled(FlexContainer)`
   position: fixed;
   bottom: 0;
   width: 100%;
+  z-index: 1;
   justify-content: space-evenly;
   border-top: 1px solid ${({ theme }) => theme.palette.neutral};
   padding: 2rem 0rem;
@@ -61,7 +62,7 @@ const LinksContainer = styled(FlexContainer)`
     align-items: center;
     justify-content: start;
     gap: 3rem;
-    a:nth-child(3) {
+    a:nth-child(2) {
       display: none;
     }
   }

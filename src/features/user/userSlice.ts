@@ -6,18 +6,18 @@ export type User = {
   username: string;
   id: string;
   profilePicture: string;
-  followers: string[];
   following: string[];
   biography: string;
+  savedPosts: [];
 };
 const initialUser: User = {
   fullName: "",
   username: "",
   id: "",
   profilePicture: "",
-  followers: [],
   following: [],
   biography: "",
+  savedPosts: [],
 } as User;
 export const userSlice = createSlice({
   name: "user",

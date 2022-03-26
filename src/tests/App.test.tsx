@@ -8,8 +8,8 @@ let mockAuthUserValue: null | string;
 const mockUser: User = {
   fullName: "John Doe",
   username: "johnDoe23",
-  followers: [],
   following: [],
+  savedPosts: [],
   id: "123",
   profilePicture: "path/to/photo/for/johnDoe23",
   biography: "Love riding bicycles and going to the beach :)",

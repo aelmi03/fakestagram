@@ -1,7 +1,6 @@
 import {
   addDoc,
   collection,
-  doc,
   getFirestore,
   serverTimestamp,
   updateDoc,
