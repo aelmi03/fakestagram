@@ -1,4 +1,11 @@
-import { doc, getFirestore } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getFirestore,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
 import {
   getDownloadURL,
   getStorage,
@@ -39,8 +46,8 @@ const AddPostModal = () => {
       reader.readAsDataURL(inputRef.current.files[0]);
     }
   };
-  const downloadImage = async () => {
-    const filePath = `${user.id}/`;
+  const downloadImage = async (id: string) => {
+    const filePath = `${user.id}/posts/${id}`;
     const newImageRef = ref(getStorage(), filePath);
     await uploadBytesResumable(newImageRef, inputRef.current!.files![0]);
     const publicImageUrl = await getDownloadURL(newImageRef);
@@ -71,6 +78,18 @@ const AddPostModal = () => {
     e.stopPropagation();
     if (checkInputs() === false) return;
     try {
+      const postDoc = await addDoc(collection(getFirestore(), "posts"), {
+        postedBy: user.id,
+        comments: [],
+        likes: [],
+        caption,
+        timestamp: serverTimestamp(),
+      });
+      const imgSrc = await downloadImage(postDoc.id);
+      updateDoc(postDoc, {
+        id: postDoc.id,
+        imgSrc,
+      });
     } catch (e) {
       console.log(e);
     }
