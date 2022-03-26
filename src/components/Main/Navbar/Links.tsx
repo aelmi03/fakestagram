@@ -6,7 +6,10 @@ import { FiSearch } from "react-icons/fi";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { getAuth } from "firebase/auth";
-const Links = () => {
+interface IProps {
+  toggleAddPostModal: (e: React.MouseEvent) => void;
+}
+const Links = ({ toggleAddPostModal }: IProps) => {
   const location = useLocation();
   return (
     <LinksContainer direction="row" gap="0.5rem">
@@ -18,7 +21,7 @@ const Links = () => {
         )}
       </StyledLink>
       <StyledLink to="/search">{<FiSearch />}</StyledLink>
-      <AiOutlinePlusCircle />
+      <AiOutlinePlusCircle onClick={toggleAddPostModal} />
       <StyledLink to="/chats">
         {location.pathname.includes("chats") ? <BsFillChatFill /> : <BsChat />}
       </StyledLink>

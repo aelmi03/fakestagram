@@ -25,8 +25,10 @@ import ModalTitle from "../../utils/ModalTitle";
 import ModalWrapper from "../../utils/ModalWrapper";
 import FileInput from "../../utils/StyledFileInput";
 import WarningText from "../../utils/WarningText";
-
-const AddPostModal = () => {
+interface IProps {
+  toggleAddPostModal: (e: React.MouseEvent) => void;
+}
+const AddPostModal = ({ toggleAddPostModal }: IProps) => {
   const user = useAppSelector(selectUser);
   const [caption, setCaption] = useState("");
   const [postPicture, setPostPicture] = useState(
@@ -86,16 +88,17 @@ const AddPostModal = () => {
         timestamp: serverTimestamp(),
       });
       const imgSrc = await downloadImage(postDoc.id);
-      updateDoc(postDoc, {
+      await updateDoc(postDoc, {
         id: postDoc.id,
         imgSrc,
       });
+      toggleAddPostModal(e);
     } catch (e) {
       console.log(e);
     }
   };
   return (
-    <ModalWrapper>
+    <ModalWrapper data-testid="Add Post Wrapper" onClick={toggleAddPostModal}>
       <AddPostForm onClick={(e) => e.stopPropagation()}>
         <FlexContainer direction="column" gap="0.8rem" alignItems="center">
           <ModalTitle>Add Post</ModalTitle>
@@ -131,7 +134,7 @@ const AddPostModal = () => {
           <WarningText>{captionWarningText}</WarningText>
         </FlexContainer>
         <FlexContainer direction="row" gap="1rem" justifyContent="center">
-          <Button color="red" name="Cancel">
+          <Button color="red" name="Cancel" onClick={toggleAddPostModal}>
             Cancel
           </Button>
           <Button name="Post" onClick={addPost}>

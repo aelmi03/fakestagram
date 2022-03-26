@@ -2,12 +2,18 @@ import styled from "styled-components";
 import Heading from "../../utils/Heading";
 import Links from "./Links";
 import StyledInput from "../../SignUpAndLogin/StyledInput";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import AddPostModal from "./AddPostModal";
 
 const Navbar = () => {
+  const [showAddPostModal, setShowAddPostModal] = useState(false);
+  const toggleAddPostModal = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setShowAddPostModal((prevBoolean) => !prevBoolean);
+  };
   const navigate = useNavigate();
   useEffect(() => {
     navigate(`/profile/${getAuth().currentUser!.uid}`);
@@ -17,8 +23,10 @@ const Navbar = () => {
     <NavbarWrapper>
       <NavbarHeading>Fakestagram</NavbarHeading>
       <NavbarInput placeholder="🔍 Search" />
-      <Links />
-      <AddPostModal />
+      <Links toggleAddPostModal={toggleAddPostModal} />
+      {showAddPostModal ? (
+        <AddPostModal toggleAddPostModal={toggleAddPostModal} />
+      ) : null}
     </NavbarWrapper>
   );
 };
