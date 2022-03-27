@@ -4,6 +4,9 @@ import { FaRegBookmark } from "react-icons/fa";
 import Post from "../../utils/PostInterface";
 import React, { useEffect, useState } from "react";
 import { selectUser, User } from "../../../features/user/userSlice";
+import { BsFillChatFill } from "react-icons/bs";
+import { AiFillHeart } from "react-icons/ai";
+
 import {
   collection,
   getFirestore,
@@ -73,7 +76,21 @@ const ProfilePosts = ({ profileUser }: IProps) => {
       </FlexContainer>
       <PostsContainer>
         {profilePosts.map((post) => (
-          <ProfilePost src={post.imgSrc} alt="profile" />
+          <ProfilePost>
+            <ProfilePostImage src={post.imgSrc} alt="profile" />
+            <PostInformation>
+              <FlexContainer direction="row" gap="0.7rem" alignItems="center">
+                <AiFillHeart />
+                <PostInformationText>{post.likes.length}</PostInformationText>
+              </FlexContainer>
+              <FlexContainer direction="row" gap="0.7rem" alignItems="center">
+                <BsFillChatFill />
+                <PostInformationText>
+                  {post.comments.length}
+                </PostInformationText>
+              </FlexContainer>
+            </PostInformation>
+          </ProfilePost>
         ))}
       </PostsContainer>
     </ProfilePostsWrapper>
@@ -102,9 +119,45 @@ const InfoText = styled.p`
   font-family: ${({ theme }) => theme.primaryFont};
   font-size: 1.3rem;
 `;
-const ProfilePost = styled.img`
+const PostInformationText = styled.h4`
+  color: ${({ theme }) => theme.palette.common.white};
+  font-family: ${({ theme }) => theme.primaryFont};
+  font-size: 1.75rem;
+  font-weight: bold;
+`;
+const ProfilePostImage = styled.img`
   width: 100%;
+  height: 100%;
   aspect-ratio: 1 / 1;
+`;
+const ProfilePost = styled.div`
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  position: relative;
+`;
+const PostInformation = styled.div`
+  position: absolute;
+  display: flex;
+  justify-content: space-evenly;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  z-index: 1;
+  &:hover {
+    opacity: 1;
+  }
+  svg {
+    color: ${({ theme }) => theme.palette.common.white};
+    height: 25px;
+    width: 25px;
+  }
+  div {
+    width: max-content;
+  }
 `;
 const InfoContainer = styled.div<{ highlight: boolean }>`
   display: flex;
