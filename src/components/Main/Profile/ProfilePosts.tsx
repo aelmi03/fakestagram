@@ -2,8 +2,20 @@ import styled from "styled-components";
 import FlexContainer from "../../utils/FlexContainer";
 import { BsGrid3X3 } from "react-icons/bs";
 import { FaRegBookmark } from "react-icons/fa";
-
-const ProfilePosts = () => {
+import Post from "../../utils/PostInterface";
+import React, { useEffect, useState } from "react";
+import { User } from "../../../features/user/userSlice";
+interface IProps {
+  profileUser: User;
+}
+const ProfilePosts = ({ profileUser }: IProps) => {
+  console.log(profileUser, "Profile Posts :)");
+  const [typeOfPosts, setTypeOfPosts] = useState("Own Posts");
+  const [profilePosts, setProfilePosts] = useState<Post[]>([]);
+  useEffect(() => {
+    if (typeOfPosts === "Own Posts") {
+    }
+  }, [typeOfPosts]);
   return (
     <ProfilePostsWrapper>
       <FlexContainer direction="row" justifyContent="space-evenly">
@@ -14,44 +26,7 @@ const ProfilePosts = () => {
           <FaRegBookmark /> <InfoText>SAVED POSTS</InfoText>
         </InfoContainer>
       </FlexContainer>
-      <PostsContainer>
-        <img
-          alt="empty profile"
-          src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/golden-retriever-royalty-free-image-506756303-1560962726.jpg?crop=0.672xw:1.00xh;0.166xw,0&resize=640:*"
-        />
-        <img
-          alt="empty profile"
-          src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/golden-retriever-royalty-free-image-506756303-1560962726.jpg?crop=0.672xw:1.00xh;0.166xw,0&resize=640:*"
-        />
-        <img
-          alt="empty profile"
-          src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/golden-retriever-royalty-free-image-506756303-1560962726.jpg?crop=0.672xw:1.00xh;0.166xw,0&resize=640:*"
-        />
-        <img
-          alt="empty profile"
-          src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/golden-retriever-royalty-free-image-506756303-1560962726.jpg?crop=0.672xw:1.00xh;0.166xw,0&resize=640:*"
-        />
-        <img
-          alt="empty profile"
-          src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/golden-retriever-royalty-free-image-506756303-1560962726.jpg?crop=0.672xw:1.00xh;0.166xw,0&resize=640:*"
-        />
-        <img
-          alt="empty profile"
-          src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/golden-retriever-royalty-free-image-506756303-1560962726.jpg?crop=0.672xw:1.00xh;0.166xw,0&resize=640:*"
-        />
-        <img
-          alt="empty profile"
-          src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/golden-retriever-royalty-free-image-506756303-1560962726.jpg?crop=0.672xw:1.00xh;0.166xw,0&resize=640:*"
-        />
-        <img
-          alt="empty profile"
-          src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/golden-retriever-royalty-free-image-506756303-1560962726.jpg?crop=0.672xw:1.00xh;0.166xw,0&resize=640:*"
-        />
-        <img
-          alt="empty profile"
-          src="https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/golden-retriever-royalty-free-image-506756303-1560962726.jpg?crop=0.672xw:1.00xh;0.166xw,0&resize=640:*"
-        />
-      </PostsContainer>
+      <PostsContainer>{}</PostsContainer>
     </ProfilePostsWrapper>
   );
 };

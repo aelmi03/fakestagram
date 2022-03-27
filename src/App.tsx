@@ -15,7 +15,6 @@ function App() {
     const userData = await getDoc(userDoc);
     dispatch(setUser(userData.data() as User));
     onSnapshot(userDoc, (snapshot) => {
-      console.log("updating user", snapshot.data());
       dispatch(setUser(snapshot.data() as User));
     });
   };

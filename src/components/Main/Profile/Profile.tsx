@@ -1,12 +1,31 @@
 import styled from "styled-components";
-import { selectUser } from "../../../features/user/userSlice";
+import { selectUser, User } from "../../../features/user/userSlice";
 import { useAppSelector } from "../../../app/hooks";
 import ProfilePosts from "./ProfilePosts";
 import EditProfileModal from "./EditProfileModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getAuth, signOut } from "firebase/auth";
+import { useParams } from "react-router-dom";
+import {
+  doc,
+  DocumentSnapshot,
+  getDoc,
+  getFirestore,
+} from "firebase/firestore";
 
 const Profile = () => {
+  let params = useParams();
+  const [profileUser, setProfileUser] = useState<User>({} as User);
+  useEffect(() => {
+    const getProfileUser = async () => {
+      const profileDoc = doc(getFirestore(), `users/${params.userID}`);
+      return await getDoc(profileDoc);
+    };
+    getProfileUser().then((doc: DocumentSnapshot) => {
+      setProfileUser(doc.data() as User);
+    });
+  }, [params.userID]);
+  console.log(profileUser);
   const user = useAppSelector(selectUser);
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
   const toggleEditProfileModal = (e: React.MouseEvent) => {
@@ -50,7 +69,7 @@ const Profile = () => {
         </ProfileContainer>
       </ProfileDisplayContainer>
 
-      <ProfilePosts />
+      <ProfilePosts profileUser={profileUser} />
       {showEditProfileModal ? (
         <EditProfileModal toggleEditProfileModal={toggleEditProfileModal} />
       ) : null}
@@ -63,12 +82,12 @@ const ProfileWrapper = styled.div`
   gap: 2rem;
   width: 100vw;
   position: relative;
+
   @media only screen and (min-width: 768px) {
     padding: 2rem 2rem;
   }
   @media only screen and (min-width: 1024px) {
     width: 80%;
-    align-content: center;
     margin: 0 auto;
     padding: 2rem 0rem;
   }
@@ -129,6 +148,7 @@ const ProfileDisplayContainer = styled.div`
     padding: 0rem 0rem 0rem 2rem;
   }
   @media only screen and (min-width: 540px) {
+    justify-content: center;
     gap: 3rem;
   }
   @media only screen and (min-width: 768px) {
