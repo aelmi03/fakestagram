@@ -122,8 +122,11 @@ const InfoText = styled.p`
 const PostInformationText = styled.h4`
   color: ${({ theme }) => theme.palette.common.white};
   font-family: ${({ theme }) => theme.primaryFont};
-  font-size: 1.75rem;
+  font-size: 1.2rem;
   font-weight: bold;
+  @media only screen and (min-width: 540px) {
+    font-size: 1.75rem;
+  }
 `;
 const ProfilePostImage = styled.img`
   width: 100%;
@@ -152,8 +155,12 @@ const PostInformation = styled.div`
   }
   svg {
     color: ${({ theme }) => theme.palette.common.white};
-    height: 25px;
-    width: 25px;
+    height: 15px;
+    width: 15px;
+    @media only screen and (min-width: 540px) {
+      height: 25px;
+      width: 25px;
+    }
   }
   div {
     width: max-content;
