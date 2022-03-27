@@ -80,7 +80,6 @@ const ProfileWrapper = styled.div`
   display: grid;
   padding: 1rem 0.6rem;
   gap: 2rem;
-  width: 100%;
   position: relative;
 
   @media only screen and (min-width: 768px) {
@@ -89,8 +88,8 @@ const ProfileWrapper = styled.div`
 
   @media only screen and (min-width: 1024px) {
     width: 80%;
+    max-width: 80%;
     margin: 0 auto;
-    padding: 2rem 0rem;
   }
 `;
 const ButtonsContainer = styled.div`
