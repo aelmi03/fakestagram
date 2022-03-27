@@ -49,6 +49,7 @@ const EditProfileModal = ({ toggleEditProfileModal }: IProps) => {
   const downloadImage = async () => {
     const filePath = `${user.id}/profile-picture`;
     const newImageRef = ref(getStorage(), filePath);
+    console.log(inputRef.current!.files![0]);
     await uploadBytesResumable(newImageRef, inputRef.current!.files![0]);
     const publicImageUrl = await getDownloadURL(newImageRef);
     return publicImageUrl;
