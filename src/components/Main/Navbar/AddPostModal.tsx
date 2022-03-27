@@ -72,6 +72,7 @@ const AddPostModal = ({ toggleAddPostModal }: IProps) => {
     ) {
       isValid = false;
     }
+
     return isValid;
   };
   const addPost = async (e: React.MouseEvent<HTMLButtonElement>) => {
