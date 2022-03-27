@@ -80,12 +80,13 @@ const ProfileWrapper = styled.div`
   display: grid;
   padding: 1rem 0.6rem;
   gap: 2rem;
-  width: 100vw;
+  width: 100%;
   position: relative;
 
   @media only screen and (min-width: 768px) {
     padding: 2rem 2rem;
   }
+
   @media only screen and (min-width: 1024px) {
     width: 80%;
     margin: 0 auto;

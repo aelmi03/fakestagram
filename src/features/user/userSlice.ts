@@ -8,7 +8,7 @@ export type User = {
   profilePicture: string;
   following: string[];
   biography: string;
-  savedPosts: [];
+  savedPosts: string[];
 };
 const initialUser: User = {
   fullName: "",

@@ -1,23 +1,24 @@
-import styled from "styled-components";
-import FlexContainer from "../../utils/FlexContainer";
+import styled, { css } from "styled-components";
 import { BsGrid3X3 } from "react-icons/bs";
 import { FaRegBookmark } from "react-icons/fa";
 import Post from "../../utils/PostInterface";
 import React, { useEffect, useState } from "react";
-import { User } from "../../../features/user/userSlice";
+import { selectUser, User } from "../../../features/user/userSlice";
 import {
   collection,
-  getDocs,
   getFirestore,
   onSnapshot,
   query,
   where,
 } from "firebase/firestore";
+import FlexContainer from "../../utils/FlexContainer";
 import { Unsubscribe } from "firebase/auth";
+import { useAppSelector } from "../../../app/hooks";
 interface IProps {
   profileUser: User;
 }
 const ProfilePosts = ({ profileUser }: IProps) => {
+  const user = useAppSelector(selectUser);
   const [typeOfPosts, setTypeOfPosts] = useState("Own Posts");
   const [profilePosts, setProfilePosts] = useState<Post[]>([]);
   useEffect(() => {
@@ -31,23 +32,42 @@ const ProfilePosts = ({ profileUser }: IProps) => {
         setProfilePosts(posts);
       });
     };
+    const getSavedPosts = async () => {
+      const savedPostsQuery = query(collection(getFirestore(), "posts"));
+      return onSnapshot(savedPostsQuery, (snapshot) => {
+        const posts = snapshot.docs
+          .map((doc) => doc.data() as Post)
+          .filter((post) => user.savedPosts.includes(post.id));
+        setProfilePosts(posts);
+      });
+    };
     let unsubscribeFunction: Unsubscribe;
     if (typeOfPosts === "Own Posts") {
       getProfileUserPosts().then((unsubscribe) => {
+        unsubscribeFunction = unsubscribe;
+      });
+    } else {
+      getSavedPosts().then((unsubscribe) => {
         unsubscribeFunction = unsubscribe;
       });
     }
     return () => {
       unsubscribeFunction();
     };
-  }, [typeOfPosts, profileUser.id]);
+  }, [typeOfPosts, profileUser.id, user]);
   return (
     <ProfilePostsWrapper>
       <FlexContainer direction="row" justifyContent="space-evenly">
-        <InfoContainer>
+        <InfoContainer
+          onClick={() => setTypeOfPosts("Own Posts")}
+          highlight={typeOfPosts === "Own Posts"}
+        >
           <BsGrid3X3 /> <InfoText>POSTS</InfoText>
         </InfoContainer>
-        <InfoContainer>
+        <InfoContainer
+          onClick={() => setTypeOfPosts("Saved Posts")}
+          highlight={typeOfPosts === "Saved Posts"}
+        >
           <FaRegBookmark /> <InfoText>SAVED POSTS</InfoText>
         </InfoContainer>
       </FlexContainer>
@@ -64,7 +84,6 @@ const ProfilePostsWrapper = styled.div`
   grid-template-columns: 1fr;
   gap: 2rem;
   width: 100%;
-  justify-content: center;
   border-top: 1px solid ${({ theme }) => theme.palette.common.grey};
   margin-bottom: 5rem;
 `;
@@ -74,10 +93,11 @@ const PostsContainer = styled.div`
   width: 100%;
   gap: 0.4rem;
   @media only screen and (min-width: 768px) {
-    grid-template-columns: repeat(auto-fit, calc(94% / 3));
+    grid-template-columns: repeat(auto-fit, calc(92% / 3));
     gap: 2.8rem;
   }
 `;
+
 const InfoText = styled.p`
   font-family: ${({ theme }) => theme.primaryFont};
   font-size: 1.3rem;
@@ -87,7 +107,7 @@ const ProfilePost = styled.img`
   height: 100%;
   aspect-ratio: 1 / 1;
 `;
-const InfoContainer = styled.div`
+const InfoContainer = styled.div<{ highlight: boolean }>`
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
@@ -97,9 +117,11 @@ const InfoContainer = styled.div`
   position: relative;
   top: -1px;
   color: ${({ theme }) => theme.palette.darkGrey};
-  :nth-child(1) {
-    border-top: 1px solid ${({ theme }) => theme.palette.common.black};
-    color: ${({ theme }) => theme.palette.primary.contrastText};
-  }
+  ${({ highlight }) =>
+    highlight === true &&
+    css`
+      border-top: 1px solid ${({ theme }) => theme.palette.common.black};
+      color: ${({ theme }) => theme.palette.primary.contrastText};
+    `}
 `;
 export default ProfilePosts;
