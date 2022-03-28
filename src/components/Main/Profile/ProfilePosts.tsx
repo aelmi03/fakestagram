@@ -24,6 +24,7 @@ const ProfilePosts = ({ profileUser }: IProps) => {
   const user = useAppSelector(selectUser);
   const [typeOfPosts, setTypeOfPosts] = useState("Own Posts");
   const [profilePosts, setProfilePosts] = useState<Post[]>([]);
+  const [postToShow, setPostToShow] = useState<null | Post>(null);
   useEffect(() => {
     const getProfileUserPosts = async () => {
       const profileUserPostsQuery = query(
@@ -149,7 +150,6 @@ const PostInformation = styled.div`
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
   opacity: 0;
-  z-index: 1;
   &:hover {
     opacity: 1;
   }
