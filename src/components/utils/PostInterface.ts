@@ -4,7 +4,7 @@ export default interface Post {
   id: string;
   postedBy: string;
   caption: string;
-  likes: number[];
+  likes: string[];
   comments: Comment[];
   imgSrc: string;
   timestamp: Timestamp;

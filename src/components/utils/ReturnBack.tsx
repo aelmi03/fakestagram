@@ -14,7 +14,7 @@ const ReturnBack = ({ name, onClick }: IProps) => {
 };
 const ReturnBackWrapper = styled.div`
   width: 100%;
-  padding: 1.6rem;
+  padding: 1.3rem 1.6rem;
   display: grid;
   align-items: center;
   position: fixed;
