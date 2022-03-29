@@ -59,6 +59,18 @@ const StandardPost = ({ post, postUser }: IProps) => {
       likes,
     });
   };
+  const clickBookmarkIcon = async () => {
+    let savedPosts: string[] = [];
+    if (user.savedPosts.includes(postInfo.id)) {
+      savedPosts = [...user.savedPosts].filter((id) => id !== postInfo.id);
+    } else {
+      savedPosts = [...user.savedPosts, postInfo.id];
+    }
+    const userDoc = doc(getFirestore(), `users/${user.id}`);
+    await updateDoc(userDoc, {
+      savedPosts,
+    });
+  };
   useEffect(() => {
     const postDoc = doc(getFirestore(), `posts/${postInfo.id}`);
     const unsubscribe = onSnapshot(postDoc, (snapshot) => {
@@ -111,9 +123,12 @@ const StandardPost = ({ post, postUser }: IProps) => {
             <BsChatDots onClick={changeModalStatus} title={"View comments"} />
           </FlexContainer>
           {userHasSavedPost() ? (
-            <BsBookmarkFill title={`Unsave this post`} />
+            <BsBookmarkFill
+              title={`Unsave this post`}
+              onClick={clickBookmarkIcon}
+            />
           ) : (
-            <BsBookmark title={"Save this post"} />
+            <BsBookmark title={"Save this post"} onClick={clickBookmarkIcon} />
           )}
         </FlexContainer>
         <FlexContainer direction="row" gap="0.6rem">
