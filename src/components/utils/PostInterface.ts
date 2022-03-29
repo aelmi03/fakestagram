@@ -1,4 +1,4 @@
-import { Timestamp } from "firebase/firestore";
+import { FieldValue, Timestamp } from "firebase/firestore";
 
 export default interface Post {
   id: string;
@@ -7,12 +7,12 @@ export default interface Post {
   likes: string[];
   comments: Comment[];
   imgSrc: string;
-  timestamp: Timestamp;
+  timestamp: FieldValue;
 }
 
-interface Comment {
+export interface Comment {
   id: string;
   user: string;
   content: string;
-  timestamp: Timestamp;
+  timestamp: FieldValue;
 }

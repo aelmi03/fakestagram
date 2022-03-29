@@ -1,10 +1,43 @@
+import {
+  doc,
+  getFirestore,
+  serverTimestamp,
+  Timestamp,
+  updateDoc,
+} from "firebase/firestore";
+import { useState } from "react";
 import styled from "styled-components";
+import { User } from "../../features/user/userSlice";
+import Post, { Comment } from "../utils/PostInterface";
 import { PostCommentText } from "../utils/Texts";
-const AddComment = () => {
+import { nanoid } from "@reduxjs/toolkit";
+interface IProps {
+  postUser: User;
+  post: Post;
+}
+const AddComment = ({ post, postUser }: IProps) => {
+  const [comment, setComment] = useState("");
+  const postComment = async () => {
+    const postDoc = doc(getFirestore(), `posts/${post.id}`);
+    const newComment: Comment = {
+      user: "123",
+      id: nanoid(),
+      content: comment,
+      timestamp: new Date() as unknown as Timestamp,
+    };
+    await updateDoc(postDoc, {
+      comments: [...post.comments, newComment],
+    });
+    setComment("");
+  };
   return (
     <PostCommentsContainer>
-      <PostCommentTextArea placeholder="Add Comment" />
-      <PostCommentText>Post</PostCommentText>
+      <PostCommentTextArea
+        placeholder="Add Comment"
+        value={comment}
+        onChange={(e) => setComment((e.target as HTMLTextAreaElement).value)}
+      />
+      <PostCommentText onClick={postComment}>Post</PostCommentText>
     </PostCommentsContainer>
   );
 };

@@ -25,7 +25,7 @@ const PostModal = ({ post, postUser, changeModalStatus }: IProps) => {
           />
           <Comments post={post} postUser={postUser} />
         </FlexContainer>
-        <AddComment />
+        <AddComment post={post} postUser={postUser} />
       </FlexContainer>
     </PostModalWrapper>
   );

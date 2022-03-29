@@ -3,6 +3,7 @@ import Post from "../utils/PostInterface";
 import { User } from "../../features/user/userSlice";
 import Comment from "./Comment";
 import HorizontalLine from "../utils/HorizontalLine";
+import { Timestamp } from "firebase/firestore";
 interface IProps {
   post: Post;
   postUser: User;
@@ -11,7 +12,7 @@ const Comments = ({ post, postUser }: IProps) => {
   return (
     <CommentsWrapper>
       <Comment
-        timestamp={post.timestamp}
+        timestamp={post.timestamp as Timestamp}
         content={post.caption}
         user={postUser}
       />

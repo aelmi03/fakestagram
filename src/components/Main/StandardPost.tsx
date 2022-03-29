@@ -8,7 +8,6 @@ import {
   BsSuitHeart,
   BsSuitHeartFill,
 } from "react-icons/bs";
-import { Bookmark, Heart } from "../utils/SVGS";
 import { formatDistanceToNow } from "date-fns";
 import FlexContainer from "../utils/FlexContainer";
 import Post from "../utils/PostInterface";
@@ -25,9 +24,9 @@ import AddComment from "./AddComment";
 import { useAppSelector } from "../../app/hooks";
 import {
   doc,
-  getDoc,
   getFirestore,
   onSnapshot,
+  Timestamp,
   updateDoc,
 } from "firebase/firestore";
 interface IProps {
@@ -147,10 +146,12 @@ const StandardPost = ({ post, postUser }: IProps) => {
           {postInfo.comments.length > 1 ? "comments" : "comment"}
         </ClickablePostGreyText>
         <PostGreyText>
-          {`${formatDistanceToNow(postInfo.timestamp.toDate())} ago`}
+          {`${formatDistanceToNow(
+            (postInfo.timestamp as Timestamp).toDate()
+          )} ago`}
         </PostGreyText>
       </FlexContainer>
-      <AddComment />
+      <AddComment post={postInfo} postUser={postUser} />
       {showPostModal === true && (
         <PostModal
           postUser={postUser}
