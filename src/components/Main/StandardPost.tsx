@@ -10,12 +10,19 @@ import {
   PostGreyText,
   PostText,
   PostTextBold,
+  ClickablePostGreyText,
 } from "../utils/Texts";
+import React, { useState } from "react";
+import PostModal from "./PostModal";
 interface IProps {
   post: Post;
   postUser: User;
 }
 const StandardPost = ({ post, postUser }: IProps) => {
+  const [showPostModal, setShowPostModal] = useState(false);
+  const changeModalStatus = () => {
+    setShowPostModal((prevBoolean) => !prevBoolean);
+  };
   return (
     <PostWrapper>
       <FlexContainer
@@ -62,10 +69,10 @@ const StandardPost = ({ post, postUser }: IProps) => {
           <PostText>&nbsp;&nbsp;{post.caption}</PostText>
         </PostTextBold>
 
-        <PostGreyText>
+        <ClickablePostGreyText onClick={changeModalStatus}>
           View all {post.comments.length}{" "}
           {post.comments.length > 1 ? "comments" : "comment"}
-        </PostGreyText>
+        </ClickablePostGreyText>
         <PostGreyText>
           {`${formatDistanceToNow(post.timestamp.toDate())} ago`}
         </PostGreyText>
@@ -74,6 +81,13 @@ const StandardPost = ({ post, postUser }: IProps) => {
         <PostCommentTextArea placeholder="Add Comment" />
         <PostCommentText>Post</PostCommentText>
       </PostCommentsContainer>
+      {showPostModal === true && (
+        <PostModal
+          postUser={postUser}
+          post={post}
+          changeModalStatus={changeModalStatus}
+        />
+      )}
     </PostWrapper>
   );
 };

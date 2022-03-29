@@ -21,6 +21,8 @@ const ReturnBackWrapper = styled.div`
   grid-template-columns: max-content 1fr;
   background-color: ${({ theme }) => theme.palette.primaryLight};
   z-index: 5;
+  top: 0px;
+  left: 0px;
   svg {
     color: ${({ theme }) => theme.palette.primary.contrastText};
     height: 25px;
@@ -33,5 +35,6 @@ const NameText = styled.p`
   font-size: 1.65rem;
   font-weight: 600;
   text-align: center;
+  margin-right: 2.8rem;
 `;
 export default ReturnBack;

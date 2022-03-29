@@ -4,24 +4,22 @@ import { User } from "../../features/user/userSlice";
 import { Timestamp } from "firebase/firestore";
 import { formatDistanceToNow } from "date-fns";
 import FlexContainer from "../utils/FlexContainer";
-import { PostCommentText, PostGreyText, PostTextBold } from "../utils/Texts";
-// interface IProps {
-//   timestamp: Timestamp;
-//   content: string;
-//   user: User;
-// }
-const Comment = () => {
+import { PostText, PostGreyText, PostTextBold } from "../utils/Texts";
+interface IProps {
+  timestamp: Timestamp;
+  content: string;
+  user: User;
+}
+const Comment = ({ timestamp, content, user }: IProps) => {
   return (
     <FlexContainer direction="row" gap="1.5rem" alignItems="start">
-      <CommentPicture src="http://www.espn.go.com/media/pg2/2005/0727/photo/kobead_275.jpg" />
+      <CommentPicture src={user.profilePicture} />
       <FlexContainer direction="column" gap="0.5rem">
         <PostTextBold>
-          abdidaboss123
-          <PostCommentText>
-            &nbsp;&nbsp;dope photo my guy that shit was super hot fire
-          </PostCommentText>
+          {user.username}
+          <PostText>&nbsp;&nbsp;{content}</PostText>
         </PostTextBold>
-        <SmallGreyText> 2h</SmallGreyText>
+        <SmallGreyText>{formatDistanceToNow(timestamp.toDate())}</SmallGreyText>
       </FlexContainer>
     </FlexContainer>
   );

@@ -17,7 +17,10 @@ export const PostTextBold = styled.span`
 export const PostGreyText = styled(PostText)`
   color: ${({ theme }) => theme.palette.darkGrey};
 `;
+export const ClickablePostGreyText = styled(PostGreyText)`
+  cursor: pointer;
+`;
 export const PostCommentText = styled(PostText)`
   font-weight: 500;
-  color: ${({ theme }) => theme.palette.primary.contrastText};
+  color: ${({ theme }) => theme.palette.secondary.main};
 `;
