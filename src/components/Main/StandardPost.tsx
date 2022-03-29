@@ -14,6 +14,7 @@ import {
 } from "../utils/Texts";
 import React, { useState } from "react";
 import PostModal from "./PostModal";
+import AddComment from "./AddComment";
 interface IProps {
   post: Post;
   postUser: User;
@@ -55,7 +56,7 @@ const StandardPost = ({ post, postUser }: IProps) => {
             alignContent="center"
           >
             <VscHeart />
-            <BsChatDots />
+            <BsChatDots onClick={changeModalStatus} />
           </FlexContainer>
           <BsBookmark />
         </FlexContainer>
@@ -77,10 +78,7 @@ const StandardPost = ({ post, postUser }: IProps) => {
           {`${formatDistanceToNow(post.timestamp.toDate())} ago`}
         </PostGreyText>
       </FlexContainer>
-      <PostCommentsContainer>
-        <PostCommentTextArea placeholder="Add Comment" />
-        <PostCommentText>Post</PostCommentText>
-      </PostCommentsContainer>
+      <AddComment />
       {showPostModal === true && (
         <PostModal
           postUser={postUser}
@@ -96,7 +94,7 @@ const PostWrapper = styled.div`
   margin-top: 4rem;
   display: grid;
   gap: 1rem;
-  margin-bottom: 5rem;
+  margin-bottom: 5.1rem;
   background-color: ${({ theme }) => theme.palette.primaryLight};
   svg {
     height: 28px;
@@ -104,26 +102,11 @@ const PostWrapper = styled.div`
     cursor: pointer;
   }
 `;
-const PostCommentsContainer = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-  gap: 0.5rem;
-  padding: 1rem;
-  align-items: center;
-  border-top: 1px solid ${({ theme }) => theme.palette.common.grey};
-  border-bottom: 1px solid ${({ theme }) => theme.palette.common.grey};
-  background-color: ${({ theme }) => theme.palette.primaryLight};
-`;
+
 const PostUserImage = styled.img`
   width: 25px;
   height: 25px;
   border-radius: 50%;
-`;
-const PostCommentTextArea = styled.textarea`
-  padding: 0.5rem;
-  flex-grow: 1;
-  font-family: ${({ theme }) => theme.primaryFont};
-  font-size: 1.4rem;
 `;
 
 const PostImage = styled.img`

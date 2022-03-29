@@ -22,5 +22,6 @@ export const ClickablePostGreyText = styled(PostGreyText)`
 `;
 export const PostCommentText = styled(PostText)`
   font-weight: 500;
+  cursor: pointer;
   color: ${({ theme }) => theme.palette.secondary.main};
 `;

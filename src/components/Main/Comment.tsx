@@ -33,6 +33,25 @@ const CommentPicture = styled.img`
   top: 2px;
 `;
 const SmallGreyText = styled(PostGreyText)`
-  font-size: 1.15rem;
+  font-size: 1.2rem;
 `;
 export default Comment;
+// interface IProps {
+//   timestamp: Timestamp;
+//   content: string;
+//   user: User;
+// }
+// const Comment = ({ timestamp, content, user }: IProps) => {
+//   return (
+//     <FlexContainer direction="row" gap="1.5rem" alignItems="start">
+//       <CommentPicture src={user.profilePicture} />
+//       <FlexContainer direction="column" gap="0.5rem">
+//         <PostTextBold>
+//           {user.username}
+//           <PostText>&nbsp;&nbsp;{content}</PostText>
+//         </PostTextBold>
+//         <SmallGreyText>{formatDistanceToNow(timestamp.toDate())}</SmallGreyText>
+//       </FlexContainer>
+//     </FlexContainer>
+//   );
+// };

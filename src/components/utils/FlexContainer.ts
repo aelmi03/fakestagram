@@ -8,6 +8,7 @@ const FlexContainer = styled.div<{
   gap?: string;
   padding?: string;
   width?: string;
+  height?: string;
 }>`
   display: flex;
   width: 100%;
@@ -36,6 +37,11 @@ const FlexContainer = styled.div<{
     width &&
     css`
       width: ${width};
+    `};
+  ${({ height }) =>
+    height &&
+    css`
+      height: ${height};
     `};
   ${({ alignContent }) =>
     alignContent &&

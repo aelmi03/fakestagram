@@ -29,8 +29,7 @@ const CommentsWrapper = styled.div`
   display: grid;
   gap: 1.5rem;
   overflow-y: scroll;
-  padding: 0rem 1.2rem;
-  margin-top: 2rem;
+  padding: 0.5rem 1.2rem;
   z-index: 10;
 `;
 
