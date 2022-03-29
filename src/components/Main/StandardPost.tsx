@@ -5,6 +5,12 @@ import { VscHeart } from "react-icons/vsc";
 import FlexContainer from "../utils/FlexContainer";
 import Post from "../utils/PostInterface";
 import { User } from "../../features/user/userSlice";
+import {
+  PostCommentText,
+  PostGreyText,
+  PostText,
+  PostTextBold,
+} from "../utils/Texts";
 interface IProps {
   post: Post;
   postUser: User;
@@ -105,28 +111,7 @@ const PostCommentTextArea = styled.textarea`
   font-family: ${({ theme }) => theme.primaryFont};
   font-size: 1.4rem;
 `;
-const PostText = styled.p`
-  font-family: ${({ theme }) => theme.primaryFont};
-  font-size: 1.4rem;
-  color: ${({ theme }) => theme.palette.primary.contrastText};
-  font-weight: 400;
-  white-space: wrap;
-  display: inline;
-`;
 
-const PostTextBold = styled.span`
-  font-family: ${({ theme }) => theme.primaryFont};
-  font-size: 1.4rem;
-  color: ${({ theme }) => theme.palette.primary.contrastText};
-  font-weight: bold;
-`;
-const PostGreyText = styled(PostText)`
-  color: ${({ theme }) => theme.palette.darkGrey};
-`;
-const PostCommentText = styled(PostText)`
-  font-weight: 700;
-  color: ${({ theme }) => theme.palette.secondary.main};
-`;
 const PostImage = styled.img`
   width: 100%;
   aspect-ratio: 1/1.1;
