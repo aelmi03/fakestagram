@@ -19,12 +19,12 @@ import { Unsubscribe } from "firebase/auth";
 import { useAppSelector } from "../../../app/hooks";
 interface IProps {
   profileUser: User;
+  changePostToShow: (post: Post) => void;
 }
-const ProfilePosts = ({ profileUser }: IProps) => {
+const ProfilePosts = ({ profileUser, changePostToShow }: IProps) => {
   const user = useAppSelector(selectUser);
   const [typeOfPosts, setTypeOfPosts] = useState("Own Posts");
   const [profilePosts, setProfilePosts] = useState<Post[]>([]);
-  const [postToShow, setPostToShow] = useState<null | Post>(null);
   useEffect(() => {
     const getProfileUserPosts = async () => {
       const profileUserPostsQuery = query(
@@ -77,7 +77,7 @@ const ProfilePosts = ({ profileUser }: IProps) => {
       </FlexContainer>
       <PostsContainer>
         {profilePosts.map((post) => (
-          <ProfilePost>
+          <ProfilePost key={post.id} onClick={() => changePostToShow(post)}>
             <ProfilePostImage src={post.imgSrc} alt="profile" />
             <PostInformation>
               <FlexContainer direction="row" gap="0.7rem" alignItems="center">

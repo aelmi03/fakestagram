@@ -12,10 +12,17 @@ import {
   getDoc,
   getFirestore,
 } from "firebase/firestore";
+import Post from "../../utils/PostInterface";
+import StandardPost from "../StandardPost";
+import ReturnBack from "../../utils/ReturnBack";
 
 const Profile = () => {
   let params = useParams();
   const [profileUser, setProfileUser] = useState<User>({} as User);
+  const [postToShow, setPostToShow] = useState<null | Post>(null);
+  const changePostToShow = (post: Post | null) => {
+    setPostToShow(post);
+  };
   useEffect(() => {
     const getProfileUser = async () => {
       const profileDoc = doc(getFirestore(), `users/${params.userID}`);
@@ -69,10 +76,19 @@ const Profile = () => {
         </ProfileContainer>
       </ProfileDisplayContainer>
 
-      <ProfilePosts profileUser={profileUser} />
+      <ProfilePosts
+        profileUser={profileUser}
+        changePostToShow={changePostToShow}
+      />
       {showEditProfileModal ? (
         <EditProfileModal toggleEditProfileModal={toggleEditProfileModal} />
       ) : null}
+      {postToShow !== null && (
+        <SelectedPostWrapper>
+          <ReturnBack name="Posts" onClick={() => changePostToShow(null)} />
+          <StandardPost post={postToShow} postUser={profileUser} />
+        </SelectedPostWrapper>
+      )}
     </ProfileWrapper>
   );
 };
@@ -91,6 +107,14 @@ const ProfileWrapper = styled.div`
     max-width: 80%;
     margin: 0 auto;
   }
+`;
+const SelectedPostWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  overflow: scroll;
 `;
 const ButtonsContainer = styled.div`
   display: flex;

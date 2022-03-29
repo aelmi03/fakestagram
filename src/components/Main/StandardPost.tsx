@@ -1,10 +1,15 @@
 import styled from "styled-components";
 import { BsThreeDots, BsBookmark, BsChatDots } from "react-icons/bs";
-
+import { formatDistanceToNow } from "date-fns";
 import { VscHeart } from "react-icons/vsc";
 import FlexContainer from "../utils/FlexContainer";
-
-const Post = () => {
+import Post from "../utils/PostInterface";
+import { User } from "../../features/user/userSlice";
+interface IProps {
+  post: Post;
+  postUser: User;
+}
+const StandardPost = ({ post, postUser }: IProps) => {
   return (
     <PostWrapper>
       <FlexContainer
@@ -13,12 +18,12 @@ const Post = () => {
         justifyContent="space-between"
       >
         <FlexContainer direction="row" gap="0.8rem" width="max-content">
-          <PostUserImage src="https://i.pinimg.com/originals/b3/75/eb/b375eb0669bf24903b625cd64777c88a.jpg" />
-          <PostText>abdidaboss123</PostText>
+          <PostUserImage src={postUser.profilePicture} />
+          <PostTextBold>{postUser.username}</PostTextBold>
         </FlexContainer>
         <BsThreeDots />
       </FlexContainer>
-      <PostImage src="https://i.pinimg.com/originals/b3/75/eb/b375eb0669bf24903b625cd64777c88a.jpg" />
+      <PostImage src={post.imgSrc} />
       <FlexContainer
         direction="column"
         gap="0.5rem"
@@ -42,24 +47,22 @@ const Post = () => {
           <BsBookmark />
         </FlexContainer>
         <FlexContainer direction="row" gap="0.6rem">
-          <PostText>Liked by </PostText>
-          <PostTextBold>5 users</PostTextBold>
+          <PostTextBold>
+            {post.likes.length} {post.likes.length === 1 ? "like" : "likes"}
+          </PostTextBold>
         </FlexContainer>
         <PostTextBold>
-          abdidaboss{" "}
-          <PostText>
-            Another in the mix forreal yall my dawgs on lets get another chip to
-            celebrate forreal
-          </PostText>
+          {postUser.username}
+          <PostText>&nbsp;&nbsp;{post.caption}</PostText>
         </PostTextBold>
 
-        <PostGreyText>View all 1813 comments</PostGreyText>
-        <FlexContainer direction="row" gap="0.4rem">
-          <PostTextBold>sporty</PostTextBold>
-          <PostText>Big dub!</PostText>
-        </FlexContainer>
-
-        <PostGreyText>3 hours ago</PostGreyText>
+        <PostGreyText>
+          View all {post.comments.length}{" "}
+          {post.comments.length > 1 ? "comments" : "comment"}
+        </PostGreyText>
+        <PostGreyText>
+          {`${formatDistanceToNow(post.timestamp.toDate())} ago`}
+        </PostGreyText>
       </FlexContainer>
       <PostCommentsContainer>
         <PostCommentTextArea placeholder="Add Comment" />
@@ -69,10 +72,11 @@ const Post = () => {
   );
 };
 const PostWrapper = styled.div`
-  width: min(100%, 500px);
+  width: min(100%, 600px);
+  margin-top: 4rem;
   display: grid;
   gap: 1rem;
-  margin-bottom: 8rem;
+  margin-bottom: 5rem;
   background-color: ${({ theme }) => theme.palette.primaryLight};
   svg {
     height: 28px;
@@ -98,6 +102,8 @@ const PostUserImage = styled.img`
 const PostCommentTextArea = styled.textarea`
   padding: 0.5rem;
   flex-grow: 1;
+  font-family: ${({ theme }) => theme.primaryFont};
+  font-size: 1.4rem;
 `;
 const PostText = styled.p`
   font-family: ${({ theme }) => theme.primaryFont};
@@ -108,8 +114,11 @@ const PostText = styled.p`
   display: inline;
 `;
 
-const PostTextBold = styled(PostText)`
-  font-weight: 650;
+const PostTextBold = styled.span`
+  font-family: ${({ theme }) => theme.primaryFont};
+  font-size: 1.4rem;
+  color: ${({ theme }) => theme.palette.primary.contrastText};
+  font-weight: bold;
 `;
 const PostGreyText = styled(PostText)`
   color: ${({ theme }) => theme.palette.darkGrey};
@@ -123,4 +132,4 @@ const PostImage = styled.img`
   aspect-ratio: 1/1.1;
 `;
 
-export default Post;
+export default StandardPost;
