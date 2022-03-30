@@ -6,7 +6,7 @@ import Comments from "./Comments";
 import styled from "styled-components";
 import AddComment from "./AddComment";
 import FlexContainer from "../utils/FlexContainer";
-import { useMemo } from "react";
+import { useState, useEffect } from "react";
 
 interface IProps {
   post: Post;
@@ -14,6 +14,19 @@ interface IProps {
   changeModalStatus: () => void;
 }
 const PostModal = ({ post, postUser, changeModalStatus }: IProps) => {
+  const [width, setWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResizeWindow = () => setWidth(window.innerWidth);
+    // subscribe to window resize event "onComponentDidMount"
+    window.addEventListener("resize", handleResizeWindow);
+    return () => {
+      // unsubscribe "onComponentDestroy"
+      window.removeEventListener("resize", handleResizeWindow);
+    };
+  }, []);
+  if (width >= 768) {
+    return null;
+  }
   return (
     <PostModalWrapper>
       <FlexContainer direction="column" height="100%">

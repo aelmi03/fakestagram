@@ -5,7 +5,7 @@ import {
   Timestamp,
   updateDoc,
 } from "firebase/firestore";
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { User } from "../../features/user/userSlice";
 import Post, { Comment } from "../utils/PostInterface";
@@ -15,7 +15,8 @@ interface IProps {
   postUser: User;
   post: Post;
 }
-const AddComment = ({ post, postUser }: IProps) => {
+const AddComment = React.memo(({ post, postUser }: IProps) => {
+  console.log("add comment");
   const [comment, setComment] = useState("");
   const postComment = async () => {
     const postDoc = doc(getFirestore(), `posts/${post.id}`);
@@ -40,7 +41,7 @@ const AddComment = ({ post, postUser }: IProps) => {
       <PostCommentText onClick={postComment}>Post</PostCommentText>
     </PostCommentsContainer>
   );
-};
+});
 
 const PostCommentsContainer = styled.div`
   display: flex;
