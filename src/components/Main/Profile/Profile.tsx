@@ -3,7 +3,7 @@ import { selectUser, User } from "../../../features/user/userSlice";
 import { useAppSelector } from "../../../app/hooks";
 import ProfilePosts from "./ProfilePosts";
 import EditProfileModal from "./EditProfileModal";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { getAuth, signOut } from "firebase/auth";
 import { useParams } from "react-router-dom";
 import {
@@ -15,26 +15,29 @@ import {
 import Post from "../../utils/PostInterface";
 import StandardPost from "../StandardPost";
 import ReturnBack from "../../utils/ReturnBack";
+import { checkEquality } from "../../utils/utilityFunctions";
 
 const Profile = () => {
   let params = useParams();
+  const user = useAppSelector(selectUser, checkEquality);
   const [profileUser, setProfileUser] = useState<User>({} as User);
   const [postToShow, setPostToShow] = useState<null | Post>(null);
+  const [showEditProfileModal, setShowEditProfileModal] = useState(false);
+
   const changePostToShow = (post: Post | null) => {
     setPostToShow(post);
   };
   useEffect(() => {
+    console.log("MAIN PROFILE USE EFFECT");
     const getProfileUser = async () => {
       const profileDoc = doc(getFirestore(), `users/${params.userID}`);
-      return await getDoc(profileDoc);
+      const userData = await getDoc(profileDoc);
+      setProfileUser(userData.data() as User);
     };
-    getProfileUser().then((doc: DocumentSnapshot) => {
-      setProfileUser(doc.data() as User);
-    });
+    getProfileUser();
   }, [params.userID]);
-  console.log(profileUser);
-  const user = useAppSelector(selectUser);
-  const [showEditProfileModal, setShowEditProfileModal] = useState(false);
+  console.log(profileUser, "profile " + params.userID);
+
   const toggleEditProfileModal = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -75,7 +78,6 @@ const Profile = () => {
           </InformationContainer>
         </ProfileContainer>
       </ProfileDisplayContainer>
-
       <ProfilePosts
         profileUser={profileUser}
         changePostToShow={changePostToShow}

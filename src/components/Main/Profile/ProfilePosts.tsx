@@ -17,86 +17,96 @@ import {
 import FlexContainer from "../../utils/FlexContainer";
 import { Unsubscribe } from "firebase/auth";
 import { useAppSelector } from "../../../app/hooks";
+import { checkEquality } from "../../utils/utilityFunctions";
 interface IProps {
   profileUser: User;
   changePostToShow: (post: Post) => void;
 }
-const ProfilePosts = ({ profileUser, changePostToShow }: IProps) => {
-  const user = useAppSelector(selectUser);
-  const [typeOfPosts, setTypeOfPosts] = useState("Own Posts");
-  const [profilePosts, setProfilePosts] = useState<Post[]>([]);
-  useEffect(() => {
-    const getProfileUserPosts = async () => {
-      const profileUserPostsQuery = query(
-        collection(getFirestore(), "posts"),
-        where("postedBy", "==", `${profileUser.id}`)
-      );
-      return onSnapshot(profileUserPostsQuery, (snapshot) => {
-        const posts = snapshot.docs.map((doc) => doc.data() as Post);
-        setProfilePosts(posts);
-      });
-    };
-    const getSavedPosts = async () => {
-      const savedPostsQuery = query(collection(getFirestore(), "posts"));
-      return onSnapshot(savedPostsQuery, (snapshot) => {
-        const posts = snapshot.docs
-          .map((doc) => doc.data() as Post)
-          .filter((post) => user.savedPosts.includes(post.id));
-        setProfilePosts(posts);
-      });
-    };
-    let unsubscribeFunction: Unsubscribe;
-    if (typeOfPosts === "Own Posts") {
-      getProfileUserPosts().then((unsubscribe) => {
-        unsubscribeFunction = unsubscribe;
-      });
-    } else {
-      getSavedPosts().then((unsubscribe) => {
-        unsubscribeFunction = unsubscribe;
-      });
-    }
-    return () => {
-      unsubscribeFunction();
-    };
-  }, [typeOfPosts, profileUser.id, user]);
-  return (
-    <ProfilePostsWrapper>
-      <FlexContainer direction="row" justifyContent="space-evenly">
-        <InfoContainer
-          onClick={() => setTypeOfPosts("Own Posts")}
-          highlight={typeOfPosts === "Own Posts"}
-        >
-          <BsGrid3X3 /> <InfoText>POSTS</InfoText>
-        </InfoContainer>
-        <InfoContainer
-          onClick={() => setTypeOfPosts("Saved Posts")}
-          highlight={typeOfPosts === "Saved Posts"}
-        >
-          <FaRegBookmark /> <InfoText>SAVED POSTS</InfoText>
-        </InfoContainer>
-      </FlexContainer>
-      <PostsContainer>
-        {profilePosts.map((post) => (
-          <ProfilePost key={post.id} onClick={() => changePostToShow(post)}>
-            <ProfilePostImage src={post.imgSrc} alt="profile" />
-            <PostInformation>
-              <FlexContainer direction="row" gap="0.7rem" alignItems="center">
-                <AiFillHeart />
-                <PostInformationText>{post.likes.length}</PostInformationText>
-              </FlexContainer>
-              <FlexContainer direction="row" gap="0.7rem" alignItems="center">
-                <BsFillChatFill />
-                <PostInformationText>
-                  {post.comments.length}
-                </PostInformationText>
-              </FlexContainer>
-            </PostInformation>
-          </ProfilePost>
-        ))}
-      </PostsContainer>
-    </ProfilePostsWrapper>
-  );
-};
+const ProfilePosts = React.memo(
+  ({ profileUser, changePostToShow }: IProps) => {
+    console.log("profileUser :))", profileUser);
+    const user = useAppSelector(selectUser, checkEquality);
+    const [typeOfPosts, setTypeOfPosts] = useState("Own Posts");
+    const [profilePosts, setProfilePosts] = useState<Post[]>([]);
+    useEffect(() => {
+      if (profileUser.id === undefined) return;
+      console.log("PROFILE POSTS USE EFFECT");
+      const getProfileUserPosts = async () => {
+        const profileUserPostsQuery = query(
+          collection(getFirestore(), "posts"),
+          where("postedBy", "==", `${profileUser.id}`)
+        );
+        return onSnapshot(profileUserPostsQuery, (snapshot) => {
+          const posts = snapshot.docs.map((doc) => doc.data() as Post);
+          setProfilePosts(posts);
+        });
+      };
+      const getSavedPosts = async () => {
+        const savedPostsQuery = query(collection(getFirestore(), "posts"));
+        return onSnapshot(savedPostsQuery, (snapshot) => {
+          const posts = snapshot.docs
+            .map((doc) => doc.data() as Post)
+            .filter((post) => user.savedPosts.includes(post.id));
+          setProfilePosts(posts);
+        });
+      };
+      let unsubscribeFunction: Unsubscribe;
+      if (typeOfPosts === "Own Posts") {
+        getProfileUserPosts().then((unsubscribe) => {
+          unsubscribeFunction = unsubscribe;
+        });
+      } else {
+        getSavedPosts().then((unsubscribe) => {
+          unsubscribeFunction = unsubscribe;
+        });
+      }
+      return () => {
+        unsubscribeFunction();
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [typeOfPosts, profileUser.id]);
+    return (
+      <ProfilePostsWrapper>
+        <FlexContainer direction="row" justifyContent="space-evenly">
+          <InfoContainer
+            onClick={() => setTypeOfPosts("Own Posts")}
+            highlight={typeOfPosts === "Own Posts"}
+          >
+            <BsGrid3X3 /> <InfoText>POSTS</InfoText>
+          </InfoContainer>
+          <InfoContainer
+            onClick={() => setTypeOfPosts("Saved Posts")}
+            highlight={typeOfPosts === "Saved Posts"}
+          >
+            <FaRegBookmark /> <InfoText>SAVED POSTS</InfoText>
+          </InfoContainer>
+        </FlexContainer>
+        <PostsContainer>
+          {profilePosts.map((post) => (
+            <ProfilePost key={post.id} onClick={() => changePostToShow(post)}>
+              <ProfilePostImage src={post.imgSrc} alt="profile" />
+              <PostInformation>
+                <FlexContainer direction="row" gap="0.7rem" alignItems="center">
+                  <AiFillHeart />
+                  <PostInformationText>{post.likes.length}</PostInformationText>
+                </FlexContainer>
+                <FlexContainer direction="row" gap="0.7rem" alignItems="center">
+                  <BsFillChatFill />
+                  <PostInformationText>
+                    {post.comments.length}
+                  </PostInformationText>
+                </FlexContainer>
+              </PostInformation>
+            </ProfilePost>
+          ))}
+        </PostsContainer>
+      </ProfilePostsWrapper>
+    );
+  },
+  (prevProps, nextProps) => {
+    return !checkEquality(prevProps.profileUser, nextProps.profileUser);
+  }
+);
 const ProfilePostsWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;

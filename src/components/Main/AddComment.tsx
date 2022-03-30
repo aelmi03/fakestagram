@@ -20,7 +20,7 @@ const AddComment = ({ post, postUser }: IProps) => {
   const postComment = async () => {
     const postDoc = doc(getFirestore(), `posts/${post.id}`);
     const newComment: Comment = {
-      user: "123",
+      user: postUser.id,
       id: nanoid(),
       content: comment,
       timestamp: new Date() as unknown as Timestamp,

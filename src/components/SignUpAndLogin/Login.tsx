@@ -28,7 +28,6 @@ const Login = () => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(getAuth(), emailAddress, password);
-      setWarningText("");
     } catch (error: any) {
       const realError = error as FirebaseError;
       if (realError.message.includes("(auth/user-not-found).")) {

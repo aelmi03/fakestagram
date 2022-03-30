@@ -3,17 +3,17 @@ import SignUpAndLogin from "./components/SignUpAndLogin/";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { getAuth } from "firebase/auth";
 import Main from "./components/Main";
-import { getDoc, doc, getFirestore, onSnapshot } from "firebase/firestore";
-import { setUser, User } from "./features/user/userSlice";
-import { useAppDispatch } from "./app/hooks";
+import { doc, getFirestore, onSnapshot } from "firebase/firestore";
+import { selectUser, setUser, User } from "./features/user/userSlice";
+import { useAppDispatch, useAppSelector } from "./app/hooks";
+import { shallowEqual } from "react-redux";
 
 function App() {
+  console.log("APP");
   const [authUser] = useAuthState(getAuth());
   const dispatch = useAppDispatch();
   const initializeUser = async () => {
     const userDoc = doc(getFirestore(), `users/${authUser!.uid}`);
-    const userData = await getDoc(userDoc);
-    dispatch(setUser(userData.data() as User));
     onSnapshot(userDoc, (snapshot) => {
       dispatch(setUser(snapshot.data() as User));
     });

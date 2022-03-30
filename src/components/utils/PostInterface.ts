@@ -7,7 +7,7 @@ export default interface Post {
   likes: string[];
   comments: Comment[];
   imgSrc: string;
-  timestamp: FieldValue;
+  timestamp: Timestamp;
 }
 
 export interface Comment {

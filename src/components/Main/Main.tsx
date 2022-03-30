@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Profile from "./Profile/Profile";
 const Main = () => {
+  console.log("MAIN ");
   return (
     <MainWrapper>
       <Router>
