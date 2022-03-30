@@ -46,6 +46,8 @@ const Comments = React.memo(({ post, postUser }: IProps) => {
         content={post.caption}
         user={postUser}
       />
+      <CommentsLine />
+
       {comments.map((comment) => (
         <Comment
           key={comment.id}
@@ -54,7 +56,6 @@ const Comments = React.memo(({ post, postUser }: IProps) => {
           content={comment.content}
         />
       ))}
-      <CommentsLine />
     </CommentsWrapper>
   );
 });

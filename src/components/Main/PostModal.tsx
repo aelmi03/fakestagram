@@ -6,6 +6,7 @@ import Comments from "./Comments";
 import styled from "styled-components";
 import AddComment from "./AddComment";
 import FlexContainer from "../utils/FlexContainer";
+import { useMemo } from "react";
 
 interface IProps {
   post: Post;
@@ -25,7 +26,10 @@ const PostModal = ({ post, postUser, changeModalStatus }: IProps) => {
           />
           <Comments post={post} postUser={postUser} />
         </FlexContainer>
-        <AddComment post={post} postUser={postUser} />
+
+        <ReturnBackWrapper>
+          <AddComment post={post} postUser={postUser} />
+        </ReturnBackWrapper>
       </FlexContainer>
     </PostModalWrapper>
   );
@@ -34,5 +38,11 @@ const PostModalWrapper = styled(ModalWrapper)`
   z-index: 5;
   background-color: ${({ theme }) => theme.palette.primary.main};
   margin-top: 5rem;
+`;
+const ReturnBackWrapper = styled.div`
+  position: fixed;
+  bottom: 6.5rem;
+  left: 0;
+  right: 0;
 `;
 export default PostModal;
