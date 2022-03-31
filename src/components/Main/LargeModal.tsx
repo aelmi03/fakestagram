@@ -1,7 +1,7 @@
 import ModalWrapper from "../utils/ModalWrapper";
 import styled from "styled-components";
 import Post from "../utils/PostInterface";
-import { User } from "../../features/user/userSlice";
+import { selectUser, User } from "../../features/user/userSlice";
 import CircularUserImage from "../utils/CircularUserImage";
 import { PostTextBold, PostGreyText } from "../utils/Texts";
 import FlexContainer from "../utils/FlexContainer";
@@ -17,7 +17,15 @@ import React from "react";
 import Comments from "./Comments";
 import Comment from "./Comment";
 import { formatDistanceToNow } from "date-fns";
+import {
+  userHasSavedPost,
+  userHasLikedPost,
+  clickLikeIcon,
+  clickBookmarkIcon,
+  checkEquality,
+} from "../utils/utilityFunctions";
 import AddComment from "./AddComment";
+import { useAppSelector } from "../../app/hooks";
 interface IProps {
   post: Post;
   postUser: User;
@@ -26,6 +34,7 @@ interface IProps {
 const LargeModal = React.memo(
   ({ post, postUser, changeModalStatus }: IProps) => {
     console.log("large modal");
+    const user = useAppSelector(selectUser, checkEquality);
     return (
       <ModalWrapper>
         <LargeModalWrapper>
@@ -72,8 +81,29 @@ const LargeModal = React.memo(
                 justifyContent="space-between"
                 margin="0rem 0rem 1.2rem 0rem"
               >
-                <BsSuitHeart />
-                <BsBookmark />
+                {userHasLikedPost(user, post) ? (
+                  <BsSuitHeartFill
+                    style={{ color: "red" }}
+                    title="Unlike this post"
+                    onClick={() => clickLikeIcon(user, post)}
+                  />
+                ) : (
+                  <BsSuitHeart
+                    title="Like this post"
+                    onClick={() => clickLikeIcon(user, post)}
+                  />
+                )}{" "}
+                {userHasSavedPost(user, post) ? (
+                  <BsBookmarkFill
+                    title={`Unsave this post`}
+                    onClick={() => clickBookmarkIcon(user, post)}
+                  />
+                ) : (
+                  <BsBookmark
+                    title={"Save this post"}
+                    onClick={() => clickBookmarkIcon(user, post)}
+                  />
+                )}{" "}
               </FlexContainer>
               <PostTextBold>
                 {post.likes.length} {post.likes.length === 1 ? "like" : "likes"}
@@ -96,7 +126,7 @@ const LargeModalWrapper = styled.div`
   max-height: 800px;
   background-color: ${({ theme }) => theme.palette.primaryLight};
   position: fixed;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 5fr 4fr;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -104,6 +134,6 @@ const LargeModalWrapper = styled.div`
 `;
 const LargePostPicture = styled.img`
   width: 100%;
-  aspect-ratio: 1/1.6;
+  aspect-ratio: 1/1.2;
 `;
 export default LargeModal;
