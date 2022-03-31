@@ -10,6 +10,8 @@ const FlexContainer = styled.div<{
   width?: string;
   height?: string;
   overflowY?: string;
+  flexGrow?: string;
+  margin?: string;
 }>`
   display: flex;
   width: 100%;
@@ -49,10 +51,20 @@ const FlexContainer = styled.div<{
     css`
       overflow-y: ${overflowY};
     `};
+  ${({ margin }) =>
+    margin &&
+    css`
+      margin: ${margin};
+    `};
   ${({ alignContent }) =>
     alignContent &&
     css`
       align-content: ${alignContent};
+    `};
+  ${({ flexGrow }) =>
+    flexGrow &&
+    css`
+      flex-grow: ${flexGrow};
     `};
 `;
 

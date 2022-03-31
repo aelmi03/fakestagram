@@ -3,12 +3,21 @@ import styled from "styled-components";
 import Post from "../utils/PostInterface";
 import { User } from "../../features/user/userSlice";
 import CircularUserImage from "../utils/CircularUserImage";
-import { PostTextBold } from "../utils/Texts";
+import { PostTextBold, PostGreyText } from "../utils/Texts";
 import FlexContainer from "../utils/FlexContainer";
-import { BsThreeDots } from "react-icons/bs";
+import {
+  BsThreeDots,
+  BsBookmark,
+  BsBookmarkFill,
+  BsSuitHeart,
+  BsSuitHeartFill,
+} from "react-icons/bs";
 import HorizontalLine from "../utils/HorizontalLine";
 import React from "react";
 import Comments from "./Comments";
+import Comment from "./Comment";
+import { formatDistanceToNow } from "date-fns";
+import AddComment from "./AddComment";
 interface IProps {
   post: Post;
   postUser: User;
@@ -39,7 +48,41 @@ const LargeModal = React.memo(
               </FlexContainer>
               <HorizontalLine />
             </FlexContainer>
-            <Comments post={post} postUser={postUser} />
+            <FlexContainer
+              direction="column"
+              overflowY="scroll"
+              height="0vh"
+              padding="0.5rem 1rem"
+              flexGrow="1"
+            >
+              <Comment
+                content={post.caption}
+                timestamp={post.timestamp}
+                user={postUser}
+              />
+              <Comments post={post} postUser={postUser} />
+            </FlexContainer>
+            <FlexContainer
+              direction="column"
+              padding="1rem 1.6rem"
+              gap="0.4rem"
+            >
+              <FlexContainer
+                direction="row"
+                justifyContent="space-between"
+                margin="0rem 0rem 1.2rem 0rem"
+              >
+                <BsSuitHeart />
+                <BsBookmark />
+              </FlexContainer>
+              <PostTextBold>
+                {post.likes.length} {post.likes.length === 1 ? "like" : "likes"}
+              </PostTextBold>
+              <PostGreyText>{`${formatDistanceToNow(
+                post.timestamp.toDate()
+              )} ago`}</PostGreyText>
+            </FlexContainer>
+            <AddComment post={post} postUser={postUser} />
           </FlexContainer>
         </LargeModalWrapper>
       </ModalWrapper>
@@ -49,8 +92,8 @@ const LargeModal = React.memo(
 );
 const LargeModalWrapper = styled.div`
   display: grid;
-  width: min(95%, 800px);
-  max-height: 735px;
+  width: min(95%, 900px);
+  max-height: 800px;
   background-color: ${({ theme }) => theme.palette.primaryLight};
   position: fixed;
   grid-template-columns: 1fr 1fr;
