@@ -2,6 +2,7 @@ import { User } from "../../features/user/userSlice";
 import Post from "../utils/PostInterface";
 import { useState, useEffect } from "react";
 import SmallModal from "./SmallModal";
+import LargeModal from "./LargeModal";
 
 interface IProps {
   post: Post;
@@ -20,7 +21,8 @@ const PostModal = ({ post, postUser, changeModalStatus }: IProps) => {
     };
   }, []);
   if (width >= 768) {
-    return null;
+    console.log("large modal");
+    return <LargeModal />;
   }
   return (
     <SmallModal

@@ -22,14 +22,14 @@ import React, { useEffect, useState } from "react";
 import PostModal from "./PostModal";
 import AddComment from "./AddComment";
 import { useAppSelector } from "../../app/hooks";
+import { doc, getFirestore, onSnapshot, Timestamp } from "firebase/firestore";
 import {
-  doc,
-  getFirestore,
-  onSnapshot,
-  Timestamp,
-  updateDoc,
-} from "firebase/firestore";
-import { checkEquality } from "../utils/utilityFunctions";
+  checkEquality,
+  clickBookmarkIcon,
+  clickLikeIcon,
+  userHasLikedPost,
+  userHasSavedPost,
+} from "../utils/utilityFunctions";
 interface IProps {
   post: Post;
   postUser: User;
@@ -44,36 +44,7 @@ const StandardPost = React.memo(
     const changeModalStatus = () => {
       setShowPostModal((prevBoolean) => !prevBoolean);
     };
-    const userHasSavedPost = () => {
-      return user.savedPosts.includes(post.id);
-    };
-    const userHasLikedPost = () => {
-      return postInfo.likes.includes(user.id);
-    };
-    const clickLikeIcon = async () => {
-      let likes: string[] = [];
-      if (postInfo.likes.includes(user.id)) {
-        likes = [...postInfo.likes].filter((id) => id !== user.id);
-      } else {
-        likes = [...postInfo.likes, user.id];
-      }
-      const postDoc = doc(getFirestore(), `posts/${postInfo.id}`);
-      await updateDoc(postDoc, {
-        likes,
-      });
-    };
-    const clickBookmarkIcon = async () => {
-      let savedPosts: string[] = [];
-      if (user.savedPosts.includes(postInfo.id)) {
-        savedPosts = [...user.savedPosts].filter((id) => id !== postInfo.id);
-      } else {
-        savedPosts = [...user.savedPosts, postInfo.id];
-      }
-      const userDoc = doc(getFirestore(), `users/${user.id}`);
-      await updateDoc(userDoc, {
-        savedPosts,
-      });
-    };
+
     useEffect(() => {
       let hasFetched = false;
       const postDoc = doc(getFirestore(), `posts/${postInfo.id}`);
@@ -120,26 +91,29 @@ const StandardPost = React.memo(
               width="max-content"
               alignContent="center"
             >
-              {userHasLikedPost() ? (
+              {userHasLikedPost(user, postInfo) ? (
                 <BsSuitHeartFill
                   style={{ color: "red" }}
                   title="Unlike this post"
-                  onClick={clickLikeIcon}
+                  onClick={() => clickLikeIcon(user, postInfo)}
                 />
               ) : (
-                <BsSuitHeart title="Like this post" onClick={clickLikeIcon} />
+                <BsSuitHeart
+                  title="Like this post"
+                  onClick={() => clickLikeIcon(user, postInfo)}
+                />
               )}
               <BsChatDots onClick={changeModalStatus} title={"View comments"} />
             </FlexContainer>
-            {userHasSavedPost() ? (
+            {userHasSavedPost(user, postInfo) ? (
               <BsBookmarkFill
                 title={`Unsave this post`}
-                onClick={clickBookmarkIcon}
+                onClick={() => clickBookmarkIcon(user, postInfo)}
               />
             ) : (
               <BsBookmark
                 title={"Save this post"}
-                onClick={clickBookmarkIcon}
+                onClick={() => clickBookmarkIcon(user, postInfo)}
               />
             )}
           </FlexContainer>
