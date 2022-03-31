@@ -6,6 +6,7 @@ export const PostText = styled.p`
   font-weight: 400;
   white-space: wrap;
   display: inline;
+  word-break: break-word;
 `;
 
 export const PostTextBold = styled.span`

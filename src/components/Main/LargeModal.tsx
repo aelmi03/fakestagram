@@ -122,15 +122,18 @@ const LargeModal = React.memo(
 );
 const LargeModalWrapper = styled.div`
   display: grid;
-  width: min(95%, 900px);
+  width: min(95%, 1000px);
   max-height: 800px;
   background-color: ${({ theme }) => theme.palette.primaryLight};
   position: fixed;
-  grid-template-columns: 5fr 4fr;
+  grid-template-columns: 1fr 1fr;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 100;
+  @media only screen and (min-width: 1024px) {
+    grid-template-columns: 6fr 5fr;
+  }
 `;
 const LargePostPicture = styled.img`
   width: 100%;
