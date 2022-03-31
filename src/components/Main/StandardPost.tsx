@@ -30,6 +30,7 @@ import {
   userHasLikedPost,
   userHasSavedPost,
 } from "../utils/utilityFunctions";
+import CircularUserImage from "../utils/CircularUserImage";
 interface IProps {
   post: Post;
   postUser: User;
@@ -67,8 +68,13 @@ const StandardPost = React.memo(
           padding="1.4rem 1.4rem 0rem 1.4rem"
           justifyContent="space-between"
         >
-          <FlexContainer direction="row" gap="0.8rem" width="max-content">
-            <PostUserImage src={postUser.profilePicture} />
+          <FlexContainer
+            direction="row"
+            gap="0.8rem"
+            width="max-content"
+            alignItems="center"
+          >
+            <CircularUserImage src={postUser.profilePicture} />
             <PostTextBold>{postUser.username}</PostTextBold>
           </FlexContainer>
           <BsThreeDots />
@@ -163,12 +169,6 @@ const PostWrapper = styled.div`
     width: 28px;
     cursor: pointer;
   }
-`;
-
-const PostUserImage = styled.img`
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
 `;
 
 const PostImage = styled.img`

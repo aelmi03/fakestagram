@@ -42,13 +42,6 @@ const Comments = React.memo(
     }, [post]);
     return (
       <CommentsWrapper>
-        <Comment
-          timestamp={post.timestamp as Timestamp}
-          content={post.caption}
-          user={postUser}
-        />
-        <CommentsLine />
-
         {comments.map((comment) => (
           <Comment
             key={comment.id}
@@ -62,18 +55,13 @@ const Comments = React.memo(
   },
   (nextProps, prevProps) => nextProps.post === prevProps.post
 );
-const CommentsLine = styled(HorizontalLine)`
-  height: 1px;
-  border: none;
-  background-color: ${({ theme }) => theme.palette.common.grey};
-`;
+
 const CommentsWrapper = styled.div`
   width: 100%;
   display: grid;
   gap: 1.6rem;
-  overflow-y: scroll;
-  padding: 0.5rem 1.2rem;
   z-index: 10;
+  margin-top: 1.6rem;
 `;
 
 export default Comments;

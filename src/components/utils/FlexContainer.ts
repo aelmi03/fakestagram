@@ -9,6 +9,7 @@ const FlexContainer = styled.div<{
   padding?: string;
   width?: string;
   height?: string;
+  overflowY?: string;
 }>`
   display: flex;
   width: 100%;
@@ -42,6 +43,11 @@ const FlexContainer = styled.div<{
     height &&
     css`
       height: ${height};
+    `};
+  ${({ overflowY }) =>
+    overflowY &&
+    css`
+      overflow-y: ${overflowY};
     `};
   ${({ alignContent }) =>
     alignContent &&

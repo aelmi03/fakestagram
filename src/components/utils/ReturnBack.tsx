@@ -28,6 +28,9 @@ const ReturnBackWrapper = styled.div`
     height: 25px;
     width: 25px;
   }
+  @media only screen and (min-width: 768px) {
+    display: none;
+  }
 `;
 const NameText = styled.p`
   font-family: ${({ theme }) => theme.primaryFont};

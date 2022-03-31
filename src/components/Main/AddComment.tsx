@@ -52,6 +52,7 @@ const PostCommentsContainer = styled.div`
   border-top: 1px solid ${({ theme }) => theme.palette.common.grey};
   border-bottom: 1px solid ${({ theme }) => theme.palette.common.grey};
   background-color: ${({ theme }) => theme.palette.primaryLight};
+  z-index: 10;
 `;
 
 const PostCommentTextArea = styled.textarea`

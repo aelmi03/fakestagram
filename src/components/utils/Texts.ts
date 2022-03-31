@@ -12,7 +12,7 @@ export const PostTextBold = styled.span`
   font-family: ${({ theme }) => theme.primaryFont};
   font-size: 1.4rem;
   color: ${({ theme }) => theme.palette.primary.contrastText};
-  font-weight: bold;
+  font-weight: 650;
 `;
 export const PostGreyText = styled(PostText)`
   color: ${({ theme }) => theme.palette.darkGrey};

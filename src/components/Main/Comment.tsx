@@ -28,11 +28,10 @@ const Comment = ({ timestamp, content, user }: IProps) => {
 };
 
 const CommentPicture = styled.img`
-  height: 25px;
-  width: 25px;
+  height: 32px;
+  width: 32px;
   border-radius: 50%;
   position: relative;
-  top: 2px;
 `;
 const SmallGreyText = styled(PostGreyText)`
   font-size: 1.2rem;

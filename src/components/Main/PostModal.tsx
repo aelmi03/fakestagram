@@ -21,8 +21,13 @@ const PostModal = ({ post, postUser, changeModalStatus }: IProps) => {
     };
   }, []);
   if (width >= 768) {
-    console.log("large modal");
-    return <LargeModal />;
+    return (
+      <LargeModal
+        post={post}
+        postUser={postUser}
+        changeModalStatus={changeModalStatus}
+      />
+    );
   }
   return (
     <SmallModal

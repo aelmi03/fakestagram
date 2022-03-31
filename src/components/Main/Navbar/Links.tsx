@@ -62,6 +62,7 @@ const LinksContainer = styled(FlexContainer)`
     align-items: center;
     justify-content: start;
     gap: 3rem;
+    z-index: 0;
     a:nth-child(2) {
       display: none;
     }
