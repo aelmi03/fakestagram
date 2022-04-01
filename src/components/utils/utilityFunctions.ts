@@ -1,5 +1,5 @@
 import { shallowEqual } from "react-redux";
-import { updateDoc, doc, getFirestore } from "firebase/firestore";
+import { updateDoc, doc, getFirestore, deleteDoc } from "firebase/firestore";
 import { User } from "../../features/user/userSlice";
 import Post from "./PostInterface";
 export const checkEquality = (left: any, right: any) => {
@@ -41,4 +41,8 @@ export const clickBookmarkIcon = async (user: User, postInfo: Post) => {
   await updateDoc(userDoc, {
     savedPosts,
   });
+};
+export const deletePost = async (post: Post) => {
+  const postDoc = doc(getFirestore(), `posts/${post.id}`);
+  await deleteDoc(postDoc);
 };

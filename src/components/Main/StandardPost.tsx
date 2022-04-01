@@ -29,6 +29,7 @@ import {
   clickLikeIcon,
   userHasLikedPost,
   userHasSavedPost,
+  deletePost,
 } from "../utils/utilityFunctions";
 import CircularUserImage from "../utils/CircularUserImage";
 interface IProps {
@@ -57,6 +58,11 @@ const StandardPost = React.memo(
         if (!hasFetched) {
           hasFetched = true;
           return;
+        }
+        if (!snapshot.exists()) {
+          if (changePostToShow) {
+            changePostToShow(null);
+          }
         }
         setPostInfo(snapshot.data() as Post);
       });
@@ -109,7 +115,12 @@ const StandardPost = React.memo(
                 position="relative"
               >
                 <BsThreeDots onClick={() => setShowDeleteButton(true)} />
-                <DeletePostButton show={showDeleteButton}>
+                <DeletePostButton
+                  show={showDeleteButton}
+                  onClick={() => {
+                    deletePost(post);
+                  }}
+                >
                   Delete
                 </DeletePostButton>
               </FlexContainer>
