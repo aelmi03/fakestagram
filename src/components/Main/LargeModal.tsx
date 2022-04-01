@@ -13,7 +13,7 @@ import {
   BsSuitHeartFill,
 } from "react-icons/bs";
 import HorizontalLine from "../utils/HorizontalLine";
-import React from "react";
+import React, { useState } from "react";
 import Comments from "./Comments";
 import Comment from "./Comment";
 import { formatDistanceToNow } from "date-fns";
@@ -23,9 +23,11 @@ import {
   clickLikeIcon,
   clickBookmarkIcon,
   checkEquality,
+  deletePost,
 } from "../utils/utilityFunctions";
 import AddComment from "./AddComment";
 import { useAppSelector } from "../../app/hooks";
+import DeletePostButton from "../utils/DeletePostButton";
 interface IProps {
   post: Post;
   postUser: User;
@@ -35,6 +37,7 @@ interface IProps {
 const LargeModal = React.memo(
   ({ post, postUser, changeModalStatus, changePostToShow }: IProps) => {
     console.log("large modal");
+    const [showDeleteButton, setShowDeleteButton] = useState(false);
     const user = useAppSelector(selectUser, checkEquality);
     return (
       <ModalWrapper
@@ -46,7 +49,12 @@ const LargeModal = React.memo(
           }
         }}
       >
-        <LargeModalWrapper onClick={(e) => e.stopPropagation()}>
+        <LargeModalWrapper
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowDeleteButton(false);
+          }}
+        >
           <LargePostPicture src={post.imgSrc} alt="photo of the post" />
           <FlexContainer direction="column">
             <FlexContainer direction="column" gap="1rem">
@@ -62,7 +70,28 @@ const LargeModal = React.memo(
                   />
                   <PostTextBold>{postUser.username}</PostTextBold>
                 </FlexContainer>
-                <BsThreeDots />
+                {user.id === postUser.id ? (
+                  <FlexContainer
+                    direction="row"
+                    width={"max-content"}
+                    position="relative"
+                  >
+                    <BsThreeDots
+                      onClick={(e) => {
+                        setShowDeleteButton(true);
+                        e.stopPropagation();
+                      }}
+                    />
+                    <DeletePostButton
+                      show={showDeleteButton}
+                      onClick={(e) => {
+                        deletePost(post);
+                      }}
+                    >
+                      Delete
+                    </DeletePostButton>
+                  </FlexContainer>
+                ) : null}{" "}
               </FlexContainer>
               <HorizontalLine />
             </FlexContainer>
