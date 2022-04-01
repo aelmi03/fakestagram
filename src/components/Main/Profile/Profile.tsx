@@ -88,7 +88,12 @@ const Profile = () => {
       {postToShow !== null && (
         <SelectedPostWrapper>
           <ReturnBack name="Posts" onClick={() => changePostToShow(null)} />
-          <StandardPost post={postToShow} postUser={profileUser} />
+          <StandardPost
+            post={postToShow}
+            postUser={profileUser}
+            isOnHomePosts={false}
+            changePostToShow={changePostToShow}
+          />
         </SelectedPostWrapper>
       )}
     </ProfileWrapper>

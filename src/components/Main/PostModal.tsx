@@ -8,24 +8,23 @@ interface IProps {
   post: Post;
   postUser: User;
   changeModalStatus: () => void;
+  width: number;
+  changePostToShow?: (post: Post | null) => void;
 }
-const PostModal = ({ post, postUser, changeModalStatus }: IProps) => {
-  const [width, setWidth] = useState(window.innerWidth);
-  useEffect(() => {
-    const handleResizeWindow = () => setWidth(window.innerWidth);
-    // subscribe to window resize event "onComponentDidMount"
-    window.addEventListener("resize", handleResizeWindow);
-    return () => {
-      // unsubscribe "onComponentDestroy"
-      window.removeEventListener("resize", handleResizeWindow);
-    };
-  }, []);
+const PostModal = ({
+  post,
+  postUser,
+  changeModalStatus,
+  width,
+  changePostToShow,
+}: IProps) => {
   if (width >= 768) {
     return (
       <LargeModal
         post={post}
         postUser={postUser}
         changeModalStatus={changeModalStatus}
+        changePostToShow={changePostToShow}
       />
     );
   }

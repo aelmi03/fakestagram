@@ -30,14 +30,23 @@ interface IProps {
   post: Post;
   postUser: User;
   changeModalStatus: () => void;
+  changePostToShow?: (post: Post | null) => void;
 }
 const LargeModal = React.memo(
-  ({ post, postUser, changeModalStatus }: IProps) => {
+  ({ post, postUser, changeModalStatus, changePostToShow }: IProps) => {
     console.log("large modal");
     const user = useAppSelector(selectUser, checkEquality);
     return (
-      <ModalWrapper>
-        <LargeModalWrapper>
+      <ModalWrapper
+        onClick={() => {
+          if (changePostToShow) {
+            changePostToShow(null);
+          } else {
+            changeModalStatus();
+          }
+        }}
+      >
+        <LargeModalWrapper onClick={(e) => e.stopPropagation()}>
           <LargePostPicture src={post.imgSrc} alt="photo of the post" />
           <FlexContainer direction="column">
             <FlexContainer direction="column" gap="1rem">
