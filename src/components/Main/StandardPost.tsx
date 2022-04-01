@@ -183,10 +183,13 @@ const StandardPost = React.memo(
               {postUser.username}
               <PostText>&nbsp;&nbsp;{post.caption}</PostText>
             </PostTextBold>
-            <ClickablePostGreyText onClick={changeModalStatus}>
-              View all {postInfo.comments.length}{" "}
-              {postInfo.comments.length > 1 ? "comments" : "comment"}
-            </ClickablePostGreyText>
+            {postInfo.comments.length > 0 ? (
+              <ClickablePostGreyText onClick={changeModalStatus}>
+                View all {postInfo.comments.length}{" "}
+                {postInfo.comments.length > 1 ? "comments" : "comment"}
+              </ClickablePostGreyText>
+            ) : null}
+
             <PostGreyText>
               {`${formatDistanceToNow(
                 (postInfo.timestamp as Timestamp).toDate()
