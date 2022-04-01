@@ -11,7 +11,15 @@ import {
   DocumentSnapshot,
   getDoc,
   getFirestore,
+  onSnapshot,
+  Unsubscribe,
 } from "firebase/firestore";
+import {
+  followsOtherUser,
+  getFollowers,
+  getProfileUserPosts,
+  updateFollowing,
+} from "../../utils/utilityFunctions";
 import Post from "../../utils/PostInterface";
 import StandardPost from "../StandardPost";
 import ReturnBack from "../../utils/ReturnBack";
@@ -22,21 +30,42 @@ const Profile = () => {
   const user = useAppSelector(selectUser, checkEquality);
   const [profileUser, setProfileUser] = useState<User>({} as User);
   const [postToShow, setPostToShow] = useState<null | Post>(null);
+  const [followersCount, setFollowersCount] = useState(0);
+  const [postsCount, setPostsCount] = useState(0);
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
 
   const changePostToShow = (post: Post | null) => {
     setPostToShow(post);
   };
+  const updatePostsCount = async () => {
+    if (profileUser.savedPosts === undefined) return;
+    const posts = await getProfileUserPosts(profileUser);
+    setPostsCount(posts.length);
+  };
+  const updateFollowersCount = async () => {
+    if (profileUser.savedPosts === undefined) return;
+    const followers = await getFollowers(profileUser);
+    setFollowersCount(followers.length);
+  };
   useEffect(() => {
     console.log("MAIN PROFILE USE EFFECT");
     const getProfileUser = async () => {
       const profileDoc = doc(getFirestore(), `users/${params.userID}`);
-      const userData = await getDoc(profileDoc);
-      setProfileUser(userData.data() as User);
+      return onSnapshot(profileDoc, (snapshot) => {
+        setProfileUser(snapshot.data() as User);
+        updatePostsCount();
+      });
     };
-    getProfileUser();
+    let unsubscribe: Unsubscribe = (() => {}) as Unsubscribe;
+    getProfileUser().then((unsubscribeFunction) => {
+      unsubscribe = unsubscribeFunction;
+    });
+    return () => {
+      unsubscribe();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.userID]);
-  console.log(profileUser, "profile " + params.userID);
+  console.log(profileUser, "PROFILE " + params.userID);
 
   const toggleEditProfileModal = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -46,35 +75,54 @@ const Profile = () => {
   return (
     <ProfileWrapper>
       <ProfileDisplayContainer>
-        <ProfileImage src={user.profilePicture} />
+        <ProfileImage src={profileUser.profilePicture} />
         <ProfileContainer>
           <ProfileInformationContainer>
             <OverflowContainer>
-              <ProfileName>{user.username}</ProfileName>
+              <ProfileName>{profileUser.username}</ProfileName>
             </OverflowContainer>
             <ButtonsContainer>
-              <ProfileButton onClick={toggleEditProfileModal}>
-                Edit Profile
-              </ProfileButton>
-              <ProfileButton onClick={() => signOut(getAuth())}>
-                Log out
-              </ProfileButton>
+              {user.id === profileUser.id ? (
+                <React.Fragment>
+                  <ProfileButton onClick={toggleEditProfileModal}>
+                    Edit Profile
+                  </ProfileButton>
+                  <ProfileButton onClick={() => signOut(getAuth())}>
+                    Log out
+                  </ProfileButton>
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  <ProfileButton
+                    onClick={() => {
+                      updateFollowing(user, profileUser);
+                      updateFollowersCount();
+                    }}
+                  >
+                    {followsOtherUser(user, profileUser)
+                      ? "Following"
+                      : "Follow"}
+                  </ProfileButton>
+                  <ProfileButton>Message</ProfileButton>
+                </React.Fragment>
+              )}
             </ButtonsContainer>
           </ProfileInformationContainer>
           <ProfileUserInfo>
             <BoldInfo>
-              0 <ProfileInfo>posts</ProfileInfo>
+              {postsCount} <ProfileInfo>posts</ProfileInfo>
             </BoldInfo>
             <BoldInfo>
-              2 <ProfileInfo>followers</ProfileInfo>
+              {followersCount} <ProfileInfo>followers</ProfileInfo>
             </BoldInfo>
             <BoldInfo>
-              3 <ProfileInfo>following</ProfileInfo>
+              {profileUser.following?.length}{" "}
+              <ProfileInfo>following</ProfileInfo>
             </BoldInfo>
           </ProfileUserInfo>
           <InformationContainer>
-            <BoldInfo>{user.fullName}</BoldInfo>
-            <ProfileInfo>{user.biography}</ProfileInfo>
+            <BoldInfo>{profileUser.fullName}</BoldInfo>
+            <ProfileInfo>{profileUser.biography}</ProfileInfo>
           </InformationContainer>
         </ProfileContainer>
       </ProfileDisplayContainer>
