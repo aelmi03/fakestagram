@@ -12,6 +12,7 @@ const FlexContainer = styled.div<{
   overflowY?: string;
   flexGrow?: string;
   margin?: string;
+  position?: string;
 }>`
   display: flex;
   width: 100%;
@@ -65,6 +66,11 @@ const FlexContainer = styled.div<{
     flexGrow &&
     css`
       flex-grow: ${flexGrow};
+    `};
+  ${({ position }) =>
+    position &&
+    css`
+      position: ${position};
     `};
 `;
 

@@ -45,6 +45,7 @@ const StandardPost = React.memo(
     const [postInfo, setPostInfo] = useState<Post>(post);
     const [showPostModal, setShowPostModal] = useState(isOnHomePosts);
     const [width, setWidth] = useState(window.innerWidth);
+    const [showDeleteButton, setShowDeleteButton] = useState(false);
     const changeModalStatus = () => {
       setShowPostModal((prevBoolean) => !prevBoolean);
     };
@@ -78,8 +79,15 @@ const StandardPost = React.memo(
       };
     }, []);
     return (
-      <PostWrapper isOnHomePosts={isOnHomePosts}>
-        <FlexContainer direction="column">
+      <PostWrapper
+        isOnHomePosts={isOnHomePosts}
+        onClick={() => {
+          if (showDeleteButton === true) {
+            setShowDeleteButton(false);
+          }
+        }}
+      >
+        <FlexContainer direction="column" gap="1rem">
           <FlexContainer
             direction="row"
             padding="1.4rem 1.4rem 0rem 1.4rem"
@@ -94,7 +102,18 @@ const StandardPost = React.memo(
               <CircularUserImage src={postUser.profilePicture} />
               <PostTextBold>{postUser.username}</PostTextBold>
             </FlexContainer>
-            <BsThreeDots />
+            {user.id === postUser.id ? (
+              <FlexContainer
+                direction="row"
+                width={"max-content"}
+                position="relative"
+              >
+                <BsThreeDots onClick={() => setShowDeleteButton(true)} />
+                <DeletePostButton show={showDeleteButton}>
+                  Delete
+                </DeletePostButton>
+              </FlexContainer>
+            ) : null}
           </FlexContainer>
           <PostImage src={postInfo.imgSrc} />
           <FlexContainer
@@ -201,7 +220,23 @@ const PostWrapper = styled.div<{ isOnHomePosts: boolean }>`
       }
     `}
 `;
-
+const DeletePostButton = styled.button<{ show: boolean }>`
+  background-color: ${({ theme }) => theme.palette.primary.main};
+  color: ${({ theme }) => theme.palette.lightRed};
+  font-size: 1.4rem;
+  font-family: ${({ theme }) => theme.primaryFont};
+  padding: 1.3rem 2rem;
+  position: absolute;
+  top: 8px;
+  right: 30px;
+  border-radius: 5px;
+  border: 1px solid ${({ theme }) => theme.palette.common.grey};
+  ${({ show }) =>
+    show === false &&
+    css`
+      display: none;
+    `}
+`;
 const PostImage = styled.img`
   width: 100%;
   aspect-ratio: 1/1.1;

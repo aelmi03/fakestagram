@@ -51,11 +51,13 @@ const SmallModalWrapper = styled(ModalWrapper)`
   z-index: 10;
   background-color: ${({ theme }) => theme.palette.primary.main};
   margin-top: 5rem;
+  margin-bottom: 3rem;
 `;
 const ReturnBackWrapper = styled.div`
   position: fixed;
   bottom: 6.5rem;
   left: 0;
   right: 0;
+  z-index: 11;
 `;
 export default SmallModal;

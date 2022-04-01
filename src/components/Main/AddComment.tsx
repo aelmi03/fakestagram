@@ -6,7 +6,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { User } from "../../features/user/userSlice";
 import Post, { Comment } from "../utils/PostInterface";
 import { PostCommentText } from "../utils/Texts";
