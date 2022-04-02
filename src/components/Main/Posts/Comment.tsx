@@ -12,7 +12,7 @@ interface IProps {
 const Comment = ({ timestamp, content, user }: IProps) => {
   return (
     <FlexContainer direction="row" gap="1.5rem" alignItems="start">
-      <CommentPicture src={user.profilePicture} />
+      <CommentPicture src={user.profilePicture} alt="comment profile" />
       <FlexContainer direction="column" gap="0.3rem">
         <PostTextBold>
           {user.username}
