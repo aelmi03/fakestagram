@@ -1,10 +1,9 @@
 import styled from "styled-components";
-import Post from "../utils/PostInterface";
-import { User } from "../../features/user/userSlice";
+import { User } from "../../../features/user/userSlice";
 import { Timestamp } from "firebase/firestore";
 import { formatDistanceToNow } from "date-fns";
-import FlexContainer from "../utils/FlexContainer";
-import { PostText, PostGreyText, PostTextBold } from "../utils/Texts";
+import FlexContainer from "../../utils/FlexContainer";
+import { PostText, PostGreyText, PostTextBold } from "../../utils/Texts";
 interface IProps {
   timestamp: Timestamp;
   content: string;

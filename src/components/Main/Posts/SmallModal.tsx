@@ -1,13 +1,13 @@
-import FlexContainer from "../utils/FlexContainer";
+import FlexContainer from "../../utils/FlexContainer";
 import Comments from "./Comments";
 import Comment from "./Comment";
-import ReturnBack from "../utils/ReturnBack";
+import ReturnBack from "../../utils/ReturnBack";
 import AddComment from "./AddComment";
-import Post from "../utils/PostInterface";
-import { User } from "../../features/user/userSlice";
+import Post from "../../utils/PostInterface";
+import { User } from "../../../features/user/userSlice";
 import styled from "styled-components";
-import ModalWrapper from "../utils/ModalWrapper";
-import HorizontalLine from "../utils/HorizontalLine";
+import ModalWrapper from "../../utils/ModalWrapper";
+import HorizontalLine from "../../utils/HorizontalLine";
 interface IProps {
   post: Post;
   postUser: User;

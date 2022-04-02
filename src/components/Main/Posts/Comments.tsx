@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import Post from "../utils/PostInterface";
-import { User } from "../../features/user/userSlice";
+import Post from "../../utils/PostInterface";
+import { User } from "../../../features/user/userSlice";
 import Comment from "./Comment";
-import HorizontalLine from "../utils/HorizontalLine";
 import { doc, getDoc, getFirestore, Timestamp } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import React from "react";

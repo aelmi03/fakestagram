@@ -9,19 +9,19 @@ import {
   BsSuitHeartFill,
 } from "react-icons/bs";
 import { formatDistanceToNow } from "date-fns";
-import FlexContainer from "../utils/FlexContainer";
-import Post from "../utils/PostInterface";
-import { selectUser, User } from "../../features/user/userSlice";
+import FlexContainer from "../../utils/FlexContainer";
+import Post from "../../utils/PostInterface";
+import { selectUser, User } from "../../../features/user/userSlice";
 import {
   PostGreyText,
   PostText,
   PostTextBold,
   ClickablePostGreyText,
-} from "../utils/Texts";
+} from "../../utils/Texts";
 import React, { useEffect, useState } from "react";
 import PostModal from "./PostModal";
 import AddComment from "./AddComment";
-import { useAppSelector } from "../../app/hooks";
+import { useAppSelector } from "../../../app/hooks";
 import { doc, getFirestore, onSnapshot, Timestamp } from "firebase/firestore";
 import {
   checkEquality,
@@ -30,9 +30,9 @@ import {
   userHasLikedPost,
   userHasSavedPost,
   deletePost,
-} from "../utils/utilityFunctions";
-import DeletePostButton from "../utils/DeletePostButton";
-import CircularUserImage from "../utils/CircularUserImage";
+} from "../../utils/utilityFunctions";
+import DeletePostButton from "../../utils/DeletePostButton";
+import CircularUserImage from "../../utils/CircularUserImage";
 interface IProps {
   post: Post;
   postUser: User;

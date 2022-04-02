@@ -42,11 +42,12 @@ const ProfilePosts = React.memo(
         });
       };
       const getSavedPosts = async () => {
-        const savedPostsQuery = query(collection(getFirestore(), "posts"));
+        const savedPostsQuery = query(
+          collection(getFirestore(), "posts"),
+          where("id", "in", user.savedPosts)
+        );
         return onSnapshot(savedPostsQuery, (snapshot) => {
-          const posts = snapshot.docs
-            .map((doc) => doc.data() as Post)
-            .filter((post) => user.savedPosts.includes(post.id));
+          const posts = snapshot.docs.map((doc) => doc.data() as Post);
           setProfilePosts(posts);
         });
       };
@@ -64,7 +65,7 @@ const ProfilePosts = React.memo(
         unsubscribeFunction();
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [typeOfPosts, profileUser.id]);
+    }, [typeOfPosts, profileUser.id, user.savedPosts]);
     return (
       <ProfilePostsWrapper>
         <FlexContainer direction="row" justifyContent="space-evenly">

@@ -21,7 +21,7 @@ import {
   updateFollowing,
 } from "../../utils/utilityFunctions";
 import Post from "../../utils/PostInterface";
-import StandardPost from "../StandardPost";
+import StandardPost from "../Posts/StandardPost";
 import ReturnBack from "../../utils/ReturnBack";
 import { checkEquality } from "../../utils/utilityFunctions";
 

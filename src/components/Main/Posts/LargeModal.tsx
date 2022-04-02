@@ -1,10 +1,10 @@
-import ModalWrapper from "../utils/ModalWrapper";
+import ModalWrapper from "../../utils/ModalWrapper";
 import styled from "styled-components";
-import Post from "../utils/PostInterface";
-import { selectUser, User } from "../../features/user/userSlice";
-import CircularUserImage from "../utils/CircularUserImage";
-import { PostTextBold, PostGreyText } from "../utils/Texts";
-import FlexContainer from "../utils/FlexContainer";
+import Post from "../../utils/PostInterface";
+import { selectUser, User } from "../../../features/user/userSlice";
+import CircularUserImage from "../../utils/CircularUserImage";
+import { PostTextBold, PostGreyText } from "../../utils/Texts";
+import FlexContainer from "../../utils/FlexContainer";
 import {
   BsThreeDots,
   BsBookmark,
@@ -12,7 +12,7 @@ import {
   BsSuitHeart,
   BsSuitHeartFill,
 } from "react-icons/bs";
-import HorizontalLine from "../utils/HorizontalLine";
+import HorizontalLine from "../../utils/HorizontalLine";
 import React, { useState } from "react";
 import Comments from "./Comments";
 import Comment from "./Comment";
@@ -24,10 +24,10 @@ import {
   clickBookmarkIcon,
   checkEquality,
   deletePost,
-} from "../utils/utilityFunctions";
+} from "../../utils/utilityFunctions";
 import AddComment from "./AddComment";
-import { useAppSelector } from "../../app/hooks";
-import DeletePostButton from "../utils/DeletePostButton";
+import { useAppSelector } from "../../../app/hooks";
+import DeletePostButton from "../../utils/DeletePostButton";
 interface IProps {
   post: Post;
   postUser: User;

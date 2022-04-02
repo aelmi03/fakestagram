@@ -1,15 +1,9 @@
-import {
-  doc,
-  getFirestore,
-  serverTimestamp,
-  Timestamp,
-  updateDoc,
-} from "firebase/firestore";
+import { doc, getFirestore, Timestamp, updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
-import styled, { css } from "styled-components";
-import { User } from "../../features/user/userSlice";
-import Post, { Comment } from "../utils/PostInterface";
-import { PostCommentText } from "../utils/Texts";
+import styled from "styled-components";
+import { User } from "../../../features/user/userSlice";
+import Post, { Comment } from "../../utils/PostInterface";
+import { PostCommentText } from "../../utils/Texts";
 import { nanoid } from "@reduxjs/toolkit";
 interface IProps {
   postUser: User;

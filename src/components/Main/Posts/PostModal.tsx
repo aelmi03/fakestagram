@@ -1,6 +1,5 @@
-import { User } from "../../features/user/userSlice";
-import Post from "../utils/PostInterface";
-import { useState, useEffect } from "react";
+import { User } from "../../../features/user/userSlice";
+import Post from "../../utils/PostInterface";
 import SmallModal from "./SmallModal";
 import LargeModal from "./LargeModal";
 
