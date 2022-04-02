@@ -4,9 +4,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { getAuth } from "firebase/auth";
 import Main from "./components/Main";
 import { doc, getFirestore, onSnapshot } from "firebase/firestore";
-import { selectUser, setUser, User } from "./features/user/userSlice";
-import { useAppDispatch, useAppSelector } from "./app/hooks";
-import { shallowEqual } from "react-redux";
+import { setUser, User } from "./features/user/userSlice";
+import { useAppDispatch } from "./app/hooks";
 
 function App() {
   console.log("APP");

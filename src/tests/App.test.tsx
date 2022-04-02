@@ -14,6 +14,9 @@ const mockUser: User = {
   profilePicture: "path/to/photo/for/johnDoe23",
   biography: "Love riding bicycles and going to the beach :)",
 };
+type mockArguementType = {
+  data: () => typeof mockUser;
+};
 jest.mock("firebase/auth", () => {
   return {
     getAuth: jest.fn(),
@@ -30,12 +33,11 @@ jest.mock("firebase/firestore", () => {
   return {
     getFirestore: jest.fn(),
     doc: jest.fn(),
-    onSnapshot: jest.fn(),
-    getDoc: async () => {
-      return {
-        data: () => mockUser,
-      };
-    },
+    onSnapshot: jest.fn(
+      (firstArg: any, func: (arg: mockArguementType) => void) => {
+        func({ data: () => mockUser });
+      }
+    ),
   };
 });
 jest.mock("../components/Main", () => {
