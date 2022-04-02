@@ -1,9 +1,9 @@
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ThemeProvider } from "styled-components";
-import Theme from "../../Themes/Theme";
+import Theme from "../../../Themes/Theme";
 import { updateDoc } from "firebase/firestore";
-import EditProfileModal from "../../components/Main/Profile/EditProfileModal";
+import EditProfileModal from "../../../components/Main/Profile/EditProfileModal";
 import React from "react";
 
 jest.mock("firebase/storage", () => {
@@ -24,7 +24,7 @@ jest.mock("firebase/firestore", () => {
   };
 });
 
-jest.mock("../../app/hooks", () => {
+jest.mock("../../../app/hooks", () => {
   return {
     useAppSelector: () => {
       return {
