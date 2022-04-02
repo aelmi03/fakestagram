@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { selectUser, User } from "../../../features/user/userSlice";
 import { useAppSelector } from "../../../app/hooks";
 import ProfilePosts from "./ProfilePosts";
@@ -6,14 +6,7 @@ import EditProfileModal from "./EditProfileModal";
 import React, { useState, useEffect } from "react";
 import { getAuth, signOut } from "firebase/auth";
 import { useParams } from "react-router-dom";
-import {
-  doc,
-  DocumentSnapshot,
-  getDoc,
-  getFirestore,
-  onSnapshot,
-  Unsubscribe,
-} from "firebase/firestore";
+import { doc, getFirestore, onSnapshot, Unsubscribe } from "firebase/firestore";
 import {
   followsOtherUser,
   getFollowers,
@@ -94,6 +87,7 @@ const Profile = () => {
               ) : (
                 <React.Fragment>
                   <ProfileButton
+                    following={followsOtherUser(user, profileUser)}
                     onClick={() => {
                       updateFollowing(user, profileUser);
                       updateFollowersCount();
@@ -158,8 +152,7 @@ const ProfileWrapper = styled.div`
   }
 
   @media only screen and (min-width: 1024px) {
-    width: 80%;
-    max-width: 80%;
+    width: 85%;
     margin: 0 auto;
   }
 `;
@@ -248,7 +241,7 @@ const ProfileContainer = styled.div`
     gap: 2rem;
   }
   @media only screen and (min-width: 1024px) {
-    width: 65%;
+    min-width: 50%;
   }
 `;
 const ProfileImage = styled.img`
@@ -270,12 +263,10 @@ const ProfileImage = styled.img`
 `;
 const ProfileInfo = styled.div`
   display: inline;
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   font-weight: 500;
   font-family: ${({ theme }) => theme.primaryFont};
-  @media only screen and (min-width: 375px) {
-    font-size: 1.4rem;
-  }
+
   @media only screen and (min-width: 540px) {
     font-size: 1.5rem;
   }
@@ -284,25 +275,32 @@ const BoldInfo = styled(ProfileInfo)`
   font-weight: bold;
 `;
 
-const ProfileButton = styled.button`
+const ProfileButton = styled.button<{ following?: boolean }>`
   background-color: ${({ theme }) => theme.palette.primaryLight};
   border: 1px solid ${({ theme }) => theme.palette.common.grey};
-  font-size: 1.2rem;
   font-family: ${({ theme }) => theme.primaryFont};
-  padding: 0.4rem 0.6rem;
+  font-size: 1.4rem;
+  padding: 0.7rem 0.9rem;
   font-weight: 600;
-  @media only screen and (min-width: 375px) {
-    font-size: 1.4rem;
-    padding: 0.7rem 0.9rem;
-  }
+  border-radius: 5px;
+
   @media only screen and (min-width: 540px) {
     font-size: 1.6rem;
     padding: 0.7rem 0.9rem;
   }
   @media only screen and (min-width: 768px) {
     font-size: 1.75rem;
-    padding: 0.85rem 1.05rem;
+    padding: 0.9rem 1.05rem;
   }
+  @media only screen and (min-width: 768px) {
+    min-width: 120px;
+  }
+  ${({ following }) =>
+    following === false &&
+    css`
+      color: ${({ theme }) => theme.palette.common.white};
+      background-color: ${({ theme }) => theme.palette.secondary.main};
+    `}
 `;
 const ProfileName = styled.h2`
   font-family: ${({ theme }) => theme.primaryFont};
@@ -322,18 +320,13 @@ const OverflowContainer = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 15ch;
-  @media only screen and (min-width: 375px) {
-    width: 24ch;
-  }
-  @media only screen and (min-width: 540px) {
-    width: 16ch;
-  }
+  max-width: 20ch;
+
   @media only screen and (min-width: 768px) {
-    min-width: 25ch;
+    max-width: 30ch;
   }
   @media only screen and (min-width: 1024px) {
-    width: auto;
+    max-width: 60ch;
   }
 `;
 export default Profile;

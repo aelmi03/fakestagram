@@ -75,12 +75,14 @@ const ProfilePosts = React.memo(
           >
             <BsGrid3X3 /> <InfoText>POSTS</InfoText>
           </InfoContainer>
-          <InfoContainer
-            onClick={() => setTypeOfPosts("Saved Posts")}
-            highlight={typeOfPosts === "Saved Posts"}
-          >
-            <FaRegBookmark /> <InfoText>SAVED POSTS</InfoText>
-          </InfoContainer>
+          {user.id === profileUser.id ? (
+            <InfoContainer
+              onClick={() => setTypeOfPosts("Saved Posts")}
+              highlight={typeOfPosts === "Saved Posts"}
+            >
+              <FaRegBookmark /> <InfoText>SAVED POSTS</InfoText>
+            </InfoContainer>
+          ) : null}
         </FlexContainer>
         <PostsContainer>
           {profilePosts.map((post) => (

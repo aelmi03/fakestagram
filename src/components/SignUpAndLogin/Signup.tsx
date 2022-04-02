@@ -119,6 +119,7 @@ const Signup = () => {
             )
           }
           title="Username"
+          maxLength={20}
         />
       </FlexContainer>
       <FlexContainer direction="column" alignItems="start" gap="0.3rem">
