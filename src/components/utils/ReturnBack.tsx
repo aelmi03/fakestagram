@@ -6,8 +6,8 @@ interface IProps {
 }
 const ReturnBack = ({ name, onClick }: IProps) => {
   return (
-    <ReturnBackWrapper>
-      <IoIosArrowBack onClick={onClick} />
+    <ReturnBackWrapper data-testid="Return Back Wrapper">
+      <IoIosArrowBack onClick={onClick} data-testid="Go back" />
       <NameText>{name}</NameText>
     </ReturnBackWrapper>
   );
