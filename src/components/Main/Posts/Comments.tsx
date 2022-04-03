@@ -7,7 +7,6 @@ import { useState, useEffect } from "react";
 import React from "react";
 interface IProps {
   post: Post;
-  postUser: User;
 }
 interface CommentData {
   timestamp: Timestamp;
@@ -16,7 +15,7 @@ interface CommentData {
   id: string;
 }
 const Comments = React.memo(
-  ({ post, postUser }: IProps) => {
+  ({ post }: IProps) => {
     console.log("COMMENTS :))");
     const [comments, setComments] = useState<CommentData[]>([]);
 
@@ -40,7 +39,7 @@ const Comments = React.memo(
       loadComments();
     }, [post]);
     return (
-      <CommentsWrapper>
+      <CommentsWrapper data-testid="Comments Wrapper">
         {comments.map((comment) => (
           <Comment
             key={comment.id}

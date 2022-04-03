@@ -107,7 +107,7 @@ const LargeModal = React.memo(
                 timestamp={post.timestamp}
                 user={postUser}
               />
-              <Comments post={post} postUser={postUser} />
+              <Comments post={post} />
             </FlexContainer>
             <FlexContainer
               direction="column"
