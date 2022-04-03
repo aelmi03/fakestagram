@@ -70,8 +70,8 @@ describe("Comments component", () => {
       );
     });
     expect(screen.getByTestId("Comments Wrapper").children.length).toBe(3);
-    expect(screen.getByText("this is the first comment"));
-    expect(screen.getByText("this is the second comment"));
-    expect(screen.getByText("this is the third comment"));
+    expect(screen.getByText("this is the first comment")).toBeInTheDocument();
+    expect(screen.getByText("this is the second comment")).toBeInTheDocument();
+    expect(screen.getByText("this is the third comment")).toBeInTheDocument();
   });
 });
