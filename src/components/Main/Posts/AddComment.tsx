@@ -10,9 +10,9 @@ interface IProps {
   post: Post;
 }
 const AddComment = React.memo(({ post, postUser }: IProps) => {
-  console.log("add comment");
   const [comment, setComment] = useState("");
   const postComment = async () => {
+    if (!comment) return;
     const postDoc = doc(getFirestore(), `posts/${post.id}`);
     const newComment: Comment = {
       user: postUser.id,
@@ -31,6 +31,7 @@ const AddComment = React.memo(({ post, postUser }: IProps) => {
         placeholder="Add Comment"
         value={comment}
         onChange={(e) => setComment((e.target as HTMLTextAreaElement).value)}
+        name="Comment"
       />
       <PostCommentText onClick={postComment}>Post</PostCommentText>
     </PostCommentsContainer>
