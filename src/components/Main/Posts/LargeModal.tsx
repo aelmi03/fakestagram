@@ -48,6 +48,7 @@ const LargeModal = React.memo(
             changeModalStatus();
           }
         }}
+        data-testid="Large Modal Wrapper"
       >
         <LargeModalWrapper
           onClick={(e) => {
@@ -81,15 +82,18 @@ const LargeModal = React.memo(
                         setShowDeleteButton(true);
                         e.stopPropagation();
                       }}
+                      data-testid="three dots"
                     />
-                    <DeletePostButton
-                      show={showDeleteButton}
-                      onClick={(e) => {
-                        deletePost(post);
-                      }}
-                    >
-                      Delete
-                    </DeletePostButton>
+                    {showDeleteButton ? (
+                      <DeletePostButton
+                        onClick={(e) => {
+                          deletePost(post);
+                        }}
+                        data-testid="Delete Post Button"
+                      >
+                        Delete
+                      </DeletePostButton>
+                    ) : null}
                   </FlexContainer>
                 ) : null}{" "}
               </FlexContainer>
@@ -124,22 +128,26 @@ const LargeModal = React.memo(
                     style={{ color: "red" }}
                     title="Unlike this post"
                     onClick={() => clickLikeIcon(user, post)}
+                    data-testid="filled-heart"
                   />
                 ) : (
                   <BsSuitHeart
                     title="Like this post"
                     onClick={() => clickLikeIcon(user, post)}
+                    data-testid="heart"
                   />
                 )}{" "}
                 {userHasSavedPost(user, post) ? (
                   <BsBookmarkFill
                     title={`Unsave this post`}
                     onClick={() => clickBookmarkIcon(user, post)}
+                    data-testid="filled-bookmark"
                   />
                 ) : (
                   <BsBookmark
                     title={"Save this post"}
                     onClick={() => clickBookmarkIcon(user, post)}
+                    data-testid="bookmark"
                   />
                 )}{" "}
               </FlexContainer>

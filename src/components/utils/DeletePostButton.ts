@@ -1,5 +1,5 @@
-import styled, { css } from "styled-components";
-const DeletePostButton = styled.button<{ show: boolean }>`
+import styled from "styled-components";
+const DeletePostButton = styled.button`
   background-color: ${({ theme }) => theme.palette.primary.main};
   color: ${({ theme }) => theme.palette.lightRed};
   font-size: 1.4rem;
@@ -10,10 +10,5 @@ const DeletePostButton = styled.button<{ show: boolean }>`
   right: 30px;
   border-radius: 5px;
   border: 1px solid ${({ theme }) => theme.palette.common.grey};
-  ${({ show }) =>
-    show === false &&
-    css`
-      display: none;
-    `}
 `;
 export default DeletePostButton;

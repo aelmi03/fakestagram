@@ -116,14 +116,16 @@ const StandardPost = React.memo(
                 position="relative"
               >
                 <BsThreeDots onClick={() => setShowDeleteButton(true)} />
-                <DeletePostButton
-                  show={showDeleteButton}
-                  onClick={() => {
-                    deletePost(post);
-                  }}
-                >
-                  Delete
-                </DeletePostButton>
+                {showDeleteButton ? (
+                  <DeletePostButton
+                    onClick={(e) => {
+                      deletePost(post);
+                    }}
+                    data-testid="Delete Post Button"
+                  >
+                    Delete
+                  </DeletePostButton>
+                ) : null}
               </FlexContainer>
             ) : null}
           </FlexContainer>

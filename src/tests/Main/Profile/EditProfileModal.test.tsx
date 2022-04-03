@@ -52,6 +52,9 @@ describe("EditProfileModal compoennt", () => {
       </ThemeProvider>
     );
   });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
   it("calls the prop function if the cancel button or the outer container is clicked", () => {
     expect(toggleEditProfileModal).toHaveBeenCalledTimes(0);
     userEvent.click(screen.getByTestId("Wrapper"));
@@ -93,7 +96,7 @@ describe("EditProfileModal compoennt", () => {
     await act(async () => {
       userEvent.click(screen.getByRole("button", { name: /Save/ }));
     });
-    expect((updateDoc as jest.Mock).mock.calls[1][1]).toEqual({
+    expect((updateDoc as jest.Mock).mock.calls[0][1]).toEqual({
       fullName: "John Doe",
       biography: "Love riding bicycles and going to the beach :)",
     });

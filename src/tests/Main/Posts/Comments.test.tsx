@@ -3,7 +3,7 @@ import Theme from "../../../Themes/Theme";
 import { ThemeProvider } from "styled-components";
 import Comments from "../../../components/Main/Posts/Comments";
 import { User } from "../../../features/user/userSlice";
-import { doc, getDoc, getFirestore, Timestamp } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 import Post from "../../../components/utils/PostInterface";
 const fakePost: Post = {
   postedBy: "randomID",

@@ -1,6 +1,5 @@
-import { act, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { formatDistanceToNow } from "date-fns";
 import { Timestamp } from "firebase/firestore";
 import { ThemeProvider } from "styled-components";
 import SmallModal from "../../../components/Main/Posts/SmallModal";
@@ -15,6 +14,7 @@ jest.mock("../../../components/Main/Posts/AddComment", () => {
 jest.mock("../../../components/Main/Posts/Comments", () => {
   return () => <div>Comments component</div>;
 });
+
 jest.mock("date-fns", () => {
   return {
     formatDistanceToNow: () => "2h ",
