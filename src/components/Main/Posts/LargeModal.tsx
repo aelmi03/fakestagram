@@ -28,6 +28,7 @@ import {
 import AddComment from "./AddComment";
 import { useAppSelector } from "../../../app/hooks";
 import DeletePostButton from "../../utils/DeletePostButton";
+import PostIcons from "./PostIcons";
 interface IProps {
   post: Post;
   postUser: User;
@@ -118,39 +119,11 @@ const LargeModal = React.memo(
               padding="1rem 1.6rem"
               gap="0.4rem"
             >
-              <FlexContainer
-                direction="row"
-                justifyContent="space-between"
-                margin="0rem 0rem 1.2rem 0rem"
-              >
-                {userHasLikedPost(user, post) ? (
-                  <BsSuitHeartFill
-                    style={{ color: "red" }}
-                    title="Unlike this post"
-                    onClick={() => clickLikeIcon(user, post)}
-                    data-testid="filled-heart"
-                  />
-                ) : (
-                  <BsSuitHeart
-                    title="Like this post"
-                    onClick={() => clickLikeIcon(user, post)}
-                    data-testid="heart"
-                  />
-                )}{" "}
-                {userHasSavedPost(user, post) ? (
-                  <BsBookmarkFill
-                    title={`Unsave this post`}
-                    onClick={() => clickBookmarkIcon(user, post)}
-                    data-testid="filled-bookmark"
-                  />
-                ) : (
-                  <BsBookmark
-                    title={"Save this post"}
-                    onClick={() => clickBookmarkIcon(user, post)}
-                    data-testid="bookmark"
-                  />
-                )}{" "}
-              </FlexContainer>
+              <PostIcons
+                post={post}
+                user={user}
+                changeModalStatus={changeModalStatus}
+              />
               <PostTextBold>
                 {post.likes.length} {post.likes.length === 1 ? "like" : "likes"}
               </PostTextBold>

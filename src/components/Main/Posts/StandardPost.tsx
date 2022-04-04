@@ -33,6 +33,7 @@ import {
 } from "../../utils/utilityFunctions";
 import DeletePostButton from "../../utils/DeletePostButton";
 import CircularUserImage from "../../utils/CircularUserImage";
+import PostIcons from "./PostIcons";
 interface IProps {
   post: Post;
   postUser: User;
@@ -115,7 +116,10 @@ const StandardPost = React.memo(
                 width={"max-content"}
                 position="relative"
               >
-                <BsThreeDots onClick={() => setShowDeleteButton(true)} />
+                <BsThreeDots
+                  onClick={() => setShowDeleteButton(true)}
+                  data-testid="three dots"
+                />
                 {showDeleteButton ? (
                   <DeletePostButton
                     onClick={(e) => {
@@ -136,46 +140,12 @@ const StandardPost = React.memo(
             padding="1.4rem"
             justifyContent="start"
           >
-            <FlexContainer
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <FlexContainer
-                direction="row"
-                gap="1.5rem"
-                width="max-content"
-                alignContent="center"
-              >
-                {userHasLikedPost(user, postInfo) ? (
-                  <BsSuitHeartFill
-                    style={{ color: "red" }}
-                    title="Unlike this post"
-                    onClick={() => clickLikeIcon(user, postInfo)}
-                  />
-                ) : (
-                  <BsSuitHeart
-                    title="Like this post"
-                    onClick={() => clickLikeIcon(user, postInfo)}
-                  />
-                )}
-                <BsChatDots
-                  onClick={changeModalStatus}
-                  title={"View comments"}
-                />
-              </FlexContainer>
-              {userHasSavedPost(user, postInfo) ? (
-                <BsBookmarkFill
-                  title={`Unsave this post`}
-                  onClick={() => clickBookmarkIcon(user, postInfo)}
-                />
-              ) : (
-                <BsBookmark
-                  title={"Save this post"}
-                  onClick={() => clickBookmarkIcon(user, postInfo)}
-                />
-              )}
-            </FlexContainer>
+            <PostIcons
+              post={postInfo}
+              user={user}
+              changeModalStatus={changeModalStatus}
+              changePostToShow={changePostToShow}
+            />
             <FlexContainer direction="row" gap="0.6rem">
               <PostTextBold>
                 {postInfo.likes.length}{" "}
