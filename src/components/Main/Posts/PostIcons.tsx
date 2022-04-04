@@ -48,7 +48,11 @@ const PostIcons = ({
             data-testid="heart"
           />
         )}
-        <BsChatDots onClick={changeModalStatus} title={"View comments"} />
+        <BsChatDots
+          onClick={changeModalStatus}
+          title={"View comments"}
+          data-testid="chat"
+        />
       </PostIconsContainer>
       {userHasSavedPost(user, post) ? (
         <BsBookmarkFill

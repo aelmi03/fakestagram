@@ -1,13 +1,6 @@
 import styled, { css } from "styled-components";
 
-import {
-  BsThreeDots,
-  BsChatDots,
-  BsBookmark,
-  BsBookmarkFill,
-  BsSuitHeart,
-  BsSuitHeartFill,
-} from "react-icons/bs";
+import { BsThreeDots } from "react-icons/bs";
 import { formatDistanceToNow } from "date-fns";
 import FlexContainer from "../../utils/FlexContainer";
 import Post from "../../utils/PostInterface";
@@ -23,14 +16,7 @@ import PostModal from "./PostModal";
 import AddComment from "./AddComment";
 import { useAppSelector } from "../../../app/hooks";
 import { doc, getFirestore, onSnapshot, Timestamp } from "firebase/firestore";
-import {
-  checkEquality,
-  clickBookmarkIcon,
-  clickLikeIcon,
-  userHasLikedPost,
-  userHasSavedPost,
-  deletePost,
-} from "../../utils/utilityFunctions";
+import { checkEquality, deletePost } from "../../utils/utilityFunctions";
 import DeletePostButton from "../../utils/DeletePostButton";
 import CircularUserImage from "../../utils/CircularUserImage";
 import PostIcons from "./PostIcons";
@@ -43,7 +29,6 @@ interface IProps {
 const StandardPost = React.memo(
   ({ post, postUser, isOnHomePosts, changePostToShow }: IProps) => {
     console.log("STANDARD POST");
-    console.log(changePostToShow);
     const user = useAppSelector(selectUser, checkEquality);
     const [postInfo, setPostInfo] = useState<Post>(post);
     const [showPostModal, setShowPostModal] = useState(isOnHomePosts);
@@ -94,6 +79,7 @@ const StandardPost = React.memo(
             setShowDeleteButton(false);
           }
         }}
+        data-testid="StandardPost Wrapper"
       >
         <FlexContainer direction="column" gap="1rem">
           <FlexContainer
