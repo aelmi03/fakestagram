@@ -5,26 +5,13 @@ import { selectUser, User } from "../../../features/user/userSlice";
 import CircularUserImage from "../../utils/CircularUserImage";
 import { PostTextBold, PostGreyText } from "../../utils/Texts";
 import FlexContainer from "../../utils/FlexContainer";
-import {
-  BsThreeDots,
-  BsBookmark,
-  BsBookmarkFill,
-  BsSuitHeart,
-  BsSuitHeartFill,
-} from "react-icons/bs";
+import { BsThreeDots } from "react-icons/bs";
 import HorizontalLine from "../../utils/HorizontalLine";
 import React, { useState } from "react";
 import Comments from "./Comments";
 import Comment from "./Comment";
 import { formatDistanceToNow } from "date-fns";
-import {
-  userHasSavedPost,
-  userHasLikedPost,
-  clickLikeIcon,
-  clickBookmarkIcon,
-  checkEquality,
-  deletePost,
-} from "../../utils/utilityFunctions";
+import { checkEquality, deletePost } from "../../utils/utilityFunctions";
 import AddComment from "./AddComment";
 import { useAppSelector } from "../../../app/hooks";
 import DeletePostButton from "../../utils/DeletePostButton";

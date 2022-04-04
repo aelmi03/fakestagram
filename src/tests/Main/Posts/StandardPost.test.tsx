@@ -1,13 +1,6 @@
 import { useAppSelector } from "../../../app/hooks";
 import { doc, getFirestore, onSnapshot, Timestamp } from "firebase/firestore";
-import {
-  checkEquality,
-  clickBookmarkIcon,
-  clickLikeIcon,
-  userHasLikedPost,
-  userHasSavedPost,
-  deletePost,
-} from "../../../components/utils/utilityFunctions";
+import { deletePost } from "../../../components/utils/utilityFunctions";
 import StandardPost from "../../../components/Main/Posts/StandardPost";
 import { ThemeProvider } from "styled-components";
 import Theme from "../../../Themes/Theme";

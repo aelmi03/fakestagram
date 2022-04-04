@@ -5,8 +5,6 @@ import { render, screen } from "@testing-library/react";
 import Post from "../../../components/utils/PostInterface";
 import { User } from "../../../features/user/userSlice";
 import { Timestamp } from "firebase/firestore";
-import SmallModal from "../../../components/Main/Posts/SmallModal";
-import LargeModal from "../../../components/Main/Posts/LargeModal";
 
 const changeModalStatus = jest.fn();
 const changePostToShow = jest.fn();
