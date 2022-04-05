@@ -36,17 +36,18 @@ const Profile = () => {
     setPostsCount(posts.length);
   };
   const updateFollowersCount = async () => {
+    console.log("WE LIT");
     if (profileUser.savedPosts === undefined) return;
     const followers = await getFollowers(profileUser);
     setFollowersCount(followers.length);
   };
+
   useEffect(() => {
     console.log("MAIN PROFILE USE EFFECT");
     const getProfileUser = async () => {
       const profileDoc = doc(getFirestore(), `users/${params.userID}`);
       return onSnapshot(profileDoc, (snapshot) => {
         setProfileUser(snapshot.data() as User);
-        updatePostsCount();
       });
     };
     let unsubscribe: Unsubscribe = (() => {}) as Unsubscribe;
@@ -58,9 +59,16 @@ const Profile = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.userID]);
+  useEffect(() => {
+    updatePostsCount();
+    updateFollowersCount();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profileUser]);
+
   console.log(profileUser, "PROFILE " + params.userID);
 
   const toggleEditProfileModal = (e: React.MouseEvent) => {
+    console.log(showEditProfileModal);
     e.preventDefault();
     e.stopPropagation();
     setShowEditProfileModal((prevBoolean) => !prevBoolean);
@@ -68,19 +76,30 @@ const Profile = () => {
   return (
     <ProfileWrapper>
       <ProfileDisplayContainer>
-        <ProfileImage src={profileUser.profilePicture} />
+        <ProfileImage
+          data-testid="Profile Picture"
+          src={profileUser.profilePicture}
+        />
         <ProfileContainer>
           <ProfileInformationContainer>
             <OverflowContainer>
-              <ProfileName>{profileUser.username}</ProfileName>
+              <ProfileName data-testid="Username">
+                {profileUser.username}
+              </ProfileName>
             </OverflowContainer>
             <ButtonsContainer>
               {user.id === profileUser.id ? (
                 <React.Fragment>
-                  <ProfileButton onClick={toggleEditProfileModal}>
+                  <ProfileButton
+                    onClick={toggleEditProfileModal}
+                    name={"Edit Profile"}
+                  >
                     Edit Profile
                   </ProfileButton>
-                  <ProfileButton onClick={() => signOut(getAuth())}>
+                  <ProfileButton
+                    onClick={() => signOut(getAuth())}
+                    name={"Log out"}
+                  >
                     Log out
                   </ProfileButton>
                 </React.Fragment>
@@ -92,6 +111,11 @@ const Profile = () => {
                       updateFollowing(user, profileUser);
                       updateFollowersCount();
                     }}
+                    name={
+                      followsOtherUser(user, profileUser)
+                        ? "Following"
+                        : "Follow"
+                    }
                   >
                     {followsOtherUser(user, profileUser)
                       ? "Following"
@@ -103,20 +127,22 @@ const Profile = () => {
             </ButtonsContainer>
           </ProfileInformationContainer>
           <ProfileUserInfo>
-            <BoldInfo>
+            <BoldInfo data-testid="Posts">
               {postsCount} <ProfileInfo>posts</ProfileInfo>
             </BoldInfo>
-            <BoldInfo>
+            <BoldInfo data-testid="Followers">
               {followersCount} <ProfileInfo>followers</ProfileInfo>
             </BoldInfo>
-            <BoldInfo>
+            <BoldInfo data-testid="Following">
               {profileUser.following?.length}{" "}
               <ProfileInfo>following</ProfileInfo>
             </BoldInfo>
           </ProfileUserInfo>
           <InformationContainer>
-            <BoldInfo>{profileUser.fullName}</BoldInfo>
-            <ProfileInfo>{profileUser.biography}</ProfileInfo>
+            <BoldInfo data-testid="Full Name">{profileUser.fullName}</BoldInfo>
+            <ProfileInfo data-testid="Biography">
+              {profileUser.biography}
+            </ProfileInfo>
           </InformationContainer>
         </ProfileContainer>
       </ProfileDisplayContainer>
