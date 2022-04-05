@@ -84,18 +84,24 @@ const ProfilePosts = React.memo(
             </InfoContainer>
           ) : null}
         </FlexContainer>
-        <PostsContainer>
+        <PostsContainer data-testid="Posts Container">
           {profilePosts.map((post) => (
-            <ProfilePost key={post.id} onClick={() => changePostToShow(post)}>
+            <ProfilePost
+              key={post.id}
+              onClick={() => changePostToShow(post)}
+              data-testid={`${post.id}`}
+            >
               <ProfilePostImage src={post.imgSrc} alt="profile" />
               <PostInformation>
                 <FlexContainer direction="row" gap="0.7rem" alignItems="center">
                   <AiFillHeart />
-                  <PostInformationText>{post.likes.length}</PostInformationText>
+                  <PostInformationText data-testid="likes">
+                    {post.likes.length}
+                  </PostInformationText>
                 </FlexContainer>
                 <FlexContainer direction="row" gap="0.7rem" alignItems="center">
                   <BsFillChatFill />
-                  <PostInformationText>
+                  <PostInformationText data-testid="comments">
                     {post.comments.length}
                   </PostInformationText>
                 </FlexContainer>
