@@ -1,21 +1,13 @@
 import userEvent from "@testing-library/user-event";
-import { act, render, screen, within } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import { Timestamp } from "firebase/firestore";
 import Post from "../../../components/utils/PostInterface";
 import { User } from "../../../features/user/userSlice";
 import Profile from "../../../components/Main/Profile/Profile";
 import { ThemeProvider } from "styled-components";
-import EditProfileModal from "../../../components/Main/Profile/EditProfileModal";
 import Theme from "../../../Themes/Theme";
-import ProfilePosts from "../../../components/Main/Profile/ProfilePosts";
-import StandardPost from "../../../components/Main/Posts/StandardPost";
-import { doc, getFirestore, onSnapshot } from "firebase/firestore";
-import {
-  followsOtherUser,
-  getFollowers,
-  getProfileUserPosts,
-  updateFollowing,
-} from "../../../components/utils/utilityFunctions";
+
+import { updateFollowing } from "../../../components/utils/utilityFunctions";
 import { signOut } from "firebase/auth";
 
 let mockUser: User;

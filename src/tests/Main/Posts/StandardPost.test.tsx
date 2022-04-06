@@ -7,7 +7,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { User } from "../../../features/user/userSlice";
 import Post from "../../../components/utils/PostInterface";
-
+let originalInnerWidth = global.innerWidth;
 let mockUser: User = {
   fullName: "John Doe",
   username: "johnDoe23",
@@ -45,7 +45,6 @@ let mockPost: Post = {
   id: "fakePostID",
   imgSrc: "fakeImgSrc",
 };
-const innerWidth: number = window.innerWidth;
 jest.mock("date-fns", () => {
   return { formatDistanceToNow: () => "2h" };
 });
@@ -83,6 +82,7 @@ jest.mock("../../../app/hooks", () => {
     useAppSelector: () => mockUser,
   };
 });
+
 describe("StandardPost Component", () => {
   let changePostToShow: jest.Mock;
   let isOnHomePosts: boolean;
@@ -112,7 +112,7 @@ describe("StandardPost Component", () => {
     jest.clearAllMocks();
   });
   afterAll(() => {
-    window.innerWidth = innerWidth;
+    global.innerWidth = originalInnerWidth;
   });
   it("renders a comment using the the content of the caption, and uses the formatDistanceToNow function to display how long ago the post was made", () => {
     render(
@@ -179,7 +179,7 @@ describe("StandardPost Component", () => {
     expect(screen.getByText(/view all 2 comments/i)).toBeInTheDocument();
   });
   it("renders the PostModal component when either the chat svg icon is clicked, or the clickable View all comments text is clicked", () => {
-    window.innerWidth = 540;
+    global.innerWidth = 540;
     render(
       <ThemeProvider theme={Theme}>
         <StandardPost
@@ -199,7 +199,7 @@ describe("StandardPost Component", () => {
     expect(screen.getByText("Post Modal Component")).toBeInTheDocument();
   });
   it("renders the PostModal initially if the window.innerWidth is greater than or equal to 768", () => {
-    window.innerWidth = 768;
+    global.innerWidth = 768;
     render(
       <ThemeProvider theme={Theme}>
         <StandardPost
@@ -213,7 +213,7 @@ describe("StandardPost Component", () => {
     expect(screen.queryByText("Post Modal Component")).toBeInTheDocument();
   });
   it("doesn't render the PostModal initially if the window.innerWidth is less than 768", () => {
-    window.innerWidth = 542;
+    global.innerWidth = 542;
     render(
       <ThemeProvider theme={Theme}>
         <StandardPost
@@ -227,7 +227,7 @@ describe("StandardPost Component", () => {
     expect(screen.queryByText("Post Modal Component")).not.toBeInTheDocument();
   });
   it("is able to accurately render and not render based on the showPostModal status when the width is smaller than 768px", () => {
-    window.innerWidth = 300;
+    global.innerWidth = 300;
     render(
       <ThemeProvider theme={Theme}>
         <StandardPost
@@ -245,7 +245,7 @@ describe("StandardPost Component", () => {
     expect(screen.queryByText("Post Modal Component")).not.toBeInTheDocument();
   });
   it("always renders the PostModal component even when the changeModalStatus function is called when the width is greater than or equal to 768px and isOnHomePosts is false", () => {
-    window.innerWidth = 768;
+    global.innerWidth = 768;
     render(
       <ThemeProvider theme={Theme}>
         <StandardPost
@@ -261,7 +261,7 @@ describe("StandardPost Component", () => {
     expect(screen.queryByText("Post Modal Component")).toBeInTheDocument(); //showModalStatus will always be true when the width is equal to or greater than 768px and isOnHomePosts is false
   });
   it("is able to accurately render and not render the PostModal component based on the showPostModal status when the width is greater than or equal to 768px and the isOnHomePosts prop is true", () => {
-    window.innerWidth = 768;
+    global.innerWidth = 768;
     isOnHomePosts = true;
     render(
       <ThemeProvider theme={Theme}>
