@@ -113,9 +113,14 @@ const ProfilePosts = React.memo(
     );
   },
   (prevProps, nextProps) => {
+    if (prevProps.profileUser.id !== nextProps.profileUser.id) {
+      console.log("HEHEHEHHEHEHEHE");
+      return false;
+    }
     return !checkEquality(prevProps.profileUser, nextProps.profileUser);
   }
 );
+
 const ProfilePostsWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
