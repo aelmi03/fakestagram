@@ -1,5 +1,6 @@
 import Navbar from "./Navbar/Navbar";
 import styled from "styled-components";
+import Search from "./Navbar/Search";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Profile from "./Profile/Profile";
 const Main = () => {
@@ -10,6 +11,7 @@ const Main = () => {
         <Navbar />
         <Routes>
           <Route path="/profile/:userID" element={<Profile />} />
+          <Route path="/search" element={<Search />} />
         </Routes>
       </Router>
     </MainWrapper>

@@ -1,14 +1,17 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import Heading from "../../utils/Heading";
 import Links from "./Links";
-import StyledInput from "../../SignUpAndLogin/StyledInput";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import Search from "./Search";
+import { useNavigate, useLocation } from "react-router-dom";
 import { getAuth } from "firebase/auth";
 import AddPostModal from "./AddPostModal";
 
 const Navbar = () => {
   const [showAddPostModal, setShowAddPostModal] = useState(false);
+  const [width, setWidth] = useState(window.innerWidth);
+  const location = useLocation();
+  console.log(location, "LOCATION!");
   const toggleAddPostModal = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -19,10 +22,22 @@ const Navbar = () => {
     navigate(`/profile/${getAuth().currentUser!.uid}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    const handleResizeWindow = () => setWidth(window.innerWidth);
+
+    // subscribe to window resize event "onComponentDidMount"
+    window.addEventListener("resize", handleResizeWindow);
+    return () => {
+      // unsubscribe "onComponentDestroy"
+      window.removeEventListener("resize", handleResizeWindow);
+    };
+  }, []);
   return (
-    <NavbarWrapper>
-      <NavbarHeading>Fakestagram</NavbarHeading>
-      <NavbarInput placeholder="🔍 Search" />
+    <NavbarWrapper hide={width <= 768 && location.pathname.includes("search")}>
+      {width <= 768 && location.pathname.includes("search") ? null : (
+        <NavbarHeading>Fakestagram</NavbarHeading>
+      )}
+      {width >= 768 ? <Search /> : null}
       <Links toggleAddPostModal={toggleAddPostModal} />
       {showAddPostModal ? (
         <AddPostModal toggleAddPostModal={toggleAddPostModal} />
@@ -30,7 +45,7 @@ const Navbar = () => {
     </NavbarWrapper>
   );
 };
-const NavbarWrapper = styled.nav`
+const NavbarWrapper = styled.nav<{ hide: boolean }>`
   display: grid;
   grid-template-columns: 1fr;
   justify-items: center;
@@ -38,6 +53,11 @@ const NavbarWrapper = styled.nav`
   width: 100%;
   border-bottom: 1px solid ${({ theme }) => theme.palette.common.grey};
   background-color: ${({ theme }) => theme.palette.primaryLight};
+  ${({ hide }) =>
+    hide === true &&
+    css`
+      padding: 0rem;
+    `}
   @media only screen and (min-width: 768px) {
     grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
@@ -51,17 +71,4 @@ const NavbarHeading = styled(Heading)`
   font-size: 2.8rem;
 `;
 
-const NavbarInput = styled(StyledInput)`
-  background-color: ${({ theme }) => theme.palette.neutral};
-  font-size: 1.4rem;
-  border-radius: 5px;
-  padding: 0rem 2rem;
-  width: min(100%, 250px);
-  display: none;
-  border: none;
-  @media only screen and (min-width: 768px) {
-    display: block;
-    padding: 0.8rem 2rem;
-  }
-`;
 export default Navbar;
