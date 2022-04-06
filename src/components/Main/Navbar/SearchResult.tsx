@@ -8,15 +8,25 @@ interface IProps {
 }
 const SearchResult = ({ user }: IProps) => {
   return (
-    <FlexContainer direction="row" gap="0.7rem" alignItems="center">
+    <SearchResultContainer>
       <UserImage src={user.profilePicture} />
       <FlexContainer direction="column" gap="0.3rem">
         <UsernameText>{user.username}</UsernameText>
         <FullNameText>{user.fullName}</FullNameText>
       </FlexContainer>
-    </FlexContainer>
+    </SearchResultContainer>
   );
 };
+const SearchResultContainer = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 0.7rem;
+  cursor: pointer;
+  align-items: center;
+  &:hover {
+    background-color: #f5f5f5;
+  }
+`;
 const FullNameText = styled.p`
   font-family: ${({ theme }) => theme.primaryFont};
   font-size: 1.25rem;
