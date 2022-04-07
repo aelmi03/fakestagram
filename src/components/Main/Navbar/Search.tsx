@@ -10,6 +10,8 @@ import {
   getDocs,
   getFirestore,
   query,
+  setDoc,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import FlexContainer from "../../utils/FlexContainer";
@@ -21,6 +23,16 @@ const Search = () => {
   const [results, setResults] = useState<User[]>([]);
   const [recentSearches, setRecentSearches] = useState<User[]>([]);
   const [searchValue, setSearchValue] = useState("");
+  const deleteRecentSearch = (userToRemove: User) => {
+    const newRecentSearches = recentSearches.filter(
+      (recentUser) => recentUser.id !== userToRemove.id
+    );
+    const recentSearchesDoc = doc(getFirestore(), `recentSearches/${user.id}`);
+    setDoc(recentSearchesDoc, {
+      recentSearches: newRecentSearches.map((user) => user.id),
+    });
+    setRecentSearches(newRecentSearches);
+  };
   useEffect(() => {
     const getResults = async () => {
       if (results.length === 0 && searchValue === "") return;
@@ -83,9 +95,10 @@ const Search = () => {
               direction="row"
               justifyContent="space-between"
               alignItems="center"
+              key={user.id}
             >
               <SearchResult user={user} key={user.id} />
-              <AiOutlineClose />
+              <AiOutlineClose onClick={() => deleteRecentSearch(user)} />
             </FlexContainer>
           ))}
         </SearchesContainer>
