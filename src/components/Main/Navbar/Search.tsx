@@ -11,15 +11,23 @@ import {
   getFirestore,
   query,
   setDoc,
+  Timestamp,
   updateDoc,
   where,
 } from "firebase/firestore";
 import FlexContainer from "../../utils/FlexContainer";
 import { PostTextBold } from "../../utils/Texts";
 import { AiOutlineClose } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
+interface SearchResult {
+  id: string;
+  timestamp: Timestamp;
+}
 const Search = () => {
+  const navigate = useNavigate();
   const user = useAppSelector(selectUser);
   const [isFocus, setIsFocus] = useState(false);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [results, setResults] = useState<User[]>([]);
   const [recentSearches, setRecentSearches] = useState<User[]>([]);
   const [searchValue, setSearchValue] = useState("");
@@ -27,9 +35,12 @@ const Search = () => {
     const newRecentSearches = recentSearches.filter(
       (recentUser) => recentUser.id !== userToRemove.id
     );
+    const newSearchResults = searchResults.filter(
+      (searchResult) => searchResult.id !== userToRemove.id
+    );
     const recentSearchesDoc = doc(getFirestore(), `recentSearches/${user.id}`);
     setDoc(recentSearchesDoc, {
-      recentSearches: newRecentSearches.map((user) => user.id),
+      recentSearches: newSearchResults,
     });
     setRecentSearches(newRecentSearches);
   };
@@ -38,7 +49,22 @@ const Search = () => {
     setDoc(recentSearchesDoc, {
       recentSearches: [],
     });
+    setSearchResults([]);
     setRecentSearches([]);
+  };
+  const onSearchResultClick = (clickedUser: User) => {
+    const filteredSearchResults = searchResults.filter(
+      (recentUser) => recentUser.id !== clickedUser.id
+    );
+    const newRecentSearches = [
+      { id: clickedUser.id, timestamp: new Date() },
+      ...filteredSearchResults,
+    ];
+    const recentSearchesDoc = doc(getFirestore(), `recentSearches/${user.id}`);
+    setDoc(recentSearchesDoc, {
+      recentSearches: newRecentSearches,
+    });
+    navigate(`../profile/${clickedUser.id}`);
   };
   useEffect(() => {
     const getResults = async () => {
@@ -61,16 +87,21 @@ const Search = () => {
         `recentSearches/${user.id}`
       );
       const recentSearches = (await getDoc(recentSearchesDoc)).data()
-        ?.recentSearches as string[];
+        ?.recentSearches as SearchResult[];
       if (recentSearches === undefined) return;
-      const usersQuery = query(
-        collection(getFirestore(), "users"),
-        where("id", "in", recentSearches)
+      recentSearches.sort(
+        (a, z) =>
+          z.timestamp.toDate().getTime() - a.timestamp.toDate().getTime()
       );
-      const resultsDocs = (await getDocs(usersQuery)).docs.map(
-        (doc) => doc.data() as User
+      const recentSearchResults: User[] = await Promise.all(
+        recentSearches.map(async (recentUser): Promise<User> => {
+          const userDoc = doc(getFirestore(), `users/${recentUser.id}`);
+          const userSnapshot = await getDoc(userDoc);
+          return userSnapshot.data() as User;
+        })
       );
-      setRecentSearches(resultsDocs);
+      setSearchResults(recentSearches);
+      setRecentSearches(recentSearchResults);
     };
     getRecentSearches();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -87,7 +118,11 @@ const Search = () => {
       {results.length !== 0 && searchValue !== "" ? (
         <SearchesContainer>
           {results.map((user) => (
-            <SearchResult user={user} key={user.id} />
+            <SearchResult
+              user={user}
+              key={user.id}
+              onSearchResultClick={onSearchResultClick}
+            />
           ))}
         </SearchesContainer>
       ) : null}
@@ -106,7 +141,11 @@ const Search = () => {
               alignItems="center"
               key={user.id}
             >
-              <SearchResult user={user} key={user.id} />
+              <SearchResult
+                user={user}
+                key={user.id}
+                onSearchResultClick={onSearchResultClick}
+              />
               <AiOutlineClose onClick={() => deleteRecentSearch(user)} />
             </FlexContainer>
           ))}

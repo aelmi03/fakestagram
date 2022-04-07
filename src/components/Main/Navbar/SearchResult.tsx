@@ -1,16 +1,13 @@
 import FlexContainer from "../../utils/FlexContainer";
-import { PostTextBold, PostGreyText } from "../../utils/Texts";
-import CircularUserImage from "../../utils/CircularUserImage";
 import { User } from "../../../features/user/userSlice";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 interface IProps {
   user: User;
+  onSearchResultClick: (user: User) => void;
 }
-const SearchResult = ({ user }: IProps) => {
-  const navigate = useNavigate();
+const SearchResult = ({ user, onSearchResultClick }: IProps) => {
   return (
-    <SearchResultContainer onClick={() => navigate(`../profile/${user.id}`)}>
+    <SearchResultContainer onClick={() => onSearchResultClick(user)}>
       <UserImage src={user.profilePicture} />
       <FlexContainer direction="column" gap="0.3rem">
         <UsernameText>{user.username}</UsernameText>
