@@ -33,6 +33,13 @@ const Search = () => {
     });
     setRecentSearches(newRecentSearches);
   };
+  const clearAllRecentSearches = () => {
+    const recentSearchesDoc = doc(getFirestore(), `recentSearches/${user.id}`);
+    setDoc(recentSearchesDoc, {
+      recentSearches: [],
+    });
+    setRecentSearches([]);
+  };
   useEffect(() => {
     const getResults = async () => {
       if (results.length === 0 && searchValue === "") return;
@@ -88,7 +95,9 @@ const Search = () => {
         <SearchesContainer>
           <FlexContainer direction="row" justifyContent="space-between">
             <RecentText>Recent</RecentText>
-            <ClearAllTextButton>Clear All</ClearAllTextButton>
+            <ClearAllTextButton onClick={clearAllRecentSearches}>
+              Clear All
+            </ClearAllTextButton>
           </FlexContainer>
           {recentSearches.map((user) => (
             <FlexContainer
