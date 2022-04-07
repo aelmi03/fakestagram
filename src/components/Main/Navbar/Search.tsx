@@ -1,4 +1,3 @@
-import StyledInput from "../../SignUpAndLogin/StyledInput";
 import styled from "styled-components";
 import SearchResult from "./SearchResult";
 import { selectUser, User } from "../../../features/user/userSlice";
@@ -6,19 +5,25 @@ import { useAppSelector } from "../../../app/hooks";
 import { useEffect, useState } from "react";
 import {
   collection,
+  doc,
+  getDoc,
   getDocs,
   getFirestore,
   query,
   where,
 } from "firebase/firestore";
+import FlexContainer from "../../utils/FlexContainer";
+import { PostTextBold } from "../../utils/Texts";
+import { AiOutlineClose } from "react-icons/ai";
 const Search = () => {
   const user = useAppSelector(selectUser);
   const [isFocus, setIsFocus] = useState(false);
   const [results, setResults] = useState<User[]>([]);
+  const [recentSearches, setRecentSearches] = useState<User[]>([]);
   const [searchValue, setSearchValue] = useState("");
-
   useEffect(() => {
     const getResults = async () => {
+      if (results.length === 0 && searchValue === "") return;
       const resultsQuery = query(collection(getFirestore(), "users"));
       const resultsDocs = (await getDocs(resultsQuery)).docs
         .map((doc) => doc.data() as User)
@@ -28,7 +33,29 @@ const Search = () => {
       setResults(resultsDocs);
     };
     getResults();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue]);
+  useEffect(() => {
+    const getRecentSearches = async () => {
+      const recentSearchesDoc = doc(
+        getFirestore(),
+        `recentSearches/${user.id}`
+      );
+      const recentSearches = (await getDoc(recentSearchesDoc)).data()
+        ?.recentSearches as string[];
+      if (recentSearches === undefined) return;
+      const usersQuery = query(
+        collection(getFirestore(), "users"),
+        where("id", "in", recentSearches)
+      );
+      const resultsDocs = (await getDocs(usersQuery)).docs.map(
+        (doc) => doc.data() as User
+      );
+      setRecentSearches(resultsDocs);
+    };
+    getRecentSearches();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <SearchWrapper>
       <SearchInput
@@ -38,14 +65,35 @@ const Search = () => {
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
       />
-      <SearchesContainer>
-        {results.map((user) => (
-          <SearchResult user={user} key={user.id} />
-        ))}
-      </SearchesContainer>
+      {results.length !== 0 && searchValue !== "" ? (
+        <SearchesContainer>
+          {results.map((user) => (
+            <SearchResult user={user} key={user.id} />
+          ))}
+        </SearchesContainer>
+      ) : null}
+      {recentSearches.length !== 0 && searchValue === "" ? (
+        <SearchesContainer>
+          <FlexContainer direction="row" justifyContent="space-between">
+            <RecentText>Recent</RecentText>
+            <ClearAllTextButton>Clear All</ClearAllTextButton>
+          </FlexContainer>
+          {recentSearches.map((user) => (
+            <FlexContainer
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <SearchResult user={user} key={user.id} />
+              <AiOutlineClose />
+            </FlexContainer>
+          ))}
+        </SearchesContainer>
+      ) : null}
     </SearchWrapper>
   );
 };
+
 const SearchInput = styled.input`
   background-color: ${({ theme }) => theme.palette.primaryLight};
   border: 1px solid ${({ theme }) => theme.palette.common.grey};
@@ -53,6 +101,9 @@ const SearchInput = styled.input`
   border-radius: 5px;
   width: 100%;
   padding: 0.8rem 2rem;
+  &:focus {
+    border: 1px solid ${({ theme }) => theme.palette.primary.contrastText};
+  }
 `;
 const SearchWrapper = styled.div`
   position: relative;
@@ -61,7 +112,7 @@ const SearchWrapper = styled.div`
   display: grid;
   grid-template-rows: max-content 1fr;
   background-color: ${({ theme }) => theme.palette.primaryLight};
-  padding: 1rem 0.9rem;
+  padding: 1rem 1.1rem;
   gap: 0.8rem;
 `;
 const SearchesContainer = styled.div`
@@ -69,7 +120,7 @@ const SearchesContainer = styled.div`
   background-color: ${({ theme }) => theme.palette.primaryLight};
   display: grid;
   border-top: 1px solid ${({ theme }) => theme.palette.common.grey};
-  gap: 1rem;
+  gap: 1.2rem;
   padding: 0.8rem 0rem;
   overflow-y: scroll;
   @media only screen and (min-width: 768px) {
@@ -78,5 +129,15 @@ const SearchesContainer = styled.div`
     z-index: 5;
   }
 `;
-
+const RecentText = styled(PostTextBold)`
+  font-weight: 600;
+  font-size: 1.6rem;
+`;
+const ClearAllTextButton = styled.button`
+  font-family: ${({ theme }) => theme.primaryFont};
+  font-size: 1.4rem;
+  font-weight: 600;
+  background-color: ${({ theme }) => theme.palette.primaryLight};
+  color: ${({ theme }) => theme.palette.secondary.main};
+`;
 export default Search;
