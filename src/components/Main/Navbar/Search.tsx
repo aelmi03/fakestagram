@@ -2,7 +2,7 @@ import styled from "styled-components";
 import SearchResult from "./SearchResult";
 import { selectUser, User } from "../../../features/user/userSlice";
 import { useAppSelector } from "../../../app/hooks";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   collection,
   doc,
@@ -16,7 +16,7 @@ import {
   where,
 } from "firebase/firestore";
 import FlexContainer from "../../utils/FlexContainer";
-import { PostTextBold } from "../../utils/Texts";
+import { PostTextBold, PostGreyText } from "../../utils/Texts";
 import { AiOutlineClose } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 interface SearchResult {
@@ -115,42 +115,48 @@ const Search = () => {
         value={searchValue}
         onChange={(e) => setSearchValue(e.target.value)}
       />
-      {results.length !== 0 && searchValue !== "" ? (
-        <SearchesContainer>
-          {results.map((user) => (
-            <SearchResult
-              user={user}
-              key={user.id}
-              onSearchResultClick={onSearchResultClick}
-            />
-          ))}
-        </SearchesContainer>
-      ) : null}
-      {recentSearches.length !== 0 && searchValue === "" ? (
-        <SearchesContainer>
-          <FlexContainer direction="row" justifyContent="space-between">
-            <RecentText>Recent</RecentText>
-            <ClearAllTextButton onClick={clearAllRecentSearches}>
-              Clear All
-            </ClearAllTextButton>
-          </FlexContainer>
-          {recentSearches.map((user) => (
-            <FlexContainer
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-              key={user.id}
-            >
+      <SearchesContainer>
+        {results.length !== 0 && searchValue !== ""
+          ? results.map((user) => (
               <SearchResult
                 user={user}
                 key={user.id}
                 onSearchResultClick={onSearchResultClick}
               />
-              <AiOutlineClose onClick={() => deleteRecentSearch(user)} />
+            ))
+          : null}
+        {results.length === 0 && searchValue !== "" ? (
+          <NoResultsText>No results found.</NoResultsText>
+        ) : null}
+        {recentSearches.length !== 0 && searchValue === "" ? (
+          <React.Fragment>
+            <FlexContainer direction="row" justifyContent="space-between">
+              <RecentText>Recent</RecentText>
+              <ClearAllTextButton onClick={clearAllRecentSearches}>
+                Clear All
+              </ClearAllTextButton>
             </FlexContainer>
-          ))}
-        </SearchesContainer>
-      ) : null}
+            {recentSearches.map((user) => (
+              <FlexContainer
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+                key={user.id}
+              >
+                <SearchResult
+                  user={user}
+                  key={user.id}
+                  onSearchResultClick={onSearchResultClick}
+                />
+                <AiOutlineClose onClick={() => deleteRecentSearch(user)} />
+              </FlexContainer>
+            ))}
+          </React.Fragment>
+        ) : null}
+        {recentSearches.length === 0 && searchValue === "" ? (
+          <NoResultsText>No recent searches.</NoResultsText>
+        ) : null}
+      </SearchesContainer>
     </SearchWrapper>
   );
 };
@@ -165,6 +171,12 @@ const SearchInput = styled.input`
   &:focus {
     border: 1px solid ${({ theme }) => theme.palette.primary.contrastText};
   }
+`;
+const NoResultsText = styled.p`
+  font-size: 1.4rem;
+  color: ${({ theme }) => theme.palette.darkGrey};
+  font-weight: 400;
+  margin: 0 auto;
 `;
 const SearchWrapper = styled.div`
   position: relative;
