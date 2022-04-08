@@ -1,17 +1,33 @@
 import FlexContainer from "../../utils/FlexContainer";
 import { User } from "../../../features/user/userSlice";
 import styled from "styled-components";
+import { AiOutlineClose } from "react-icons/ai";
 interface IProps {
   user: User;
   onSearchResultClick: (user: User) => void;
+  onDeleteIconClick?: (user: User) => void;
 }
-const SearchResult = ({ user, onSearchResultClick }: IProps) => {
+const SearchResult = ({
+  user,
+  onSearchResultClick,
+  onDeleteIconClick,
+}: IProps) => {
   return (
     <SearchResultContainer onClick={() => onSearchResultClick(user)}>
-      <UserImage src={user.profilePicture} />
-      <FlexContainer direction="column" gap="0.3rem">
-        <UsernameText>{user.username}</UsernameText>
-        <FullNameText>{user.fullName}</FullNameText>
+      <FlexContainer direction="row" gap="0.7rem">
+        <UserImage src={user.profilePicture} />
+        <FlexContainer direction="column" gap="0.3rem">
+          <UsernameText>{user.username}</UsernameText>
+          <FullNameText>{user.fullName}</FullNameText>
+        </FlexContainer>
+        {onDeleteIconClick !== undefined ? (
+          <AiOutlineClose
+            onClick={(e) => {
+              e.stopPropagation();
+              onDeleteIconClick(user);
+            }}
+          />
+        ) : null}
       </FlexContainer>
     </SearchResultContainer>
   );
@@ -19,11 +35,18 @@ const SearchResult = ({ user, onSearchResultClick }: IProps) => {
 const SearchResultContainer = styled.div`
   display: flex;
   flex-flow: row nowrap;
-  gap: 0.7rem;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
   cursor: pointer;
   align-items: center;
   &:hover {
-    background-color: #f5f5f5;
+    background-color: rgba(0.1, 0.1, 0.1, 0.03);
+  }
+  svg {
+    width: 30px;
+    height: 30px;
+    align-self: center;
   }
 `;
 const FullNameText = styled.p`
