@@ -1,5 +1,5 @@
-import FlexContainer from "../../utils/FlexContainer";
-import { User } from "../../../features/user/userSlice";
+import FlexContainer from "../../../utils/FlexContainer";
+import { User } from "../../../../features/user/userSlice";
 import styled from "styled-components";
 import { AiOutlineClose } from "react-icons/ai";
 interface IProps {

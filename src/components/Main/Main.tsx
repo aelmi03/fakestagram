@@ -1,8 +1,8 @@
-import Navbar from "./Navbar/Navbar";
+import Navbar from "./Navbar";
 import styled from "styled-components";
 import Search from "./Navbar/Search";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Profile from "./Profile/Profile";
+import Profile from "./Profile";
 const Main = () => {
   console.log("MAIN ");
   return (

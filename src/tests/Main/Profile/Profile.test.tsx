@@ -3,7 +3,7 @@ import { act, render, screen } from "@testing-library/react";
 import { Timestamp } from "firebase/firestore";
 import Post from "../../../components/utils/PostInterface";
 import { User } from "../../../features/user/userSlice";
-import Profile from "../../../components/Main/Profile/Profile";
+import Profile from "../../../components/Main/Profile";
 import { ThemeProvider } from "styled-components";
 import Theme from "../../../Themes/Theme";
 

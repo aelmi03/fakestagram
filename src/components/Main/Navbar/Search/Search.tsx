@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 import SearchResult from "./SearchResult";
-import { selectUser, User } from "../../../features/user/userSlice";
-import { useAppSelector } from "../../../app/hooks";
+import { selectUser, User } from "../../../../features/user/userSlice";
+import { useAppSelector } from "../../../../app/hooks";
 import React, { useEffect, useState } from "react";
 import {
   collection,
@@ -12,13 +12,11 @@ import {
   query,
   setDoc,
   Timestamp,
-  updateDoc,
-  where,
 } from "firebase/firestore";
-import FlexContainer from "../../utils/FlexContainer";
-import { PostTextBold } from "../../utils/Texts";
+import FlexContainer from "../../../utils/FlexContainer";
+import { PostTextBold } from "../../../utils/Texts";
 import { useNavigate } from "react-router-dom";
-interface SearchResult {
+interface RecentSearch {
   id: string;
   timestamp: Timestamp;
 }
@@ -26,8 +24,8 @@ const Search = () => {
   const navigate = useNavigate();
   const user = useAppSelector(selectUser);
   const [isFocus, setIsFocus] = useState(false);
-  const [width, setWidth] = useState(window.innerWidth);
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [width] = useState(window.innerWidth);
+  const [searchResults, setSearchResults] = useState<RecentSearch[]>([]);
   const [updateRecentSearches, setUpdateRecentSearches] = useState(false);
   const [results, setResults] = useState<User[]>([]);
   const [recentSearches, setRecentSearches] = useState<User[]>([]);
@@ -103,7 +101,7 @@ const Search = () => {
         `recentSearches/${user.id}`
       );
       const recentSearches = (await getDoc(recentSearchesDoc)).data()
-        ?.recentSearches as SearchResult[];
+        ?.recentSearches as RecentSearch[];
       if (recentSearches === undefined) return;
       recentSearches.sort(
         (a, z) =>
@@ -312,6 +310,7 @@ const SearchesContainer = styled.div<{ isFocus: boolean; width: number }>`
       border-radius: 5px;
       border: none;
       padding: 1rem;
+      box-shadow: 0 0 5px 1px rgb(0 0 0 / 10%);
     `}
 `;
 const RecentText = styled(PostTextBold)`
