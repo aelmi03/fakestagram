@@ -58,10 +58,12 @@ const Search = () => {
     const filteredSearchResults = searchResults.filter(
       (recentUser) => recentUser.id !== clickedUser.id
     );
+    console.log(clickedUser.id, ";)");
     const newRecentSearches = [
       { id: clickedUser.id, timestamp: new Date() },
       ...filteredSearchResults,
     ];
+    console.log(newRecentSearches);
     const recentSearchesDoc = doc(getFirestore(), `recentSearches/${user.id}`);
     setDoc(recentSearchesDoc, {
       recentSearches: newRecentSearches,
@@ -130,6 +132,7 @@ const Search = () => {
         }}
         isFocus={isFocus}
         width={width}
+        data-testid="Click Wrapper"
       />
       <SearchInput
         placeholder="🔍 Search"
@@ -142,7 +145,11 @@ const Search = () => {
         width={width}
       />
 
-      <SearchesContainer isFocus={isFocus} width={width}>
+      <SearchesContainer
+        isFocus={isFocus}
+        width={width}
+        data-testid="Searches Container"
+      >
         {results.length !== 0 && searchValue !== ""
           ? results.map((user) => (
               <SearchResult
@@ -169,6 +176,7 @@ const Search = () => {
                 justifyContent="space-between"
                 alignItems="center"
                 key={user.id}
+                data-testid="Recent Search Result"
               >
                 <SearchResult
                   user={user}
