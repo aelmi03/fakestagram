@@ -13,9 +13,12 @@ const SearchResult = ({
   onDeleteIconClick,
 }: IProps) => {
   return (
-    <SearchResultContainer onClick={() => onSearchResultClick(user)}>
+    <SearchResultContainer
+      onClick={() => onSearchResultClick(user)}
+      data-testid="SearchResult Container"
+    >
       <FlexContainer direction="row" gap="0.7rem">
-        <UserImage src={user.profilePicture} />
+        <UserImage src={user.profilePicture} alt="Profile Picture" />
         <FlexContainer direction="column" gap="0.3rem">
           <UsernameText>{user.username}</UsernameText>
           <FullNameText>{user.fullName}</FullNameText>
@@ -26,6 +29,7 @@ const SearchResult = ({
               e.stopPropagation();
               onDeleteIconClick(user);
             }}
+            data-testid="Delete Icon"
           />
         ) : null}
       </FlexContainer>
