@@ -1,21 +1,11 @@
-import { act, fireEvent, render, screen, within } from "@testing-library/react";
+import { act, render, screen, within } from "@testing-library/react";
 import Theme from "../../../../Themes/Theme";
 import { ThemeProvider } from "styled-components";
 import Search from "../../../../components/Main/Navbar/Search";
 import { User } from "../../../../features/user/userSlice";
 import userEvent from "@testing-library/user-event";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  getFirestore,
-  query,
-  setDoc,
-  Timestamp,
-} from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "../../../../app/hooks";
+import { setDoc } from "firebase/firestore";
+
 const mockUser: User = {
   fullName: "John Doe",
   username: "johnDoe23",
@@ -249,7 +239,7 @@ describe("Search Component", () => {
     expect(mockNavigateFunction.mock.calls[0][0]).toEqual(
       `../profile/${mockSecondUser.id}`
     );
-    expect(setDoc.mock.calls[0][1]).toEqual({
+    expect((setDoc as jest.Mock).mock.calls[0][1]).toEqual({
       recentSearches: [
         { id: "joker123", timestamp: new Date() },
         { id: "firstRecentSearch", timestamp: new Date() },
