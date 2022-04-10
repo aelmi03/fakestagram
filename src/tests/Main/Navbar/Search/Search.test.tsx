@@ -37,7 +37,7 @@ jest.mock("../../../../app/hooks", () => {
 });
 let originalPromiseAll = Promise.all;
 Promise.all = async () => {
-  return [mockUser, mockSecondUser];
+  return [mockUser, mockSecondUser] as any;
 };
 jest.mock("firebase/firestore", () => {
   return {
@@ -219,7 +219,7 @@ describe("Search Component", () => {
     expect(screen.queryByText("No results found.")).toBeInTheDocument();
   });
   it("should close the Searches Container when a Search Result component is clicked and call the navigate function to go to that user's profile, and will call the setDoc with the new recentSearches array with the most recently searched user", async () => {
-    window.innerWidth = 768;
+    global.innerWidth = 768;
     await act(async () => {
       render(
         <ThemeProvider theme={Theme}>

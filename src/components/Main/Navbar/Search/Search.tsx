@@ -204,7 +204,7 @@ const SearchInput = styled.input<{ width: number }>`
   border-radius: 5px;
   width: 100%;
   padding: 0.8rem 2rem;
-  z-index: 13;
+  position: relative;
   &:focus {
     border: 1px solid ${({ theme }) => theme.palette.primary.contrastText};
   }

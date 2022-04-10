@@ -45,14 +45,14 @@ const LargeModal = React.memo(
           }}
         >
           <LargePostPicture src={post.imgSrc} alt="photo of the post" />
-          <FlexContainer direction="column">
-            <FlexContainer direction="column" gap="1rem">
+          <FlexContainer direction="column" gap="0.5rem">
+            <FlexContainer direction="column">
               <FlexContainer
                 direction="row"
                 justifyContent="space-between"
                 padding="1rem 1rem"
               >
-                <FlexContainer direction="row" gap="0.4rem" alignItems="center">
+                <FlexContainer direction="row" gap="1rem" alignItems="center">
                   <CircularUserImage
                     src={postUser.profilePicture}
                     alt={"avatar of profile user"}
@@ -136,7 +136,7 @@ const LargeModalWrapper = styled.div`
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  z-index: 100;
+  z-index: 13;
   @media only screen and (min-width: 1024px) {
     grid-template-columns: 6fr 5fr;
   }

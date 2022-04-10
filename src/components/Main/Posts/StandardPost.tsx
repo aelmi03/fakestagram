@@ -31,13 +31,17 @@ const StandardPost = React.memo(
     console.log("STANDARD POST");
     const user = useAppSelector(selectUser, checkEquality);
     const [postInfo, setPostInfo] = useState<Post>(post);
-    const [showPostModal, setShowPostModal] = useState(isOnHomePosts);
+    const [showPostModal, setShowPostModal] = useState(!isOnHomePosts);
     const [width, setWidth] = useState(window.innerWidth);
     const [showDeleteButton, setShowDeleteButton] = useState(false);
     const changeModalStatus = () => {
       setShowPostModal((prevBoolean) => !prevBoolean);
     };
-
+    useEffect(() => {
+      if (width < 768 && isOnHomePosts === false) {
+        setShowPostModal(false);
+      }
+    }, []);
     useEffect(() => {
       let hasFetched = false;
       const postDoc = doc(getFirestore(), `posts/${postInfo.id}`);
@@ -192,11 +196,24 @@ const PostWrapper = styled.div<{ isOnHomePosts: boolean }>`
         }
       }
     `}
+  ${({ isOnHomePosts }) =>
+    isOnHomePosts === true &&
+    css`
+      margin-bottom: 0rem;
+      margin-top: 0rem;
+      width: min(100%, 600px);
+      @media only screen and (min-width: 768px) {
+        width: 70%;
+      }
+    `}
 `;
 
 const PostImage = styled.img`
   width: 100%;
   aspect-ratio: 1/1.1;
+  @media only screen and (min-width: 540px) {
+    aspect-ratio: 1/1;
+  }
 `;
 
 export default StandardPost;
