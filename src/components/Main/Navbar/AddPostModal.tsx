@@ -15,7 +15,7 @@ import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { useAppSelector } from "../../../app/hooks";
 import { selectUser } from "../../../features/user/userSlice";
-import Button from "../../utils/Button";
+import FormButton from "../../utils/FormButton";
 import FlexContainer from "../../utils/FlexContainer";
 import HorizontalLine from "../../utils/HorizontalLine";
 import ModalInput from "../../utils/ModalInput";
@@ -134,12 +134,12 @@ const AddPostModal = ({ toggleAddPostModal }: IProps) => {
           <WarningText>{captionWarningText}</WarningText>
         </FlexContainer>
         <FlexContainer direction="row" gap="1rem" justifyContent="center">
-          <Button color="red" name="Cancel" onClick={toggleAddPostModal}>
+          <FormButton color="red" name="Cancel" onClick={toggleAddPostModal}>
             Cancel
-          </Button>
-          <Button name="Post" onClick={addPost}>
+          </FormButton>
+          <FormButton name="Post" onClick={addPost}>
             Post
-          </Button>
+          </FormButton>
         </FlexContainer>
       </AddPostForm>
     </ModalWrapper>

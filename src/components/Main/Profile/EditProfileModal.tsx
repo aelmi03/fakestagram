@@ -5,7 +5,7 @@ import FlexContainer from "../../utils/FlexContainer";
 import ModalLabel from "../../utils/ModalLabel";
 import { useAppSelector } from "../../../app/hooks";
 import { selectUser } from "../../../features/user/userSlice";
-import Button from "../../utils/Button";
+import FormButton from "../../utils/FormButton";
 import WarningText from "../../utils/WarningText";
 import {
   ref,
@@ -131,12 +131,12 @@ const EditProfileModal = ({ toggleEditProfileModal }: IProps) => {
         </FlexContainer>
 
         <FlexContainer direction="row" gap="1rem" justifyContent="center">
-          <Button onClick={toggleEditProfileModal} color="red" name="Cancel">
+          <FormButton onClick={toggleEditProfileModal} color="red" name="Cancel">
             Cancel
-          </Button>
-          <Button onClick={updateUserProfile} name="Save">
+          </FormButton>
+          <FormButton onClick={updateUserProfile} name="Save">
             Save Changes
-          </Button>
+          </FormButton>
         </FlexContainer>
       </EditProfileForm>
     </ModalWrapper>

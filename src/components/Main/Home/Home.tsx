@@ -10,8 +10,12 @@ import {
   getDocs,
   doc,
   getDoc,
+  limit,
 } from "firebase/firestore";
 import StandardPost from "../Posts/StandardPost";
+import Button from "../../utils/Button";
+import Loader from "../../utils/Loader";
+import { PostText } from "../../utils/Texts";
 import Post from "../../utils/PostInterface";
 interface PostQuery {
   post: Post;
@@ -19,12 +23,15 @@ interface PostQuery {
 }
 const Home = () => {
   const user = useAppSelector(selectUser);
+  const [showNoMorePostsText, setShowNoMorePostsText] = useState(false);
+  const [showLoadMoreButton, setShowLoadMoreButton] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
   const [postsQuery, setPostsQuery] = useState<PostQuery[]>([]);
   useEffect(() => {
     const loadPosts = async () => {
       const postsQueryDocs = query(
         collection(getFirestore(), "posts"),
-        where("postedBy", "in", user.following)
+        limit(10)
       );
       const postsQueryData = await Promise.all(
         (
@@ -40,10 +47,16 @@ const Home = () => {
             } as PostQuery;
           })
       );
+      if (postsQueryData.length < 10) {
+        setShowNoMorePostsText(true);
+      } else {
+        setShowLoadMoreButton(true);
+      }
       setPostsQuery(postsQueryData);
     };
     loadPosts();
-  }, [user.following]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <HomeWrapper>
       {postsQuery.map((postQuery) => (
@@ -51,8 +64,14 @@ const Home = () => {
           post={postQuery.post}
           postUser={postQuery.postUser}
           isOnHomePosts={true}
+          key={postQuery.post.id}
         />
       ))}
+      {showLoadMoreButton === true ? <Button>Load More</Button> : null}
+      {showLoading === true ? <Loader /> : null}
+      {showNoMorePostsText === true ? (
+        <PostText>No more posts to show.</PostText>
+      ) : null}
     </HomeWrapper>
   );
 };
