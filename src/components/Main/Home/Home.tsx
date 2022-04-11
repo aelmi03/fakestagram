@@ -40,7 +40,7 @@ const Home = () => {
     const postsQueryDocs = query(
       collection(getFirestore(), "posts"),
       startAfter(lastVisible),
-      limit(5)
+      limit(8)
     );
     const postQueryDocs = await getDocs(postsQueryDocs);
     const postsQueryData = await Promise.all(
@@ -57,7 +57,7 @@ const Home = () => {
     );
     if (postsQueryData.length === 0) {
       setShowNoMorePostsText(true);
-    } else if (postsQueryData.length < 5) {
+    } else if (postsQueryData.length < 8) {
       setPostsQuery([...postsQuery, ...postsQueryData]);
       setShowNoMorePostsText(true);
     } else {
@@ -123,8 +123,7 @@ const HomeWrapper = styled.div`
   gap: 2rem;
   justify-items: center;
   padding: 0.5rem 0rem 15rem 0rem;
-  justify-content: center;
-  background-color: ${({ theme }) => theme.palette.neutral};
+  background-color: ${({ theme }) => theme.palette.primary.main};
   @media only screen and (min-width: 768px) {
     padding: 4rem 0rem 15rem 0rem;
   }

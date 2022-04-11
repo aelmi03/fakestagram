@@ -11,6 +11,7 @@ import {
   collection,
   getFirestore,
   onSnapshot,
+  orderBy,
   query,
   where,
 } from "firebase/firestore";
@@ -34,7 +35,8 @@ const ProfilePosts = React.memo(
       const getProfileUserPosts = async () => {
         const profileUserPostsQuery = query(
           collection(getFirestore(), "posts"),
-          where("postedBy", "==", `${profileUser.id}`)
+          where("postedBy", "==", `${profileUser.id}`),
+          orderBy("timestamp", "desc")
         );
         return onSnapshot(profileUserPostsQuery, (snapshot) => {
           const posts = snapshot.docs.map((doc) => doc.data() as Post);
@@ -44,7 +46,8 @@ const ProfilePosts = React.memo(
       const getSavedPosts = async () => {
         const savedPostsQuery = query(
           collection(getFirestore(), "posts"),
-          where("id", "in", user.savedPosts)
+          where("id", "in", user.savedPosts),
+          orderBy("timestamp", "desc")
         );
         return onSnapshot(savedPostsQuery, (snapshot) => {
           const posts = snapshot.docs.map((doc) => doc.data() as Post);

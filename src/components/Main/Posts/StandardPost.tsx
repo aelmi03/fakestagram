@@ -46,6 +46,7 @@ const StandardPost = React.memo(
       let hasFetched = false;
       const postDoc = doc(getFirestore(), `posts/${postInfo.id}`);
       const unsubscribe = onSnapshot(postDoc, (snapshot) => {
+        console.log("ON SNAPSHOT");
         if (!hasFetched) {
           hasFetched = true;
           return;
@@ -201,8 +202,9 @@ const PostWrapper = styled.div<{ isOnHomePosts: boolean }>`
     css`
       margin-bottom: 0rem;
       margin-top: 0rem;
-      width: min(100%, 600px);
-      @media only screen and (min-width: 768px) {
+      width: min(100%, 614px);
+      @media only screen and (min-width: 614px) {
+        border: 1px solid ${({ theme }) => theme.palette.common.grey};
       }
     `}
 `;
@@ -211,7 +213,7 @@ const PostImage = styled.img`
   width: 100%;
   aspect-ratio: 1/1.1;
   @media only screen and (min-width: 540px) {
-    aspect-ratio: 1/1;
+    aspect-ratio: 1/1.1;
   }
 `;
 
