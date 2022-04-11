@@ -203,7 +203,6 @@ const PostWrapper = styled.div<{ isOnHomePosts: boolean }>`
       margin-top: 0rem;
       width: min(100%, 600px);
       @media only screen and (min-width: 768px) {
-        width: 60%;
       }
     `}
 `;

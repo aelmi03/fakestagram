@@ -11,6 +11,9 @@ import {
   doc,
   getDoc,
   limit,
+  QuerySnapshot,
+  startAfter,
+  DocumentData,
 } from "firebase/firestore";
 import StandardPost from "../Posts/StandardPost";
 import Button from "../../utils/Button";
@@ -27,16 +30,52 @@ const Home = () => {
   const [showLoadMoreButton, setShowLoadMoreButton] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
   const [postsQuery, setPostsQuery] = useState<PostQuery[]>([]);
+  const [recentSnapshot, setRecentSnapshot] = useState<
+    QuerySnapshot<DocumentData>
+  >({} as QuerySnapshot<DocumentData>);
+  const loadMorePosts = async () => {
+    setShowLoading(true);
+    setShowLoadMoreButton(false);
+    const lastVisible = recentSnapshot.docs[recentSnapshot.docs.length - 1];
+    const postsQueryDocs = query(
+      collection(getFirestore(), "posts"),
+      startAfter(lastVisible),
+      limit(5)
+    );
+    const postQueryDocs = await getDocs(postsQueryDocs);
+    const postsQueryData = await Promise.all(
+      postQueryDocs.docs
+        .map((doc) => doc.data() as Post)
+        .map(async (post) => {
+          const userDoc = doc(getFirestore(), `users/${post.postedBy}`);
+          const userData = (await getDoc(userDoc)).data() as User;
+          return {
+            post: post,
+            postUser: userData,
+          } as PostQuery;
+        })
+    );
+    if (postsQueryData.length === 0) {
+      setShowNoMorePostsText(true);
+    } else if (postsQueryData.length < 5) {
+      setPostsQuery([...postsQuery, ...postsQueryData]);
+      setShowNoMorePostsText(true);
+    } else {
+      setPostsQuery([...postsQuery, ...postsQueryData]);
+      setShowLoadMoreButton(true);
+    }
+    setRecentSnapshot(postQueryDocs);
+    setShowLoading(false);
+  };
   useEffect(() => {
-    const loadPosts = async () => {
+    const loadInitialPosts = async () => {
       const postsQueryDocs = query(
         collection(getFirestore(), "posts"),
-        limit(10)
+        limit(1)
       );
+      const postQueryDocs = await getDocs(postsQueryDocs);
       const postsQueryData = await Promise.all(
-        (
-          await getDocs(postsQueryDocs)
-        ).docs
+        postQueryDocs.docs
           .map((doc) => doc.data() as Post)
           .map(async (post) => {
             const userDoc = doc(getFirestore(), `users/${post.postedBy}`);
@@ -47,14 +86,16 @@ const Home = () => {
             } as PostQuery;
           })
       );
-      if (postsQueryData.length < 10) {
+
+      if (postsQueryData.length < 1) {
         setShowNoMorePostsText(true);
       } else {
         setShowLoadMoreButton(true);
       }
+      setRecentSnapshot(postQueryDocs);
       setPostsQuery(postsQueryData);
     };
-    loadPosts();
+    loadInitialPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -67,7 +108,9 @@ const Home = () => {
           key={postQuery.post.id}
         />
       ))}
-      {showLoadMoreButton === true ? <Button>Load More</Button> : null}
+      {showLoadMoreButton === true ? (
+        <Button onClick={loadMorePosts}>Load More</Button>
+      ) : null}
       {showLoading === true ? <Loader /> : null}
       {showNoMorePostsText === true ? (
         <PostText>No more posts to show.</PostText>
