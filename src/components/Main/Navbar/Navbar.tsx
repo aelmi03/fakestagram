@@ -58,6 +58,7 @@ const NavbarWrapper = styled.nav<{ hide: boolean }>`
   width: 100%;
   border-bottom: 1px solid ${({ theme }) => theme.palette.common.grey};
   background-color: ${({ theme }) => theme.palette.primaryLight};
+  z-index: 10;
   ${({ hide }) =>
     hide === true &&
     css`

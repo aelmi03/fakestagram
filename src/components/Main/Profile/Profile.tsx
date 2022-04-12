@@ -171,9 +171,6 @@ const ProfileWrapper = styled.div`
   display: grid;
   padding: 1rem 0.6rem;
   gap: 2rem;
-  position: relative;
-  z-index: 2;
-
   @media only screen and (min-width: 768px) {
     padding: 2rem 2rem;
   }
@@ -190,6 +187,7 @@ const SelectedPostWrapper = styled.div`
   left: 0;
   bottom: 0;
   overflow: scroll;
+  z-index: 20;
 `;
 const ButtonsContainer = styled.div`
   display: flex;

@@ -136,7 +136,7 @@ const LargeModalWrapper = styled.div`
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  z-index: 13;
+  z-index: 16;
   @media only screen and (min-width: 1024px) {
     grid-template-columns: 6fr 5fr;
   }

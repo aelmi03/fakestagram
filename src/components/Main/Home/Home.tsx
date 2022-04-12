@@ -14,11 +14,13 @@ import {
   QuerySnapshot,
   startAfter,
   DocumentData,
+  orderBy,
 } from "firebase/firestore";
 import StandardPost from "../Posts/StandardPost";
 import Button from "../../utils/Button";
 import Loader from "../../utils/Loader";
 import { PostText } from "../../utils/Texts";
+import SuggestionsList from "./SuggestionsList";
 import Post from "../../utils/PostInterface";
 interface PostQuery {
   post: Post;
@@ -30,6 +32,7 @@ const Home = () => {
   const [showLoadMoreButton, setShowLoadMoreButton] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
   const [postsQuery, setPostsQuery] = useState<PostQuery[]>([]);
+  const [showSuggestionsList, setShowSuggestionsList] = useState(false);
   const [recentSnapshot, setRecentSnapshot] = useState<
     QuerySnapshot<DocumentData>
   >({} as QuerySnapshot<DocumentData>);
@@ -39,6 +42,7 @@ const Home = () => {
     const lastVisible = recentSnapshot.docs[recentSnapshot.docs.length - 1];
     const postsQueryDocs = query(
       collection(getFirestore(), "posts"),
+      orderBy("timestamp", "desc"),
       startAfter(lastVisible),
       limit(8)
     );
@@ -71,6 +75,7 @@ const Home = () => {
     const loadInitialPosts = async () => {
       const postsQueryDocs = query(
         collection(getFirestore(), "posts"),
+        orderBy("timestamp", "desc"),
         limit(1)
       );
       const postQueryDocs = await getDocs(postsQueryDocs);
@@ -86,8 +91,9 @@ const Home = () => {
             } as PostQuery;
           })
       );
-
-      if (postsQueryData.length < 1) {
+      if (postsQueryData.length === 1) {
+        setShowSuggestionsList(true);
+      } else if (postsQueryData.length < 5) {
         setShowNoMorePostsText(true);
       } else {
         setShowLoadMoreButton(true);
@@ -100,23 +106,27 @@ const Home = () => {
   }, []);
   return (
     <HomeContainer>
-      <PostFeedWrapper>
-        {postsQuery.map((postQuery) => (
-          <StandardPost
-            post={postQuery.post}
-            postUser={postQuery.postUser}
-            isOnHomePosts={true}
-            key={postQuery.post.id}
-          />
-        ))}
-        {showLoadMoreButton === true ? (
-          <Button onClick={loadMorePosts}>Load More</Button>
-        ) : null}
-        {showLoading === true ? <Loader /> : null}
-        {showNoMorePostsText === true ? (
-          <PostText>No more posts to show.</PostText>
-        ) : null}
-      </PostFeedWrapper>
+      {showSuggestionsList ? (
+        <SuggestionsList />
+      ) : (
+        <PostFeedWrapper>
+          {postsQuery.map((postQuery) => (
+            <StandardPost
+              post={postQuery.post}
+              postUser={postQuery.postUser}
+              isOnHomePosts={true}
+              key={postQuery.post.id}
+            />
+          ))}
+          {showLoadMoreButton === true ? (
+            <Button onClick={loadMorePosts}>Load More</Button>
+          ) : null}
+          {showLoading === true ? <Loader /> : null}
+          {showNoMorePostsText === true ? (
+            <PostText>No more posts to show.</PostText>
+          ) : null}
+        </PostFeedWrapper>
+      )}
     </HomeContainer>
   );
 };
@@ -125,6 +135,8 @@ const HomeContainer = styled.div`
   width: 100%;
   display: grid;
   grid-template-columns: 1fr;
+  grid-template-rows: max-content;
+  min-height: 100vh;
 `;
 const PostFeedWrapper = styled.div`
   display: grid;

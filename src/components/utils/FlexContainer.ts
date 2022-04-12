@@ -13,6 +13,7 @@ const FlexContainer = styled.div<{
   flexGrow?: string;
   margin?: string;
   position?: string;
+  cursor?: string;
 }>`
   display: flex;
   width: 100%;
@@ -71,6 +72,11 @@ const FlexContainer = styled.div<{
     position &&
     css`
       position: ${position};
+    `};
+  ${({ cursor }) =>
+    cursor &&
+    css`
+      cursor: ${cursor};
     `};
 `;
 

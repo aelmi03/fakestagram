@@ -19,7 +19,7 @@ const SearchResult = ({
       data-testid="SearchResult Container"
     >
       <FlexContainer direction="row" gap="0.7rem">
-        <UserInfo user={user} />
+        <UserInfo user={user} width="100%" />
         {onDeleteIconClick !== undefined ? (
           <AiOutlineClose
             onClick={(e) => {

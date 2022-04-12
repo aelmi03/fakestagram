@@ -50,7 +50,7 @@ const LinksContainer = styled(FlexContainer)`
   position: fixed;
   bottom: 0;
   width: 100%;
-  z-index: 20;
+  z-index: 25;
   justify-content: space-evenly;
   border-top: 1px solid ${({ theme }) => theme.palette.neutral};
   padding: 2rem 0rem;
