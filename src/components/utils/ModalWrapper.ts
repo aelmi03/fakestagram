@@ -6,7 +6,7 @@ const ModalWrapper = styled.div`
   left: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 2;
+  z-index: 5;
   input[type="file"]::file-selector-button {
     border-radius: 5px;
     background-color: ${({ theme }) => theme.palette.secondary.main};

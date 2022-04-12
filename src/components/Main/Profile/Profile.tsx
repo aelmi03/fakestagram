@@ -172,6 +172,7 @@ const ProfileWrapper = styled.div`
   padding: 1rem 0.6rem;
   gap: 2rem;
   position: relative;
+  z-index: 2;
 
   @media only screen and (min-width: 768px) {
     padding: 2rem 2rem;

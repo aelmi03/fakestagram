@@ -167,7 +167,7 @@ const AddPostForm = styled.form`
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  z-index: 100;
+
   @media only screen and (min-width: 540px) {
     padding: 2.5rem 5rem;
     justify-items: center;

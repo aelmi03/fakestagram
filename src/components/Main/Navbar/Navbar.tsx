@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Search from "./Search";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getAuth } from "firebase/auth";
+import React from "react";
 import AddPostModal from "./AddPostModal";
 
 const Navbar = () => {
@@ -33,16 +34,20 @@ const Navbar = () => {
     };
   }, []);
   return (
-    <NavbarWrapper hide={width <= 768 && location.pathname.includes("search")}>
-      {width <= 768 && location.pathname.includes("search") ? null : (
-        <NavbarHeading>Fakestagram</NavbarHeading>
-      )}
-      {width >= 768 ? <Search /> : null}
-      <Links toggleAddPostModal={toggleAddPostModal} />
+    <React.Fragment>
+      <NavbarWrapper
+        hide={width <= 768 && location.pathname.includes("search")}
+      >
+        {width <= 768 && location.pathname.includes("search") ? null : (
+          <NavbarHeading>Fakestagram</NavbarHeading>
+        )}
+        {width >= 768 ? <Search /> : null}
+        <Links toggleAddPostModal={toggleAddPostModal} />
+      </NavbarWrapper>
       {showAddPostModal ? (
         <AddPostModal toggleAddPostModal={toggleAddPostModal} />
       ) : null}
-    </NavbarWrapper>
+    </React.Fragment>
   );
 };
 const NavbarWrapper = styled.nav<{ hide: boolean }>`
@@ -62,6 +67,8 @@ const NavbarWrapper = styled.nav<{ hide: boolean }>`
     grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
     gap: 3.5rem;
+    position: sticky;
+    top: 0;
   }
   @media only screen and (min-width: 1024px) {
     gap: 1rem;
