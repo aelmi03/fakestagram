@@ -18,12 +18,14 @@ import HorizontalLine from "../../utils/HorizontalLine";
 import ModalWrapper from "../../utils/ModalWrapper";
 import ModalPicture from "../../utils/ModalPicture";
 import FileInput from "../../utils/StyledFileInput";
+import Loader from "../../utils/Loader";
 import ModalInput from "../../utils/ModalInput";
 interface IProps {
   toggleEditProfileModal: (e: React.MouseEvent) => void;
 }
 const EditProfileModal = ({ toggleEditProfileModal }: IProps) => {
   const user = useAppSelector(selectUser);
+  const [loading, setLoading] = useState(false);
   const [profilePicture, setProfilePicture] = useState<string>("");
   const [fullName, setFullName] = useState<string>("");
   const [biography, setBiography] = useState<string>("");
@@ -62,6 +64,7 @@ const EditProfileModal = ({ toggleEditProfileModal }: IProps) => {
       return;
     }
     try {
+      setLoading(true);
       const userDoc = doc(getFirestore(), `users/${user.id}`);
       if (inputRef.current?.files?.[0]) {
         const publicImageUrl = await downloadImage();
@@ -80,6 +83,7 @@ const EditProfileModal = ({ toggleEditProfileModal }: IProps) => {
     } catch (e) {
       console.log(e);
     }
+    setLoading(false);
   };
   return (
     <ModalWrapper onClick={toggleEditProfileModal} data-testid="Wrapper">
@@ -129,15 +133,22 @@ const EditProfileModal = ({ toggleEditProfileModal }: IProps) => {
             value={biography}
           />
         </FlexContainer>
-
-        <FlexContainer direction="row" gap="1rem" justifyContent="center">
-          <FormButton onClick={toggleEditProfileModal} color="red" name="Cancel">
-            Cancel
-          </FormButton>
-          <FormButton onClick={updateUserProfile} name="Save">
-            Save Changes
-          </FormButton>
-        </FlexContainer>
+        {loading === true ? (
+          <Loader />
+        ) : (
+          <FlexContainer direction="row" gap="1rem" justifyContent="center">
+            <FormButton
+              onClick={toggleEditProfileModal}
+              color="red"
+              name="Cancel"
+            >
+              Cancel
+            </FormButton>
+            <FormButton onClick={updateUserProfile} name="Save">
+              Save Changes
+            </FormButton>
+          </FlexContainer>
+        )}
       </EditProfileForm>
     </ModalWrapper>
   );

@@ -98,10 +98,14 @@ const Search = () => {
   }, [searchValue]);
   useEffect(() => {
     const getRecentSearches = async () => {
+      if (user.id === undefined) return null;
+      console.log("BEFORE");
       const recentSearchesDoc = doc(
         getFirestore(),
         `recentSearches/${user.id}`
       );
+      console.log("AFTER");
+
       const recentSearches = (await getDoc(recentSearchesDoc)).data()
         ?.recentSearches as RecentSearch[];
       if (recentSearches === undefined) return;
@@ -118,10 +122,12 @@ const Search = () => {
       );
       setSearchResults(recentSearches);
       setRecentSearches(recentSearchResults);
+      console.log(recentSearches, "recent-searches");
+      console.log(recentSearchResults, "recentSearch-results");
     };
     getRecentSearches();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [updateRecentSearches]);
+  }, [updateRecentSearches, user.id]);
   return (
     <SearchWrapper width={width}>
       <ClickWrapper

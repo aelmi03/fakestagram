@@ -7,6 +7,7 @@ const Button = styled.button<{ color?: string }>`
   background-color: ${({ theme }) => theme.palette.secondary.main};
   color: ${({ theme }) => theme.palette.secondary.contrastText};
   padding: 0.8rem 2rem;
+  border-radius: 5px;
 
   &:disabled {
     pointer-events: none;

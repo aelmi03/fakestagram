@@ -21,6 +21,7 @@ import HorizontalLine from "../../utils/HorizontalLine";
 import ModalInput from "../../utils/ModalInput";
 import ModalLabel from "../../utils/ModalLabel";
 import ModalTitle from "../../utils/ModalTitle";
+import Loader from "../../utils/Loader";
 import ModalWrapper from "../../utils/ModalWrapper";
 import FileInput from "../../utils/StyledFileInput";
 import WarningText from "../../utils/WarningText";
@@ -29,6 +30,7 @@ interface IProps {
 }
 const AddPostModal = ({ toggleAddPostModal }: IProps) => {
   const user = useAppSelector(selectUser);
+  const [loading, setLoading] = useState(false);
   const [caption, setCaption] = useState("");
   const [postPicture, setPostPicture] = useState(
     "https://firebasestorage.googleapis.com/v0/b/fakestagram-b535c.appspot.com/o/post-placeholder.jpg?alt=media&token=aad29630-6606-4b09-9bc7-ebd83d990548"
@@ -79,7 +81,9 @@ const AddPostModal = ({ toggleAddPostModal }: IProps) => {
     e.preventDefault();
     e.stopPropagation();
     if (checkInputs() === false) return;
+
     try {
+      setLoading(true);
       const postDoc = await addDoc(collection(getFirestore(), "posts"), {
         postedBy: user.id,
         comments: [],
@@ -96,6 +100,7 @@ const AddPostModal = ({ toggleAddPostModal }: IProps) => {
     } catch (e) {
       console.log(e);
     }
+    setLoading(false);
   };
   return (
     <ModalWrapper data-testid="Add Post Wrapper" onClick={toggleAddPostModal}>
@@ -133,14 +138,18 @@ const AddPostModal = ({ toggleAddPostModal }: IProps) => {
           </FlexContainer>
           <WarningText>{captionWarningText}</WarningText>
         </FlexContainer>
-        <FlexContainer direction="row" gap="1rem" justifyContent="center">
-          <FormButton color="red" name="Cancel" onClick={toggleAddPostModal}>
-            Cancel
-          </FormButton>
-          <FormButton name="Post" onClick={addPost}>
-            Post
-          </FormButton>
-        </FlexContainer>
+        {loading === true ? (
+          <Loader />
+        ) : (
+          <FlexContainer direction="row" gap="1rem" justifyContent="center">
+            <FormButton color="red" name="Cancel" onClick={toggleAddPostModal}>
+              Cancel
+            </FormButton>
+            <FormButton name="Post" onClick={addPost}>
+              Post
+            </FormButton>
+          </FlexContainer>
+        )}
       </AddPostForm>
     </ModalWrapper>
   );
