@@ -8,7 +8,13 @@ interface IProps {
 }
 const UserInfo = ({ user, width, onClick }: IProps) => {
   return (
-    <FlexContainer direction="row" gap="0.7rem" width={width} cursor="pointer">
+    <FlexContainer
+      direction="row"
+      gap="0.7rem"
+      width={width}
+      cursor="pointer"
+      onClick={onClick ? () => onClick(user) : () => {}}
+    >
       <UserImage src={user.profilePicture} alt="Profile Picture" />
       <FlexContainer direction="column" gap="0rem">
         <OverflowContainer>

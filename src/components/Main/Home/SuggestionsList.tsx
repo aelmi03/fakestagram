@@ -12,21 +12,29 @@ import {
 import FlexContainer from "../../utils/FlexContainer";
 import UserInfo from "../../utils/UserInfo";
 import { useAppSelector } from "../../../app/hooks";
+import {
+  followsOtherUser,
+  updateFollowing,
+} from "../../utils/utilityFunctions";
+import { useNavigate } from "react-router-dom";
 import { selectUser, User } from "../../../features/user/userSlice";
 import Button from "../../utils/Button";
 import styled from "styled-components";
 const SuggestionsList = () => {
   const user = useAppSelector(selectUser);
   const [suggestedUsers, setSuggestedUsers] = useState<User[]>([]);
+  const navigate = useNavigate();
+  const onUserClick = (clickedUser: User) => {
+    navigate(`../profile/${clickedUser.id}`, { replace: true });
+  };
+  const onButtonClick = (clickedUser: User) => {
+    updateFollowing(user, clickedUser);
+  };
   useEffect(() => {
     const getSuggestedAccounts = async () => {
       const suggestedUsersQuery = query(
         collection(getFirestore(), "users"),
-        where(
-          "id",
-          "not-in",
-          user.following.length !== 0 ? user.following : [`${user.id}`]
-        ),
+        where("id", "not-in", [...user.following, user.id]),
         limit(50)
       );
       const suggestedUsersDocs = await getDocs(suggestedUsersQuery);
@@ -47,12 +55,26 @@ const SuggestionsList = () => {
           <FlexContainer
             direction="row"
             justifyContent="space-between"
-            gap="3rem"
             key={suggestedUser.id}
             alignItems="center"
           >
-            <UserInfo user={suggestedUser} width="max-content" />
-            <Button>Follow</Button>
+            <UserInfo
+              user={suggestedUser}
+              width="max-content"
+              onClick={onUserClick}
+            />
+            {followsOtherUser(user, suggestedUser) ? (
+              <Button
+                color="white"
+                onClick={() => onButtonClick(suggestedUser)}
+              >
+                Following
+              </Button>
+            ) : (
+              <Button onClick={() => onButtonClick(suggestedUser)}>
+                Follow
+              </Button>
+            )}
           </FlexContainer>
         ))}
       </SuggestionsListContainer>

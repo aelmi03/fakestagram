@@ -8,7 +8,13 @@ const Button = styled.button<{ color?: string }>`
   color: ${({ theme }) => theme.palette.secondary.contrastText};
   padding: 0.8rem 2rem;
   border-radius: 5px;
-
+  ${({ color }) =>
+    color === "white" &&
+    css`
+      background-color: ${({ theme }) => theme.palette.primaryLight};
+      border: 1px solid ${({ theme }) => theme.palette.common.grey};
+      color: ${({ theme }) => theme.palette.primary.contrastText};
+    `}
   &:disabled {
     pointer-events: none;
     opacity: 0.6;
