@@ -8,5 +8,6 @@ const DeletePostButton = styled.button`
   position: absolute;
   border-radius: 5px;
   border: 1px solid ${({ theme }) => theme.palette.common.grey};
+  right: 10px;
 `;
 export default DeletePostButton;

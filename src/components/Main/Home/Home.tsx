@@ -99,33 +99,45 @@ const Home = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
-    <HomeWrapper>
-      {postsQuery.map((postQuery) => (
-        <StandardPost
-          post={postQuery.post}
-          postUser={postQuery.postUser}
-          isOnHomePosts={true}
-          key={postQuery.post.id}
-        />
-      ))}
-      {showLoadMoreButton === true ? (
-        <Button onClick={loadMorePosts}>Load More</Button>
-      ) : null}
-      {showLoading === true ? <Loader /> : null}
-      {showNoMorePostsText === true ? (
-        <PostText>No more posts to show.</PostText>
-      ) : null}
-    </HomeWrapper>
+    <HomeContainer>
+      <PostFeedWrapper>
+        {postsQuery.map((postQuery) => (
+          <StandardPost
+            post={postQuery.post}
+            postUser={postQuery.postUser}
+            isOnHomePosts={true}
+            key={postQuery.post.id}
+          />
+        ))}
+        {showLoadMoreButton === true ? (
+          <Button onClick={loadMorePosts}>Load More</Button>
+        ) : null}
+        {showLoading === true ? <Loader /> : null}
+        {showNoMorePostsText === true ? (
+          <PostText>No more posts to show.</PostText>
+        ) : null}
+      </PostFeedWrapper>
+    </HomeContainer>
   );
 };
-const HomeWrapper = styled.div`
+const HomeContainer = styled.div`
+  background-color: ${({ theme }) => theme.palette.primary.main};
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+`;
+const PostFeedWrapper = styled.div`
   display: grid;
   gap: 2rem;
   justify-items: center;
   padding: 0.5rem 0rem 15rem 0rem;
-  background-color: ${({ theme }) => theme.palette.primary.main};
   @media only screen and (min-width: 768px) {
     padding: 4rem 0rem 15rem 0rem;
   }
+`;
+const TestingContainer = styled.div`
+  position: sticky;
+  top: 55px;
+  height: 80vh;
 `;
 export default Home;

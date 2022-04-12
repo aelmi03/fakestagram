@@ -2,6 +2,7 @@ import FlexContainer from "../../../utils/FlexContainer";
 import { User } from "../../../../features/user/userSlice";
 import styled from "styled-components";
 import { AiOutlineClose } from "react-icons/ai";
+import UserInfo from "../../../utils/UserInfo";
 interface IProps {
   user: User;
   onSearchResultClick: (user: User) => void;
@@ -18,11 +19,7 @@ const SearchResult = ({
       data-testid="SearchResult Container"
     >
       <FlexContainer direction="row" gap="0.7rem">
-        <UserImage src={user.profilePicture} alt="Profile Picture" />
-        <FlexContainer direction="column" gap="0.3rem">
-          <UsernameText>{user.username}</UsernameText>
-          <FullNameText>{user.fullName}</FullNameText>
-        </FlexContainer>
+        <UserInfo user={user} />
         {onDeleteIconClick !== undefined ? (
           <AiOutlineClose
             onClick={(e) => {
@@ -53,22 +50,5 @@ const SearchResultContainer = styled.div`
     align-self: center;
   }
 `;
-const FullNameText = styled.p`
-  font-family: ${({ theme }) => theme.primaryFont};
-  font-size: 1.25rem;
-  color: ${({ theme }) => theme.palette.darkGrey};
-  font-weight: 400;
-`;
-const UsernameText = styled.p`
-  font-family: ${({ theme }) => theme.primaryFont};
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: ${({ theme }) => theme.palette.primary.contrastText};
-`;
 
-const UserImage = styled.img`
-  height: 44px;
-  width: 44px;
-  border-radius: 50%;
-`;
 export default SearchResult;
