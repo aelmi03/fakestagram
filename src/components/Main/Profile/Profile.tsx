@@ -249,11 +249,9 @@ const ProfileDisplayContainer = styled.div`
     gap: 3rem;
   }
   @media only screen and (min-width: 768px) {
-    justify-content: center;
     gap: 5rem;
   }
   @media only screen and (min-width: 1024px) {
-    justify-content: center;
     gap: 8rem;
   }
 `;
@@ -266,24 +264,28 @@ const ProfileContainer = styled.div`
     gap: 2rem;
   }
   @media only screen and (min-width: 1024px) {
-    min-width: 50%;
+    min-width: 45%;
   }
 `;
 const ProfileImage = styled.img`
   height: 77px;
+  min-width: 77px;
   width: 77px;
   border-radius: 50%;
   @media only screen and (min-width: 411px) {
     height: 85px;
     width: 85px;
+    min-width: 85px;
   }
   @media only screen and (min-width: 768px) {
     height: 110px;
     width: 110px;
+    min-width: 110px;
   }
   @media only screen and (min-width: 1024px) {
     height: 150px;
     width: 150px;
+    min-width: 150px;
   }
 `;
 const ProfileInfo = styled.div`

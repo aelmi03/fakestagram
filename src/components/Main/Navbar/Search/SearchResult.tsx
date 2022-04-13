@@ -45,8 +45,9 @@ const SearchResultContainer = styled.div`
     background-color: rgba(0.1, 0.1, 0.1, 0.03);
   }
   svg {
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
+    color: ${({ theme }) => theme.palette.darkGrey};
     align-self: center;
   }
 `;

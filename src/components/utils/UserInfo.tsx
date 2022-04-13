@@ -1,12 +1,13 @@
 import FlexContainer from "./FlexContainer";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { User } from "../../features/user/userSlice";
 interface IProps {
   user: User;
   width: string;
   onClick?: (user: User) => void;
+  largerImage?: boolean;
 }
-const UserInfo = ({ user, width, onClick }: IProps) => {
+const UserInfo = ({ user, width, onClick, largerImage }: IProps) => {
   return (
     <FlexContainer
       direction="row"
@@ -14,8 +15,13 @@ const UserInfo = ({ user, width, onClick }: IProps) => {
       width={width}
       cursor="pointer"
       onClick={onClick ? () => onClick(user) : () => {}}
+      alignItems="center"
     >
-      <UserImage src={user.profilePicture} alt="Profile Picture" />
+      <UserImage
+        src={user.profilePicture}
+        alt="Profile Picture"
+        largerImage={largerImage}
+      />
       <FlexContainer direction="column" gap="0rem">
         <OverflowContainer>
           <UsernameText>{user.username}</UsernameText>
@@ -62,11 +68,18 @@ const UsernameText = styled.p`
   text-overflow: ellipsis;
 `;
 
-const UserImage = styled.img`
+const UserImage = styled.img<{ largerImage?: boolean }>`
   height: 44px;
   width: 44px;
   min-width: 44px;
   border-radius: 50%;
+  ${({ largerImage }) =>
+    largerImage === true &&
+    css`
+      height: 60px;
+      width: 60px;
+      min-width: 60px;
+    `}
 `;
 
 export default UserInfo;
