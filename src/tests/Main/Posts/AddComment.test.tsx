@@ -19,6 +19,25 @@ jest.mock("@reduxjs/toolkit", () => {
     nanoid: () => "randomCommentID",
   };
 });
+const fakeUser: User = {
+  fullName: "John Doe",
+  username: "johnDoe23",
+  following: [],
+  savedPosts: [],
+  id: "fakeUserID",
+  profilePicture: "path/to/photo/for/johnDoe23",
+  biography: "Love riding bicycles and going to the beach :)",
+};
+jest.mock("../../../features/user/userSlice", () => {
+  return {
+    selectUser: () => {},
+  };
+});
+jest.mock("../../../app/hooks", () => {
+  return {
+    useAppSelector: () => fakeUser,
+  };
+});
 const mockDate = new Date("2022-09-26T00:00:00.000Z");
 let spy = jest.spyOn(global, "Date").mockImplementation((): any => {
   return mockDate;
@@ -34,18 +53,10 @@ describe("AddComment component", () => {
       id: "fakePostID",
       imgSrc: "fakeImgSrc",
     };
-    const fakeUser: User = {
-      fullName: "John Doe",
-      username: "johnDoe23",
-      following: [],
-      savedPosts: [],
-      id: "fakeUserID",
-      profilePicture: "path/to/photo/for/johnDoe23",
-      biography: "Love riding bicycles and going to the beach :)",
-    };
+
     render(
       <ThemeProvider theme={Theme}>
-        <AddComment post={fakePost} postUser={fakeUser} />
+        <AddComment post={fakePost} />
       </ThemeProvider>
     );
   });

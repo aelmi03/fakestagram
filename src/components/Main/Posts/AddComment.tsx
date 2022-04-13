@@ -1,21 +1,22 @@
 import { doc, getFirestore, Timestamp, updateDoc } from "firebase/firestore";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { User } from "../../../features/user/userSlice";
+import { selectUser } from "../../../features/user/userSlice";
+import { useAppSelector } from "../../../app/hooks";
 import Post, { Comment } from "../../utils/PostInterface";
 import { PostCommentText } from "../../utils/Texts";
 import { nanoid } from "@reduxjs/toolkit";
 interface IProps {
-  postUser: User;
   post: Post;
 }
-const AddComment = React.memo(({ post, postUser }: IProps) => {
+const AddComment = React.memo(({ post }: IProps) => {
+  const user = useAppSelector(selectUser);
   const [comment, setComment] = useState("");
   const postComment = async () => {
     if (!comment) return;
     const postDoc = doc(getFirestore(), `posts/${post.id}`);
     const newComment: Comment = {
-      user: postUser.id,
+      user: user.id,
       id: nanoid(),
       content: comment,
       timestamp: new Date() as unknown as Timestamp,

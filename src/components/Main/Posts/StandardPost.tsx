@@ -20,6 +20,7 @@ import { checkEquality, deletePost } from "../../utils/utilityFunctions";
 import DeletePostButton from "../../utils/DeletePostButton";
 import CircularUserImage from "../../utils/CircularUserImage";
 import PostIcons from "./PostIcons";
+import { useNavigate } from "react-router-dom";
 interface IProps {
   post: Post;
   postUser: User;
@@ -30,6 +31,7 @@ const StandardPost = React.memo(
   ({ post, postUser, isOnHomePosts, changePostToShow }: IProps) => {
     console.log("STANDARD POST");
     const user = useAppSelector(selectUser, checkEquality);
+    const navigate = useNavigate();
     const [postInfo, setPostInfo] = useState<Post>(post);
     const [showPostModal, setShowPostModal] = useState(!isOnHomePosts);
     const [width, setWidth] = useState(window.innerWidth);
@@ -97,6 +99,10 @@ const StandardPost = React.memo(
               gap="0.8rem"
               width="max-content"
               alignItems="center"
+              cursor="pointer"
+              onClick={() =>
+                navigate(`/profile/${postUser.id}`, { replace: true })
+              }
             >
               <CircularUserImage src={postUser.profilePicture} />
               <PostTextBold>{postUser.username}</PostTextBold>
@@ -160,7 +166,7 @@ const StandardPost = React.memo(
               )} ago`}
             </PostGreyText>
           </FlexContainer>
-          <AddComment post={postInfo} postUser={postUser} />
+          <AddComment post={postInfo} />
         </FlexContainer>
         {showPostModal === true && (
           <PostModal

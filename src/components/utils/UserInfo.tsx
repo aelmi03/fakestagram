@@ -65,6 +65,7 @@ const UsernameText = styled.p`
 const UserImage = styled.img`
   height: 44px;
   width: 44px;
+  min-width: 44px;
   border-radius: 50%;
 `;
 

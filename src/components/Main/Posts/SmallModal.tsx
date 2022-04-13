@@ -41,7 +41,7 @@ const SmallModal = ({ post, postUser, changeModalStatus }: IProps) => {
           <Comments post={post} />
         </FlexContainer>
         <ReturnBackWrapper>
-          <AddComment post={post} postUser={postUser} />
+          <AddComment post={post} />
         </ReturnBackWrapper>
       </FlexContainer>
     </SmallModalWrapper>

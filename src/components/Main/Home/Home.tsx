@@ -43,6 +43,8 @@ const Home = () => {
     const postsQueryDocs = query(
       collection(getFirestore(), "posts"),
       orderBy("timestamp", "desc"),
+      where("postedBy", "in", [...user.following]),
+
       startAfter(lastVisible),
       limit(8)
     );
@@ -75,8 +77,9 @@ const Home = () => {
     const loadInitialPosts = async () => {
       const postsQueryDocs = query(
         collection(getFirestore(), "posts"),
+        where("postedBy", "in", [...user.following]),
         orderBy("timestamp", "desc"),
-        limit(1)
+        limit(5)
       );
       const postQueryDocs = await getDocs(postsQueryDocs);
       const postsQueryData = await Promise.all(
@@ -91,7 +94,7 @@ const Home = () => {
             } as PostQuery;
           })
       );
-      if (postsQueryData.length === 1) {
+      if (postsQueryData.length === 0) {
         setShowSuggestionsList(true);
       } else if (postsQueryData.length < 5) {
         setShowNoMorePostsText(true);

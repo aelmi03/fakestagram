@@ -118,7 +118,7 @@ const LargeModal = React.memo(
                 post.timestamp.toDate()
               )} ago`}</PostGreyText>
             </FlexContainer>
-            <AddComment post={post} postUser={postUser} />
+            <AddComment post={post} />
           </FlexContainer>
         </LargeModalWrapper>
       </ModalWrapper>

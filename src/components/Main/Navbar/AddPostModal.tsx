@@ -133,7 +133,7 @@ const AddPostModal = ({ toggleAddPostModal }: IProps) => {
               id="caption"
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
-              maxLength={25}
+              maxLength={60}
             />
           </FlexContainer>
           <WarningText>{captionWarningText}</WarningText>
