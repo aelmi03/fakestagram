@@ -7,6 +7,15 @@ import AddComment from "../../../components/Main/Posts/AddComment";
 import Theme from "../../../Themes/Theme";
 import userEvent from "@testing-library/user-event";
 
+const fakeUser: User = {
+  fullName: "John Doe",
+  username: "johnDoe23",
+  following: [],
+  savedPosts: [],
+  id: "fakeUserID",
+  profilePicture: "path/to/photo/for/johnDoe23",
+  biography: "Love riding bicycles and going to the beach :)",
+};
 jest.mock("firebase/firestore", () => {
   return {
     doc: jest.fn(),
@@ -19,15 +28,6 @@ jest.mock("@reduxjs/toolkit", () => {
     nanoid: () => "randomCommentID",
   };
 });
-const fakeUser: User = {
-  fullName: "John Doe",
-  username: "johnDoe23",
-  following: [],
-  savedPosts: [],
-  id: "fakeUserID",
-  profilePicture: "path/to/photo/for/johnDoe23",
-  biography: "Love riding bicycles and going to the beach :)",
-};
 jest.mock("../../../features/user/userSlice", () => {
   return {
     selectUser: () => {},

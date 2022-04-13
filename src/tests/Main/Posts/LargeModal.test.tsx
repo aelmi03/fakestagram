@@ -5,6 +5,7 @@ import { ThemeProvider } from "styled-components";
 import { deletePost } from "../../../components/utils/utilityFunctions";
 import LargeModal from "../../../components/Main/Posts/LargeModal";
 import Post from "../../../components/utils/PostInterface";
+import AddComment from "../../../components/Main/Posts/AddComment";
 import { User } from "../../../features/user/userSlice";
 import Theme from "../../../Themes/Theme";
 
@@ -28,9 +29,17 @@ let mockPost: Post = {
   id: "fakePostID",
   imgSrc: "fakeImgSrc",
 };
+
 type fakeComment = { content: string };
 jest.mock("date-fns", () => {
   return { formatDistanceToNow: () => "2h" };
+});
+jest.mock("../../../components/Main/Posts/Comment", () => {
+  return ({ user, content }: { user: User; content: string }) => (
+    <div>
+      <h1>{user.username}</h1> <h1>{content}</h1>
+    </div>
+  );
 });
 jest.mock("../../../app/hooks", () => {
   return {

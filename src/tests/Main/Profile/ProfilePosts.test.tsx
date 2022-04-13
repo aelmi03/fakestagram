@@ -196,6 +196,7 @@ jest.mock("firebase/firestore", () => {
         return "Own Posts";
       }
     }),
+    orderBy: jest.fn(),
   };
 });
 jest.mock("../../../app/hooks", () => {

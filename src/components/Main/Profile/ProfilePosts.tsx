@@ -54,7 +54,7 @@ const ProfilePosts = React.memo(
           setProfilePosts(posts);
         });
       };
-      let unsubscribeFunction: Unsubscribe;
+      let unsubscribeFunction: Unsubscribe = () => {};
       if (typeOfPosts === "Own Posts") {
         getProfileUserPosts().then((unsubscribe) => {
           unsubscribeFunction = unsubscribe;

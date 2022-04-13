@@ -14,12 +14,19 @@ jest.mock("../../../components/Main/Posts/AddComment", () => {
 jest.mock("../../../components/Main/Posts/Comments", () => {
   return () => <div>Comments component</div>;
 });
-
+jest.mock("../../../components/Main/Posts/Comment", () => {
+  return ({ user, content }: { user: User; content: string }) => (
+    <div>
+      <h1>{user.username}</h1> <h1>{content}</h1>
+    </div>
+  );
+});
 jest.mock("date-fns", () => {
   return {
     formatDistanceToNow: () => "2h ",
   };
 });
+
 const mockPost: Post = {
   postedBy: "randomID",
   comments: [],

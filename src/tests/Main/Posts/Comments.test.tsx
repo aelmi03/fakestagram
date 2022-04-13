@@ -59,7 +59,11 @@ jest.mock("firebase/firestore", () => {
     getFirestore: jest.fn(),
   };
 });
-
+jest.mock("react-router-dom", () => {
+  return {
+    useNavigate: jest.fn(() => {}),
+  };
+});
 describe("Comments component", () => {
   it("renders the correct amount of comments with the corerct information", async () => {
     await act(async () => {

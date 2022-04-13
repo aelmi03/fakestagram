@@ -103,6 +103,7 @@ const StandardPost = React.memo(
               onClick={() =>
                 navigate(`/profile/${postUser.id}`, { replace: true })
               }
+              data-testid="Username and Profile Picture Container"
             >
               <CircularUserImage src={postUser.profilePicture} />
               <PostTextBold>{postUser.username}</PostTextBold>

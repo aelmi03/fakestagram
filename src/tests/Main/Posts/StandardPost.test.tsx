@@ -45,6 +45,8 @@ let mockPost: Post = {
   id: "fakePostID",
   imgSrc: "fakeImgSrc",
 };
+let mockNavigateFunction = jest.fn();
+
 jest.mock("date-fns", () => {
   return { formatDistanceToNow: () => "2h" };
 });
@@ -63,6 +65,20 @@ jest.mock("../../../components/Main/Posts/PostModal", () => {
   }
   return ({ changeModalStatus }: MockProps) => (
     <div onClick={() => changeModalStatus()}>Post Modal Component</div>
+  );
+});
+jest.mock("react-router-dom", () => {
+  return {
+    useNavigate: jest.fn(() => {
+      return mockNavigateFunction;
+    }),
+  };
+});
+jest.mock("../../../components/Main/Posts/Comment", () => {
+  return ({ user, content }: { user: User; content: string }) => (
+    <div>
+      <h1>{user.username}</h1> <h1>{content}</h1>
+    </div>
   );
 });
 jest.mock("../../../components/Main/Posts/AddComment", () => {
@@ -273,12 +289,32 @@ describe("StandardPost Component", () => {
         />
       </ThemeProvider>
     );
-    expect(screen.getByText("Post Modal Component")).toBeInTheDocument();
-    userEvent.click(screen.getByText("Post Modal Component"));
     expect(screen.queryByText("Post Modal Component")).not.toBeInTheDocument();
     userEvent.click(screen.getByText(/view all 2 comments/i));
     expect(screen.getByText("Post Modal Component")).toBeInTheDocument();
     userEvent.click(screen.getByText("Post Modal Component"));
     expect(screen.queryByText("Post Modal Component")).not.toBeInTheDocument();
+  });
+  it("calls the navigate function when the username or profile picture of the postUser is clicked", () => {
+    global.innerWidth = 768;
+    isOnHomePosts = true;
+    render(
+      <ThemeProvider theme={Theme}>
+        <StandardPost
+          post={mockPost}
+          isOnHomePosts={isOnHomePosts}
+          postUser={mockUser}
+          changePostToShow={changePostToShow}
+        />
+      </ThemeProvider>
+    );
+    expect(mockNavigateFunction).toHaveBeenCalledTimes(0);
+    userEvent.click(
+      screen.getByTestId("Username and Profile Picture Container")
+    );
+    expect(mockNavigateFunction).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFunction.mock.calls[0][0]).toBe(
+      `/profile/${mockUser.id}`
+    );
   });
 });

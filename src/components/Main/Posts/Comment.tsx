@@ -11,6 +11,7 @@ interface IProps {
   user: User;
 }
 const Comment = ({ timestamp, content, user }: IProps) => {
+  console.log("LOL");
   const navigate = useNavigate();
   return (
     <FlexContainer direction="row" gap="1.5rem" alignItems="start">
