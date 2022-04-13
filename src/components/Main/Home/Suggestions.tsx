@@ -3,7 +3,9 @@ import { useAppSelector } from "../../../app/hooks";
 import UserInfo from "../../utils/UserInfo";
 import React, { useState, useEffect } from "react";
 import { selectUser, User } from "../../../features/user/userSlice";
+import { useNavigate } from "react-router-dom";
 import FlexContainer from "../../utils/FlexContainer";
+import { signOut, getAuth } from "firebase/auth";
 import {
   collection,
   getFirestore,
@@ -18,9 +20,10 @@ import {
 } from "../../utils/utilityFunctions";
 const Suggestions = () => {
   const user = useAppSelector(selectUser);
+  const navigate = useNavigate();
   const [suggestedUsers, setSuggestedUsers] = useState<User[]>([]);
-  const onTextClicked = (clickedUser: User) => {
-    updateFollowing(user, clickedUser);
+  const onUserClicked = (clickedUser: User) => {
+    navigate(`/profile/${clickedUser.id}`, { replace: true });
   };
   useEffect(() => {
     const getSuggestedAccounts = async () => {
@@ -46,8 +49,15 @@ const Suggestions = () => {
         justifyContent="space-between"
         alignItems="center"
       >
-        <UserInfo user={user} largerImage={true} width="max-content" />
-        <SuggestionsText>Log Out</SuggestionsText>
+        <UserInfo
+          user={user}
+          largerImage={true}
+          width="max-content"
+          onClick={onUserClicked}
+        />
+        <SuggestionsText onClick={() => signOut(getAuth())}>
+          Log Out
+        </SuggestionsText>
       </FlexContainer>
       {suggestedUsers.length !== 0 ? (
         <FlexContainer direction="column" gap="1.5rem">
@@ -58,8 +68,15 @@ const Suggestions = () => {
               alignItems="center"
               justifyContent="space-between"
             >
-              <UserInfo user={suggestedUser} width="max-content" />
-              <SuggestionsText>
+              <UserInfo
+                user={suggestedUser}
+                width="max-content"
+                onClick={onUserClicked}
+              />
+              <SuggestionsText
+                onClick={() => updateFollowing(user, suggestedUser)}
+                following={followsOtherUser(user, suggestedUser)}
+              >
                 {followsOtherUser(user, suggestedUser) ? "Following" : "Follow"}
               </SuggestionsText>
             </FlexContainer>
@@ -90,10 +107,11 @@ const SuggestionsTitle = styled.h4`
 const SuggestionsText = styled.p<{ following?: boolean }>`
   color: ${({ theme }) => theme.palette.secondary.main};
   font-size: 1.3rem;
+  font-weight: 600;
   font-family: ${({ theme }) => theme.primaryFont};
   cursor: pointer;
   ${({ following }) =>
-    following === false &&
+    following === true &&
     css`
       color: ${({ theme }) => theme.palette.primary.contrastText};
     `}

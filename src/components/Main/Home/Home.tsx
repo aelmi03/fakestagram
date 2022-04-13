@@ -141,7 +141,7 @@ const Home = () => {
               <PostText>No more posts to show.</PostText>
             ) : null}
           </PostFeedWrapper>
-          {width >= 768 ? <Suggestions /> : null}
+          {width >= 1024 && postsQuery.length !== 0 ? <Suggestions /> : null}
         </React.Fragment>
       )}
     </HomeContainer>
