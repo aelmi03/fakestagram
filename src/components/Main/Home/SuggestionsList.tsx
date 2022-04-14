@@ -6,8 +6,6 @@ import {
   where,
   limit,
   getDocs,
-  QuerySnapshot,
-  DocumentData,
 } from "firebase/firestore";
 import FlexContainer from "../../utils/FlexContainer";
 import UserInfo from "../../utils/UserInfo";
@@ -25,7 +23,7 @@ const SuggestionsList = () => {
   const [suggestedUsers, setSuggestedUsers] = useState<User[]>([]);
   const navigate = useNavigate();
   const onUserClick = (clickedUser: User) => {
-    navigate(`../profile/${clickedUser.id}`, { replace: true });
+    navigate(`/profile/${clickedUser.id}`, { replace: true });
   };
   const onButtonClick = (clickedUser: User) => {
     updateFollowing(user, clickedUser);
@@ -50,18 +48,20 @@ const SuggestionsList = () => {
   return (
     <SuggestionsListWrapper>
       <SuggestionsListTitle>Suggestions For You</SuggestionsListTitle>
-      <SuggestionsListContainer>
+      <SuggestionsListContainer data-testid="SuggestionsList Container">
         {suggestedUsers.map((suggestedUser) => (
           <FlexContainer
             direction="row"
             justifyContent="space-between"
             key={suggestedUser.id}
             alignItems="center"
+            data-testid={`${suggestedUser.id}`}
           >
             <UserInfo
               user={suggestedUser}
               width="max-content"
               onClick={onUserClick}
+              data-testid={`User Info ${suggestedUser.id}`}
             />
             {followsOtherUser(user, suggestedUser) ? (
               <Button

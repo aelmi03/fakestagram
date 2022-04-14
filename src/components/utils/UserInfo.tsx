@@ -15,6 +15,7 @@ const UserInfo = ({ user, width, onClick, largerImage }: IProps) => {
       width={width}
       cursor="pointer"
       onClick={onClick ? () => onClick(user) : () => {}}
+      data-testid={`User Info ${user.id}`}
       alignItems="center"
     >
       <UserImage
