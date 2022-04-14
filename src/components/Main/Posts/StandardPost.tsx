@@ -150,10 +150,10 @@ const StandardPost = React.memo(
                 {postInfo.likes.length === 1 ? "like" : "likes"}
               </PostTextBold>
             </FlexContainer>
-            <PostTextBold>
-              {postUser.username}
-              <PostText>&nbsp;&nbsp;{post.caption}</PostText>
-            </PostTextBold>
+            <PostText>
+              <PostTextBold cursor="pointer">{postUser.username}</PostTextBold>
+              &nbsp;&nbsp;{post.caption}
+            </PostText>
             {postInfo.comments.length > 0 ? (
               <ClickablePostGreyText onClick={changeModalStatus}>
                 View all {postInfo.comments.length}{" "}

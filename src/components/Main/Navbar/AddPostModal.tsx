@@ -155,7 +155,7 @@ const AddPostModal = ({ toggleAddPostModal }: IProps) => {
   );
 };
 const AddPostForm = styled.form`
-  padding: 2rem 2rem;
+  padding: 2rem 2rem 8rem 2rem;
   display: grid;
   justify-items: center;
   width: min(95%, 700px);
@@ -169,8 +169,11 @@ const AddPostForm = styled.form`
   transform: translate(-50%, -50%);
 
   @media only screen and (min-width: 540px) {
-    padding: 2.5rem 5rem;
+    padding: 2.5rem 5rem 8rem 5rem;
     justify-items: center;
+  }
+  @media only screen and (min-width: 768px) {
+    padding: 2rem;
   }
 `;
 const PostPicture = styled.img`
