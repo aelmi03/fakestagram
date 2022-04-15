@@ -5,7 +5,6 @@ import { ThemeProvider } from "styled-components";
 import { deletePost } from "../../../components/utils/utilityFunctions";
 import LargeModal from "../../../components/Main/Posts/LargeModal";
 import Post from "../../../components/utils/PostInterface";
-import AddComment from "../../../components/Main/Posts/AddComment";
 import { User } from "../../../features/user/userSlice";
 import Theme from "../../../Themes/Theme";
 

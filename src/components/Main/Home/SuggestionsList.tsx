@@ -61,7 +61,6 @@ const SuggestionsList = () => {
               user={suggestedUser}
               width="max-content"
               onClick={onUserClick}
-              data-testid={`User Info ${suggestedUser.id}`}
             />
             {followsOtherUser(user, suggestedUser) ? (
               <Button

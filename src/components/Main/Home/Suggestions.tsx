@@ -48,6 +48,7 @@ const Suggestions = () => {
         direction="row"
         justifyContent="space-between"
         alignItems="center"
+        data-testid="User Profile"
       >
         <UserInfo
           user={user}
@@ -62,25 +63,35 @@ const Suggestions = () => {
       {suggestedUsers.length !== 0 ? (
         <FlexContainer direction="column" gap="1.5rem">
           <SuggestionsTitle>Suggestions For You</SuggestionsTitle>
-          {suggestedUsers.map((suggestedUser) => (
-            <FlexContainer
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <UserInfo
-                user={suggestedUser}
-                width="max-content"
-                onClick={onUserClicked}
-              />
-              <SuggestionsText
-                onClick={() => updateFollowing(user, suggestedUser)}
-                following={followsOtherUser(user, suggestedUser)}
+          <FlexContainer
+            direction="column"
+            gap="1.5rem"
+            data-testid="Suggested Users Container"
+          >
+            {suggestedUsers.map((suggestedUser) => (
+              <FlexContainer
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+                key={suggestedUser.id}
+                data-testid={`${suggestedUser.id}`}
               >
-                {followsOtherUser(user, suggestedUser) ? "Following" : "Follow"}
-              </SuggestionsText>
-            </FlexContainer>
-          ))}
+                <UserInfo
+                  user={suggestedUser}
+                  width="max-content"
+                  onClick={onUserClicked}
+                />
+                <SuggestionsText
+                  onClick={() => updateFollowing(user, suggestedUser)}
+                  following={followsOtherUser(user, suggestedUser)}
+                >
+                  {followsOtherUser(user, suggestedUser)
+                    ? "Following"
+                    : "Follow"}
+                </SuggestionsText>
+              </FlexContainer>
+            ))}
+          </FlexContainer>
         </FlexContainer>
       ) : null}
     </SuggestionsWrapper>
