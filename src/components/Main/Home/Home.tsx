@@ -124,7 +124,7 @@ const Home = () => {
         <SuggestionsList />
       ) : (
         <React.Fragment>
-          <PostFeedWrapper>
+          <PostFeedWrapper data-testid="PostFeed Wrapper">
             {postsQuery.map((postQuery) => (
               <StandardPost
                 post={postQuery.post}
