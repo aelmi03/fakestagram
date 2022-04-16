@@ -93,9 +93,10 @@ const SuggestionsListContainer = styled.div`
 `;
 const SuggestionsListWrapper = styled.div`
   display: grid;
+  grid-auto-rows: max-content;
   gap: 2rem;
   width: 100%;
-  padding: 3rem 0.5rem;
+  padding: 3rem 0.5rem 7rem 0.5rem;
   justify-content: center;
 `;
 const SuggestionsListTitle = styled.h4`

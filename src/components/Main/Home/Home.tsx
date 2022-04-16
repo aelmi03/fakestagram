@@ -119,7 +119,7 @@ const Home = () => {
     };
   }, []);
   return (
-    <HomeContainer>
+    <HomeContainer showSuggestionsList={showSuggestionsList}>
       {showSuggestionsList ? (
         <SuggestionsList />
       ) : (
@@ -147,7 +147,7 @@ const Home = () => {
     </HomeContainer>
   );
 };
-const HomeContainer = styled.div`
+const HomeContainer = styled.div<{ showSuggestionsList: boolean }>`
   background-color: ${({ theme }) => theme.palette.primary.main};
   display: flex;
   min-height: 100vh;
@@ -172,9 +172,5 @@ const PostFeedWrapper = styled.div`
     max-width: 614px;
   }
 `;
-const TestingContainer = styled.div`
-  position: sticky;
-  top: 55px;
-  height: 80vh;
-`;
+
 export default Home;
