@@ -1,15 +1,17 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ReturnBack from "../../../utils/ReturnBack";
-
-const Chats = () => {
+interface IProps {
+  toggleModal: () => void;
+}
+const Chats = ({ toggleModal }: IProps) => {
   const navigate = useNavigate();
   return (
     <MessagesContainer>
       <ReturnBack
         staticPositioning={true}
         onClick={() => navigate("/home", { replace: true })}
-        onChatIconClick={() => {}}
+        onChatIconClick={toggleModal}
         name="Chats"
       />
     </MessagesContainer>

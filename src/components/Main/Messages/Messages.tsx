@@ -1,10 +1,19 @@
 import styled from "styled-components";
 import Chats from "./Chats";
+import React, { useState } from "react";
+import NewMessageModal from "./NewMessageModal";
 
 const Messages = () => {
+  const [modalStatus, setModalStatus] = useState(false);
+  const toggleModal = () => {
+    setModalStatus((prevBoolean) => !prevBoolean);
+  };
   return (
     <MessagesWrapper>
-      <Chats />
+      <Chats toggleModal={toggleModal} />
+      {modalStatus === true ? (
+        <NewMessageModal toggleModal={toggleModal} />
+      ) : null}
     </MessagesWrapper>
   );
 };

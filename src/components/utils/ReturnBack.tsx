@@ -22,7 +22,7 @@ const ReturnBack = ({
     >
       <IoIosArrowBack onClick={onClick} data-testid="Go back" />
       <NameText>{name}</NameText>
-      {onChatIconClick ? <FaRegEdit /> : null}
+      {onChatIconClick ? <FaRegEdit onClick={onChatIconClick} /> : null}
     </ReturnBackWrapper>
   );
 };
@@ -44,6 +44,7 @@ const ReturnBackWrapper = styled.div<{
     color: ${({ theme }) => theme.palette.primary.contrastText};
     height: 25px;
     width: 25px;
+    cursor: pointer;
   }
   ${({ onChatIconClick }) =>
     onChatIconClick &&
@@ -58,9 +59,13 @@ const ReturnBackWrapper = styled.div<{
       position: static;
       border-bottom: 1px solid ${({ theme }) => theme.palette.common.grey};
     `}
-  @media only screen and (min-width: 768px) {
-    display: none;
-  }
+    ${({ staticPositioning }) =>
+    !staticPositioning &&
+    css`
+      @media only screen and (min-width: 768px) {
+        display: none;
+      }
+    `}
 `;
 const NameText = styled.p`
   font-family: ${({ theme }) => theme.primaryFont};
