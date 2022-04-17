@@ -20,15 +20,15 @@ export type Chat = {
 };
 const initialChats: Chat[] = [];
 export const chatsSlice = createSlice({
-  name: "user",
+  name: "chats",
   initialState: initialChats,
   reducers: {
-    setUser(state, action: PayloadAction<Chat[]>) {
+    setChats(state, action: PayloadAction<Chat[]>) {
       return action.payload;
     },
   },
 });
 
-export const selectUser = (state: RootState) => state.user;
-export const { setUser } = chatsSlice.actions;
+export const selectChats = (state: RootState) => state.chats;
+export const { setChats } = chatsSlice.actions;
 export default chatsSlice.reducer;
