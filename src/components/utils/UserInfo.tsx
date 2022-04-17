@@ -6,8 +6,15 @@ interface IProps {
   width: string;
   onClick?: (user: User) => void;
   largerImage?: boolean;
+  minimumSize?: string;
 }
-const UserInfo = ({ user, width, onClick, largerImage }: IProps) => {
+const UserInfo = ({
+  user,
+  width,
+  onClick,
+  largerImage,
+  minimumSize,
+}: IProps) => {
   return (
     <FlexContainer
       direction="row"
@@ -24,10 +31,10 @@ const UserInfo = ({ user, width, onClick, largerImage }: IProps) => {
         largerImage={largerImage}
       />
       <FlexContainer direction="column" gap="0rem">
-        <OverflowContainer>
+        <OverflowContainer minimumSize={minimumSize}>
           <UsernameText>{user.username}</UsernameText>
         </OverflowContainer>
-        <OverflowContainer>
+        <OverflowContainer minimumSize={minimumSize}>
           <FullNameText>{user.fullName}</FullNameText>
         </OverflowContainer>
       </FlexContainer>
@@ -44,11 +51,16 @@ const FullNameText = styled.p`
   text-overflow: ellipsis;
   font-weight: 400;
 `;
-const OverflowContainer = styled.div`
+const OverflowContainer = styled.div<{ minimumSize?: string }>`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 140px;
+  ${({ minimumSize }) =>
+    minimumSize &&
+    css`
+      max-width: ${minimumSize};
+    `}
   @media only screen and (min-width: 414px) {
     max-width: 180px;
   }
