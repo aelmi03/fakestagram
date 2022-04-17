@@ -1,20 +1,10 @@
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import ReturnBack from "../../utils/ReturnBack";
+import Chats from "./Chats";
 
 const Messages = () => {
-  const navigate = useNavigate();
-
   return (
     <MessagesWrapper>
-      <MessagesContainer>
-        <ReturnBack
-          stickyPositioning={true}
-          onClick={() => navigate("/home", { replace: true })}
-          onChatIconClick={() => {}}
-          name="Chats"
-        />
-      </MessagesContainer>
+      <Chats />
     </MessagesWrapper>
   );
 };
@@ -28,8 +18,5 @@ const MessagesWrapper = styled.div`
   bottom: 0;
   z-index: 30;
 `;
-const MessagesContainer = styled.div`
-  display: flex;
-  flex-flow: column nowrap;
-`;
+
 export default Messages;

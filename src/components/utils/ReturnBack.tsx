@@ -5,19 +5,19 @@ import { IoIosArrowBack } from "react-icons/io";
 interface IProps {
   name: string;
   onClick: () => void;
-  stickyPositioning?: boolean;
+  staticPositioning?: boolean;
   onChatIconClick?: () => void;
 }
 const ReturnBack = ({
   name,
   onClick,
   onChatIconClick,
-  stickyPositioning,
+  staticPositioning,
 }: IProps) => {
   return (
     <ReturnBackWrapper
       data-testid="Return Back Wrapper"
-      stickyPositioning={stickyPositioning}
+      staticPositioning={staticPositioning}
       onChatIconClick={onChatIconClick}
     >
       <IoIosArrowBack onClick={onClick} data-testid="Go back" />
@@ -27,7 +27,7 @@ const ReturnBack = ({
   );
 };
 const ReturnBackWrapper = styled.div<{
-  stickyPositioning?: boolean;
+  staticPositioning?: boolean;
   onChatIconClick?: () => void;
 }>`
   width: 100%;
@@ -52,10 +52,10 @@ const ReturnBackWrapper = styled.div<{
         margin-left: 20px;
       }
     `}
-  ${({ stickyPositioning }) =>
-    stickyPositioning === true &&
+  ${({ staticPositioning }) =>
+    staticPositioning === true &&
     css`
-      position: sticky;
+      position: static;
       border-bottom: 1px solid ${({ theme }) => theme.palette.common.grey};
     `}
   @media only screen and (min-width: 768px) {
