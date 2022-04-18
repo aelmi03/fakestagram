@@ -10,13 +10,13 @@ export type Message = {
   postedBy: string;
 };
 export type Chat = {
-  members: User[];
+  members: string[];
   messages: Message[];
   recentMessage: {
     content: string;
     timestamp: Timestamp;
     sentBy: string;
-  };
+  } | null;
 };
 type SelectedChat = Chat | null;
 const initialState = {
@@ -39,5 +39,5 @@ export const chatRoomSlice = createSlice({
 export const selectChats = (state: RootState) => state.chatRoom.chats;
 export const getSelectedChat = (state: RootState) =>
   state.chatRoom.selectedChat;
-export const { setChats } = chatRoomSlice.actions;
+export const { setChats, changeSelectedChat } = chatRoomSlice.actions;
 export default chatRoomSlice.reducer;

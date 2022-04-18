@@ -3,9 +3,21 @@ import styled from "styled-components";
 import FlexContainer from "../../utils/FlexContainer";
 import ModalWrapper from "../../utils/ModalWrapper";
 import ReturnBack from "../../utils/ReturnBack";
-import { query, collection, getFirestore, getDocs } from "firebase/firestore";
+import { useAppDispatch } from "../../../app/hooks";
+import {
+  query,
+  collection,
+  getFirestore,
+  getDocs,
+  where,
+  addDoc,
+} from "firebase/firestore";
 import UserInfo from "../../utils/UserInfo";
 import { selectUser, User } from "../../../features/user/userSlice";
+import {
+  changeSelectedChat,
+  Chat,
+} from "../../../features/chatRoom/chatRoomSlice";
 import { PostGreyText } from "../../utils/Texts";
 import { useAppSelector } from "../../../app/hooks";
 interface IProps {
@@ -15,7 +27,32 @@ const NewMessageModal = ({ toggleModal }: IProps) => {
   const [searchValue, setSearchValue] = useState("");
   const [previousSearchValue, setPreviousSearchValue] = useState("");
   const [results, setResults] = useState<User[]>([]);
+  const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
+  const createChatRoom = async (secondUser: User) => {
+    const chatRoom: Chat = {
+      members: [user.id, secondUser.id],
+      messages: [],
+      recentMessage: null,
+    };
+    await addDoc(collection(getFirestore(), "chatRooms"), chatRoom);
+    return chatRoom;
+  };
+  const onUserClick = async (clickedUser: User) => {
+    const chatRoomQuery = query(
+      collection(getFirestore(), "chatRooms"),
+      where("members", "in", [[user.id, clickedUser.id]])
+    );
+    const chatRoomDoc = await getDocs(chatRoomQuery);
+    console.log(chatRoomDoc.docs.length);
+    if (chatRoomDoc.docs.length === 0) {
+      const chatRoom = await createChatRoom(clickedUser);
+      dispatch(changeSelectedChat(chatRoom));
+    } else {
+      dispatch(changeSelectedChat(chatRoomDoc.docs[0].data() as Chat));
+    }
+    toggleModal();
+  };
   useEffect(() => {
     const getResults = async () => {
       if (results.length === 0 && searchValue === "") return;
@@ -32,7 +69,10 @@ const NewMessageModal = ({ toggleModal }: IProps) => {
       const resultsDocs = (await getDocs(resultsQuery)).docs
         .map((doc) => doc.data() as User)
         .filter(
-          (user) => user.username.startsWith(searchValue) && searchValue !== ""
+          (filteredUser) =>
+            filteredUser.username.startsWith(searchValue) &&
+            searchValue !== "" &&
+            filteredUser.id !== user.id
         );
       setResults(resultsDocs);
     };
@@ -67,7 +107,7 @@ const NewMessageModal = ({ toggleModal }: IProps) => {
         <FlexContainer direction="column" padding="0.5rem" overflowY="scroll">
           {results.length !== 0 ? (
             results.map((user) => (
-              <UserContainer>
+              <UserContainer key={user.id} onClick={() => onUserClick(user)}>
                 <UserInfo
                   user={user}
                   width={`${window.innerWidth}`}
