@@ -6,14 +6,15 @@ import Main from "./components/Main";
 import {
   collection,
   doc,
+  getDocs,
   getFirestore,
   onSnapshot,
   query,
   where,
 } from "firebase/firestore";
-import { selectUser, setUser, User } from "./features/user/userSlice";
+import { selectUser, setUser, User, setUsers } from "./features/user/userSlice";
 import { useAppDispatch, useAppSelector } from "./app/hooks";
-import { Chat, setChats } from "./features/chatRoom/chatRoomSlice";
+import { Chat, setChats } from "./features/chatRooms/chatRoomsSlice";
 
 function App() {
   console.log("APP");
@@ -44,7 +45,22 @@ function App() {
     if (user.id) {
       initializeChatRooms();
     }
-  }, [user]);
+  }, [user.id]);
+  useEffect(() => {
+    const getAllUsers = async () => {
+      const usersQuery = query(
+        collection(getFirestore(), "users"),
+        where("id", "!=", `${user.id}`)
+      );
+      const allUsers = (await getDocs(usersQuery)).docs.map(
+        (doc) => doc.data() as User
+      );
+      dispatch(setUsers(allUsers));
+    };
+    if (user.id) {
+      getAllUsers();
+    }
+  }, [user.id]);
   if (authUser) {
     initializeUser();
     return <Main />;

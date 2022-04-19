@@ -26,7 +26,7 @@ const initialState = {
   chats: [] as Chat[],
   selectedChat: null as SelectedChat,
 };
-export const chatRoomSlice = createSlice({
+export const chatRoomsSlice = createSlice({
   name: "chatroom",
   initialState: initialState,
   reducers: {
@@ -39,8 +39,8 @@ export const chatRoomSlice = createSlice({
   },
 });
 
-export const selectChats = (state: RootState) => state.chatRoom.chats;
+export const selectChats = (state: RootState) => state.chatRooms.chats;
 export const getSelectedChat = (state: RootState) =>
-  state.chatRoom.selectedChat;
-export const { setChats, changeSelectedChat } = chatRoomSlice.actions;
-export default chatRoomSlice.reducer;
+  state.chatRooms.selectedChat;
+export const { setChats, changeSelectedChat } = chatRoomsSlice.actions;
+export default chatRoomsSlice.reducer;

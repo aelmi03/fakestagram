@@ -22,7 +22,7 @@ import { selectUser, User } from "../../../features/user/userSlice";
 import {
   changeSelectedChat,
   Chat,
-} from "../../../features/chatRoom/chatRoomSlice";
+} from "../../../features/chatRooms/chatRoomsSlice";
 import { PostGreyText } from "../../utils/Texts";
 import { useAppSelector } from "../../../app/hooks";
 interface IProps {

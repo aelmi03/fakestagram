@@ -11,10 +11,14 @@ import {
   getSelectedChat,
   changeSelectedChat,
   Chat,
-} from "../../../../features/chatRoom/chatRoomSlice";
+} from "../../../../features/chatRooms/chatRoomsSlice";
 import Button from "../../../utils/Button";
 import { useEffect, useState } from "react";
-import { selectUser, User } from "../../../../features/user/userSlice";
+import {
+  selectUser,
+  User,
+  selectAllUsers,
+} from "../../../../features/user/userSlice";
 import {
   collection,
   doc,
@@ -36,7 +40,7 @@ const Chats = ({ toggleModal }: IProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
-  const [users, setUsers] = useState<User[]>([]);
+  const users = useAppSelector(selectAllUsers);
   const selectedChat = useAppSelector(getSelectedChat);
   const chats = useAppSelector(selectChats);
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
@@ -46,16 +50,6 @@ const Chats = ({ toggleModal }: IProps) => {
   const onChatRoomClick = (clickedChatRoom: ChatRoom) => {
     dispatch(changeSelectedChat(clickedChatRoom.chat));
   };
-  useEffect(() => {
-    const getUsers = async () => {
-      const usersQuery = query(collection(getFirestore(), "users"));
-      const allUsers = (await getDocs(usersQuery)).docs.map(
-        (doc) => doc.data() as User
-      );
-      setUsers(allUsers);
-    };
-    getUsers();
-  }, []);
   useEffect(() => {
     const initializeChatRooms = async () => {
       console.log("chat rooms forrrreaallll");
@@ -68,14 +62,7 @@ const Chats = ({ toggleModal }: IProps) => {
           .map(async (chat) => {
             const otherUserID =
               chat.members[0] === user.id ? chat.members[1] : chat.members[0];
-            let otherUser: User;
-            if (users.length === 0) {
-              console.log("GETTING USER DATA IN CHATS");
-              const otherUserDoc = doc(getFirestore(), `users/${otherUserID}`);
-              otherUser = (await getDoc(otherUserDoc)).data() as User;
-            } else {
-              otherUser = getOtherUser(otherUserID);
-            }
+            const otherUser = getOtherUser(otherUserID);
             const chatRoom: ChatRoom = {
               otherUser,
               recentMessage: chat.recentMessage,

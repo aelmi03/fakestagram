@@ -1,10 +1,13 @@
 import styled from "styled-components";
 import Chats from "./Chats";
+import { useAppSelector } from "../../../app/hooks";
+import { getSelectedChat } from "../../../features/chatRooms/chatRoomsSlice";
 import React, { useState } from "react";
 import NewMessageModal from "./NewMessageModal";
 
 const Messages = () => {
   const [modalStatus, setModalStatus] = useState(false);
+  const selectedChat = useAppSelector(getSelectedChat);
   const toggleModal = () => {
     setModalStatus((prevBoolean) => !prevBoolean);
   };
