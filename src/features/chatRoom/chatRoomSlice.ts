@@ -4,19 +4,21 @@ import { RootState } from "../../app/store";
 import { Timestamp } from "firebase/firestore";
 
 export type Message = {
-  timestamp: Timestamp;
+  timestamp: string;
   id: string;
   content: string;
   postedBy: string;
 };
+export type RecentMessage = {
+  content: string;
+  timestamp: string;
+  sentBy: string;
+} | null;
 export type Chat = {
+  id: string;
   members: string[];
   messages: Message[];
-  recentMessage: {
-    content: string;
-    timestamp: Timestamp;
-    sentBy: string;
-  } | null;
+  recentMessage: RecentMessage;
 };
 type SelectedChat = Chat | null;
 const initialState = {

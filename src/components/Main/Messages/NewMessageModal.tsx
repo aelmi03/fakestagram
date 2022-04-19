@@ -11,6 +11,11 @@ import {
   getDocs,
   where,
   addDoc,
+  updateDoc,
+  getDoc,
+  serverTimestamp,
+  Timestamp,
+  FieldValue,
 } from "firebase/firestore";
 import UserInfo from "../../utils/UserInfo";
 import { selectUser, User } from "../../../features/user/userSlice";
@@ -33,10 +38,23 @@ const NewMessageModal = ({ toggleModal }: IProps) => {
     const chatRoom: Chat = {
       members: [user.id, secondUser.id],
       messages: [],
-      recentMessage: null,
+      recentMessage: {
+        timestamp: new Date().toString(),
+        content:
+          "Hey bro what have you been up to recently, I have been absolutely chilling forreal shit is dope man",
+        sentBy: "1234567678",
+      },
+      id: "",
     };
-    await addDoc(collection(getFirestore(), "chatRooms"), chatRoom);
-    return chatRoom;
+    const chatRoomDoc = await addDoc(
+      collection(getFirestore(), "chatRooms"),
+      chatRoom
+    );
+    updateDoc(chatRoomDoc, {
+      id: chatRoomDoc.id,
+    });
+    const chatRoomData = (await getDoc(chatRoomDoc)).data() as Chat;
+    return chatRoomData;
   };
   const onUserClick = async (clickedUser: User) => {
     const chatRoomQuery = query(

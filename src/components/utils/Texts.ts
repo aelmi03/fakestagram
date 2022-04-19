@@ -26,6 +26,35 @@ export const PostGreyText = styled(PostText)`
 export const ClickablePostGreyText = styled(PostGreyText)`
   cursor: pointer;
 `;
+export const BasicText = styled.p<{
+  fontWeight: string;
+  fontSize: string;
+  color?: string;
+  ellipseText?: boolean;
+  wrap?: boolean;
+}>`
+  font-family: ${({ theme }) => theme.primaryFont};
+  color: ${({ theme }) => theme.palette.primary.contrastText};
+  font-size: ${({ fontSize }) => fontSize};
+  font-weight: ${({ fontWeight }) => fontWeight};
+  ${({ color }) =>
+    color === "grey" &&
+    css`
+      color: ${({ theme }) => theme.palette.darkGrey};
+    `}
+  ${({ ellipseText }) =>
+    ellipseText === true &&
+    css`
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    `}
+    ${({ wrap }) =>
+    wrap === false &&
+    css`
+      white-space: nowrap;
+    `}
+`;
 export const PostCommentText = styled(PostText)`
   font-weight: 500;
   cursor: pointer;
