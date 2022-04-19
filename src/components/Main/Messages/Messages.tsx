@@ -13,6 +13,7 @@ const Messages = () => {
     setModalStatus((prevBoolean) => !prevBoolean);
   };
   const [width, setWidth] = useState(window.innerWidth);
+
   useEffect(() => {
     const handleResizeWindow = () => setWidth(window.innerWidth);
 
@@ -25,13 +26,16 @@ const Messages = () => {
   }, []);
   return (
     <MessagesWrapper>
-      {width < 768 && selectedChat ? <ChatRoom /> : null}
+      {width < 768 && selectedChat ? (
+        <ChatRoom toggleModal={toggleModal} />
+      ) : null}
       {width < 768 && !selectedChat ? (
         <Chats toggleModal={toggleModal} />
       ) : null}
       {width >= 768 ? (
         <React.Fragment>
-          <Chats toggleModal={toggleModal} /> <ChatRoom />
+          <Chats toggleModal={toggleModal} />{" "}
+          <ChatRoom toggleModal={toggleModal} />
         </React.Fragment>
       ) : null}
       {modalStatus === true ? (

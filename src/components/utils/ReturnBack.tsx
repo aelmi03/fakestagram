@@ -1,18 +1,23 @@
 import styled, { css } from "styled-components";
 import { FaRegEdit } from "react-icons/fa";
 import { IoIosArrowBack } from "react-icons/io";
+import FlexContainer from "./FlexContainer";
+import CircularUserImage from "./CircularUserImage";
+import { isEntityName } from "typescript";
 
 interface IProps {
   name: string;
   onClick: () => void;
   staticPositioning?: boolean;
   onChatIconClick?: () => void;
+  profilePicture?: string;
 }
 const ReturnBack = ({
   name,
   onClick,
   onChatIconClick,
   staticPositioning,
+  profilePicture,
 }: IProps) => {
   return (
     <ReturnBackWrapper
@@ -21,7 +26,20 @@ const ReturnBack = ({
       onChatIconClick={onChatIconClick}
     >
       <IoIosArrowBack onClick={onClick} data-testid="Go back" />
-      <NameText>{name}</NameText>
+      {profilePicture ? (
+        <FlexContainer
+          direction="row"
+          gap="0.5rem"
+          alignItems="center"
+          justifyContent="center"
+          padding="0rem 1rem 0rem 0rem"
+        >
+          <CircularUserImage size="30px" src={profilePicture} />
+          <NameText margin={false}>{name}</NameText>
+        </FlexContainer>
+      ) : (
+        <NameText>{name}</NameText>
+      )}
       {onChatIconClick ? <FaRegEdit onClick={onChatIconClick} /> : null}
     </ReturnBackWrapper>
   );
@@ -56,6 +74,7 @@ const ReturnBackWrapper = styled.div<{
   ${({ staticPositioning }) =>
     staticPositioning === true &&
     css`
+      font-size: 1.6rem;
       position: static;
       border-bottom: 1px solid ${({ theme }) => theme.palette.common.grey};
     `}
@@ -67,12 +86,17 @@ const ReturnBackWrapper = styled.div<{
       }
     `}
 `;
-const NameText = styled.p`
+const NameText = styled.p<{ margin?: boolean }>`
   font-family: ${({ theme }) => theme.primaryFont};
   color: ${({ theme }) => theme.palette.primary.contrastText};
   font-size: 1.65rem;
   font-weight: 600;
   text-align: center;
   margin-right: 2.8rem;
+  ${({ margin }) =>
+    margin === false &&
+    css`
+      margin: 0;
+    `}
 `;
 export default ReturnBack;
