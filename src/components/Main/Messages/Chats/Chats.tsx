@@ -60,24 +60,29 @@ const Chats = ({ toggleModal }: IProps) => {
     const initializeChatRooms = async () => {
       console.log("chat rooms forrrreaallll");
       const newChatRooms = await Promise.all(
-        chats.map(async (chat) => {
-          const otherUserID =
-            chat.members[0] === user.id ? chat.members[1] : chat.members[0];
-          let otherUser: User;
-          if (users.length === 0) {
-            console.log("GETTING USER DATA IN CHATS");
-            const otherUserDoc = doc(getFirestore(), `users/${otherUserID}`);
-            otherUser = (await getDoc(otherUserDoc)).data() as User;
-          } else {
-            otherUser = getOtherUser(otherUserID);
-          }
-          const chatRoom: ChatRoom = {
-            otherUser,
-            recentMessage: chat.recentMessage,
-            chat,
-          };
-          return chatRoom;
-        })
+        [...chats]
+          .sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          )
+          .map(async (chat) => {
+            const otherUserID =
+              chat.members[0] === user.id ? chat.members[1] : chat.members[0];
+            let otherUser: User;
+            if (users.length === 0) {
+              console.log("GETTING USER DATA IN CHATS");
+              const otherUserDoc = doc(getFirestore(), `users/${otherUserID}`);
+              otherUser = (await getDoc(otherUserDoc)).data() as User;
+            } else {
+              otherUser = getOtherUser(otherUserID);
+            }
+            const chatRoom: ChatRoom = {
+              otherUser,
+              recentMessage: chat.recentMessage,
+              chat,
+            };
+            return chatRoom;
+          })
       );
       setChatRooms(newChatRooms);
     };
@@ -119,11 +124,12 @@ const Chats = ({ toggleModal }: IProps) => {
                     direction="row"
                     justifyContent="space-between"
                     alignItems="center"
+                    gap="0.3rem"
                   >
                     <RecentTextContainer>
                       <BasicText
                         fontSize="1.3rem"
-                        fontWeight="400"
+                        fontWeight="500"
                         color="grey"
                         ellipseText={true}
                       >
@@ -132,7 +138,7 @@ const Chats = ({ toggleModal }: IProps) => {
                     </RecentTextContainer>
                     <BasicText
                       fontSize="1.2rem"
-                      fontWeight="500"
+                      fontWeight="400"
                       color="grey"
                       wrap={false}
                     >
@@ -170,6 +176,7 @@ const ChatRoomContainer = styled.div<{ selected: boolean }>`
   gap: 1rem;
   align-items: center;
   padding: 0.5rem 1rem;
+  cursor: pointer;
   &:hover {
     background-color: ${({ theme }) => theme.palette.neutral};
   }
@@ -187,7 +194,7 @@ const NoMessagesContainer = styled.div`
   height: 100%;
 `;
 const RecentTextContainer = styled.div`
-  max-width: 130px;
+  max-width: 115px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
