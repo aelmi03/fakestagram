@@ -1,13 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { BasicText } from "../../../utils/Texts";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import ReturnBack from "../../../utils/ReturnBack";
 import FlexContainer from "../../../utils/FlexContainer";
 import CircularUserImage from "../../../utils/CircularUserImage";
-import { useAppSelector } from "../../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import {
   selectChats,
   RecentMessage,
+  getSelectedChat,
+  changeSelectedChat,
+  Chat,
 } from "../../../../features/chatRoom/chatRoomSlice";
 import Button from "../../../utils/Button";
 import { useEffect, useState } from "react";
@@ -27,16 +30,21 @@ interface IProps {
 interface ChatRoom {
   otherUser: User;
   recentMessage: RecentMessage;
-  id: string;
+  chat: Chat;
 }
 const Chats = ({ toggleModal }: IProps) => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
   const [users, setUsers] = useState<User[]>([]);
+  const selectedChat = useAppSelector(getSelectedChat);
   const chats = useAppSelector(selectChats);
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
   const getOtherUser = (id: string) => {
     return users.filter((user) => user.id === id)[0];
+  };
+  const onChatRoomClick = (clickedChatRoom: ChatRoom) => {
+    dispatch(changeSelectedChat(clickedChatRoom.chat));
   };
   useEffect(() => {
     const getUsers = async () => {
@@ -65,8 +73,8 @@ const Chats = ({ toggleModal }: IProps) => {
           }
           const chatRoom: ChatRoom = {
             otherUser,
-            id: chat.id,
             recentMessage: chat.recentMessage,
+            chat,
           };
           return chatRoom;
         })
@@ -93,12 +101,10 @@ const Chats = ({ toggleModal }: IProps) => {
       {chats.length !== 0 ? (
         <FlexContainer direction="column">
           {chatRooms.map((chatRoom) => (
-            <FlexContainer
-              direction="row"
-              gap="1rem"
-              alignItems="center"
-              padding="0.5rem 1rem"
-              key={chatRoom.id}
+            <ChatRoomContainer
+              key={chatRoom.chat.id}
+              selected={chatRoom.chat.id === selectedChat?.id}
+              onClick={() => onChatRoomClick(chatRoom)}
             >
               <CircularUserImage
                 size="56px"
@@ -126,7 +132,7 @@ const Chats = ({ toggleModal }: IProps) => {
                     </RecentTextContainer>
                     <BasicText
                       fontSize="1.2rem"
-                      fontWeight="400"
+                      fontWeight="500"
                       color="grey"
                       wrap={false}
                     >
@@ -137,7 +143,7 @@ const Chats = ({ toggleModal }: IProps) => {
                   </FlexContainer>
                 ) : null}
               </FlexContainer>
-            </FlexContainer>
+            </ChatRoomContainer>
           ))}
         </FlexContainer>
       ) : (
@@ -157,9 +163,25 @@ const MessagesContainer = styled.div`
   gap: 1.1rem;
   width: 100%;
 `;
+const ChatRoomContainer = styled.div<{ selected: boolean }>`
+  width: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  &:hover {
+    background-color: ${({ theme }) => theme.palette.neutral};
+  }
+  ${({ selected }) =>
+    selected === true &&
+    css`
+      background-color: ${({ theme }) => theme.palette.neutral};
+    `}
+`;
 const NoMessagesContainer = styled.div`
   display: grid;
-  gap: 2rem;
+  gap: 1.5rem;
   justify-items: center;
   align-content: center;
   height: 100%;

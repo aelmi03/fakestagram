@@ -17,6 +17,7 @@ export type RecentMessage = {
 export type Chat = {
   id: string;
   members: string[];
+  createdAt: string;
   messages: Message[];
   recentMessage: RecentMessage;
 };

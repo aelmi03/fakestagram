@@ -2,7 +2,7 @@ import styled, { css } from "styled-components";
 
 const Button = styled.button<{ color?: string }>`
   font-family: ${({ theme }) => theme.primaryFont};
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: bold;
   background-color: ${({ theme }) => theme.palette.secondary.main};
   color: ${({ theme }) => theme.palette.secondary.contrastText};

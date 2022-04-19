@@ -38,6 +38,7 @@ const NewMessageModal = ({ toggleModal }: IProps) => {
     const chatRoom: Chat = {
       members: [user.id, secondUser.id],
       messages: [],
+      createdAt: new Date().toString(),
       recentMessage: {
         timestamp: new Date().toString(),
         content:
