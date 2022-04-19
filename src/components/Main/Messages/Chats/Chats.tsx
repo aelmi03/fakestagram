@@ -9,6 +9,7 @@ import {
   selectChats,
   RecentMessage,
 } from "../../../../features/chatRoom/chatRoomSlice";
+import Button from "../../../utils/Button";
 import { useEffect, useState } from "react";
 import { selectUser, User } from "../../../../features/user/userSlice";
 import {
@@ -89,63 +90,79 @@ const Chats = ({ toggleModal }: IProps) => {
           Messages
         </BasicText>
       </FlexContainer>
-      <FlexContainer direction="column">
-        {chatRooms.map((chatRoom) => (
-          <FlexContainer
-            direction="row"
-            gap="1rem"
-            alignItems="center"
-            padding="0.5rem 1rem"
-            key={chatRoom.id}
-          >
-            <CircularUserImage
-              size="56px"
-              src={chatRoom.otherUser.profilePicture}
-            />
-            <FlexContainer direction="column" gap="0.2rem">
-              <BasicText fontSize="1.3rem" fontWeight="500">
-                {chatRoom.otherUser.fullName}
-              </BasicText>
-              {chatRoom.recentMessage ? (
-                <FlexContainer
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <RecentTextContainer>
+      {chats.length !== 0 ? (
+        <FlexContainer direction="column">
+          {chatRooms.map((chatRoom) => (
+            <FlexContainer
+              direction="row"
+              gap="1rem"
+              alignItems="center"
+              padding="0.5rem 1rem"
+              key={chatRoom.id}
+            >
+              <CircularUserImage
+                size="56px"
+                src={chatRoom.otherUser.profilePicture}
+              />
+              <FlexContainer direction="column" gap="0.2rem">
+                <BasicText fontSize="1.3rem" fontWeight="500">
+                  {chatRoom.otherUser.fullName}
+                </BasicText>
+                {chatRoom.recentMessage ? (
+                  <FlexContainer
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <RecentTextContainer>
+                      <BasicText
+                        fontSize="1.3rem"
+                        fontWeight="400"
+                        color="grey"
+                        ellipseText={true}
+                      >
+                        {chatRoom.recentMessage.content}
+                      </BasicText>
+                    </RecentTextContainer>
                     <BasicText
-                      fontSize="1.3rem"
+                      fontSize="1.2rem"
                       fontWeight="400"
                       color="grey"
-                      ellipseText={true}
+                      wrap={false}
                     >
-                      {chatRoom.recentMessage.content}
+                      {formatDistanceToNow(
+                        new Date(chatRoom.recentMessage.timestamp)
+                      )}
                     </BasicText>
-                  </RecentTextContainer>
-                  <BasicText
-                    fontSize="1.2rem"
-                    fontWeight="400"
-                    color="grey"
-                    wrap={false}
-                  >
-                    {formatDistanceToNow(
-                      new Date(chatRoom.recentMessage.timestamp)
-                    )}
-                  </BasicText>
-                </FlexContainer>
-              ) : null}
+                  </FlexContainer>
+                ) : null}
+              </FlexContainer>
             </FlexContainer>
-          </FlexContainer>
-        ))}
-      </FlexContainer>
+          ))}
+        </FlexContainer>
+      ) : (
+        <NoMessagesContainer>
+          <BasicText fontSize="2rem" fontWeight="400">
+            No Messages
+          </BasicText>
+          <Button onClick={toggleModal}>Start a Message</Button>
+        </NoMessagesContainer>
+      )}
     </MessagesContainer>
   );
 };
 const MessagesContainer = styled.div`
-  display: flex;
-  flex-flow: column nowrap;
+  display: grid;
+  grid-template-rows: max-content max-content 1fr;
   gap: 1.1rem;
   width: 100%;
+`;
+const NoMessagesContainer = styled.div`
+  display: grid;
+  gap: 2rem;
+  justify-items: center;
+  align-content: center;
+  height: 100%;
 `;
 const RecentTextContainer = styled.div`
   max-width: 130px;
