@@ -2,7 +2,8 @@ import styled from "styled-components";
 import Chats from "./Chats";
 import { useAppSelector } from "../../../app/hooks";
 import { getSelectedChat } from "../../../features/chatRooms/chatRoomsSlice";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import ChatRoom from "./ChatRoom";
 import NewMessageModal from "./NewMessageModal";
 
 const Messages = () => {
@@ -11,9 +12,28 @@ const Messages = () => {
   const toggleModal = () => {
     setModalStatus((prevBoolean) => !prevBoolean);
   };
+  const [width, setWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResizeWindow = () => setWidth(window.innerWidth);
+
+    // subscribe to window resize event "onComponentDidMount"
+    window.addEventListener("resize", handleResizeWindow);
+    return () => {
+      // unsubscribe "onComponentDestroy"
+      window.removeEventListener("resize", handleResizeWindow);
+    };
+  }, []);
   return (
     <MessagesWrapper>
-      <Chats toggleModal={toggleModal} />
+      {width < 768 && selectedChat ? <ChatRoom /> : null}
+      {width < 768 && !selectedChat ? (
+        <Chats toggleModal={toggleModal} />
+      ) : null}
+      {width >= 768 ? (
+        <React.Fragment>
+          <Chats toggleModal={toggleModal} /> <ChatRoom />
+        </React.Fragment>
+      ) : null}
       {modalStatus === true ? (
         <NewMessageModal toggleModal={toggleModal} />
       ) : null}
