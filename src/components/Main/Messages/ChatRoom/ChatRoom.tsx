@@ -10,8 +10,11 @@ import {
   selectAllUsers,
   selectUser,
 } from "../../../../features/user/userSlice";
+import { nanoid } from "@reduxjs/toolkit";
 import ReturnBack from "../../../utils/ReturnBack";
+import { useState } from "react";
 import FlexContainer from "../../../utils/FlexContainer";
+import { doc, getFirestore, updateDoc } from "firebase/firestore";
 interface IProps {
   toggleModal: () => void;
 }
@@ -20,18 +23,47 @@ const ChatRoom = ({ toggleModal }: IProps) => {
   const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
   const allUsers = useAppSelector(selectAllUsers);
+  const [messageValue, setMessageValue] = useState("");
   const getUserByID = (id: string) => {
     return allUsers.find((filteredUser) => filteredUser.id === id);
   };
   const unselectChat = () => {
     dispatch(changeSelectedChat(null));
   };
+  type Message = {
+    timestamp: string;
+    id: string;
+    content: string;
+    sentBy: string;
+  };
+  type RecentMessage = {
+    content: string;
+    timestamp: string;
+    sentBy: string;
+  } | null;
   const getOtherUser = () => {
     const otherUser =
       selectedChat?.members[0] === user.id
         ? getUserByID(selectedChat!.members[1])
         : getUserByID(selectedChat!.members[0]);
     return otherUser;
+  };
+  const sendMessage = async () => {
+    if (messageValue.replace(/ /g, "").length === 0) return;
+    const newMessage = {
+      timestamp: new Date().toString(),
+      id: nanoid(),
+      content: messageValue,
+      sentBy: user.id,
+    };
+    const newMessages = [...selectedChat!.messages, newMessage];
+    const chatRoomDoc = doc(getFirestore(), `chatRooms/${selectedChat?.id}`);
+    await updateDoc(chatRoomDoc, {
+      recentMessage: newMessage,
+      messages: newMessages,
+    });
+    setMessageValue("");
+    console.log(selectedChat, "selectedChat");
   };
   return (
     <ChatRoomContainer>
@@ -44,12 +76,19 @@ const ChatRoom = ({ toggleModal }: IProps) => {
       <FlexContainer direction="column" padding="1rem" gap="2rem">
         <ChatMessagesContainer></ChatMessagesContainer>
         <SendBox>
-          <MessageTextArea placeholder="Message..." rows={2} cols={26} />
+          <MessageTextArea
+            placeholder="Message..."
+            rows={2}
+            cols={26}
+            value={messageValue}
+            onChange={(e) => setMessageValue(e.target.value)}
+          />
           <BasicText
             color="blue"
             fontWeight="600"
             fontSize="1.3rem"
-            fadeText={true}
+            fadeText={messageValue.replace(/ /g, "").length === 0}
+            onClick={() => sendMessage()}
           >
             Send
           </BasicText>

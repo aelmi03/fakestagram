@@ -39,12 +39,7 @@ const NewMessageModal = ({ toggleModal }: IProps) => {
       members: [user.id, secondUser.id],
       messages: [],
       createdAt: new Date().toString(),
-      recentMessage: {
-        timestamp: new Date().toString(),
-        content:
-          "Hey bro what have you been up to recently, I have been absolutely chilling forreal shit is dope man",
-        sentBy: "1234567678",
-      },
+      recentMessage: null,
       id: "",
     };
     const chatRoomDoc = await addDoc(
