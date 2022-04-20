@@ -32,6 +32,7 @@ export const BasicText = styled.p<{
   color?: string;
   ellipseText?: boolean;
   wrap?: boolean;
+  fadeText?: boolean;
 }>`
   font-family: ${({ theme }) => theme.primaryFont};
   color: ${({ theme }) => theme.palette.primary.contrastText};
@@ -41,6 +42,11 @@ export const BasicText = styled.p<{
     color === "grey" &&
     css`
       color: ${({ theme }) => theme.palette.darkGrey};
+    `}
+  ${({ color }) =>
+    color === "blue" &&
+    css`
+      color: ${({ theme }) => theme.palette.secondary.main};
     `}
   ${({ ellipseText }) =>
     ellipseText === true &&
@@ -53,6 +59,11 @@ export const BasicText = styled.p<{
     wrap === false &&
     css`
       white-space: nowrap;
+    `}
+    ${({ fadeText }) =>
+    fadeText === true &&
+    css`
+      opacity: 0.5;
     `}
 `;
 export const PostCommentText = styled(PostText)`

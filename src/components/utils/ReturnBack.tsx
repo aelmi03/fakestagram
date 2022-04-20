@@ -29,7 +29,7 @@ const ReturnBack = ({
       {profilePicture ? (
         <FlexContainer
           direction="row"
-          gap="0.5rem"
+          gap="0.9rem"
           alignItems="center"
           justifyContent="center"
           padding="0rem 1rem 0rem 0rem"
