@@ -27,10 +27,13 @@ const Messages = () => {
   return (
     <MessagesWrapper>
       {width < 768 && selectedChat ? (
-        <ChatRoom toggleModal={toggleModal} />
+        <React.Fragment>
+          <ChatRoom toggleModal={toggleModal} />
+          <Chats toggleModal={toggleModal} hide={true} />
+        </React.Fragment>
       ) : null}
       {width < 768 && !selectedChat ? (
-        <Chats toggleModal={toggleModal} />
+        <Chats toggleModal={toggleModal} hide={false} />
       ) : null}
       {width >= 768 ? (
         <React.Fragment>

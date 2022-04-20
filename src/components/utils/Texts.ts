@@ -31,7 +31,7 @@ export const BasicText = styled.p<{
   fontSize: string;
   color?: string;
   ellipseText?: boolean;
-  wrap?: boolean;
+  wrapText?: boolean;
   fadeText?: boolean;
 }>`
   font-family: ${({ theme }) => theme.primaryFont};
@@ -55,8 +55,8 @@ export const BasicText = styled.p<{
       overflow: hidden;
       text-overflow: ellipsis;
     `}
-    ${({ wrap }) =>
-    wrap === false &&
+    ${({ wrapText }) =>
+    wrapText === false &&
     css`
       white-space: nowrap;
     `}

@@ -30,13 +30,14 @@ import {
 import { formatDistanceToNow } from "date-fns";
 interface IProps {
   toggleModal: () => void;
+  hide?: boolean;
 }
 interface ChatRoom {
   otherUser: User;
   recentMessage: RecentMessage;
   chat: Chat;
 }
-const Chats = ({ toggleModal }: IProps) => {
+const Chats = ({ toggleModal, hide }: IProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
@@ -63,6 +64,14 @@ const Chats = ({ toggleModal }: IProps) => {
             const otherUserID =
               chat.members[0] === user.id ? chat.members[1] : chat.members[0];
             const otherUser = getOtherUser(otherUserID);
+            if (
+              selectedChat &&
+              chat.id === selectedChat.id &&
+              selectedChat?.messages.length !== chat.members.length
+            ) {
+              console.log(chat, "chat matched");
+              dispatch(changeSelectedChat(chat));
+            }
             const chatRoom: ChatRoom = {
               otherUser,
               recentMessage: chat.recentMessage,
@@ -78,7 +87,7 @@ const Chats = ({ toggleModal }: IProps) => {
   }, [chats]);
 
   return (
-    <MessagesContainer>
+    <MessagesContainer hide={hide}>
       <ReturnBack
         staticPositioning={true}
         onClick={() => navigate("/home", { replace: true })}
@@ -127,7 +136,7 @@ const Chats = ({ toggleModal }: IProps) => {
                       fontSize="1.2rem"
                       fontWeight="400"
                       color="grey"
-                      wrap={false}
+                      wrapText={false}
                     >
                       {formatDistanceToNow(
                         new Date(chatRoom.recentMessage.timestamp)
@@ -150,11 +159,16 @@ const Chats = ({ toggleModal }: IProps) => {
     </MessagesContainer>
   );
 };
-const MessagesContainer = styled.div`
+const MessagesContainer = styled.div<{ hide?: boolean }>`
   display: grid;
   grid-template-rows: max-content max-content 1fr;
   gap: 1.1rem;
   width: 100%;
+  ${({ hide }) =>
+    hide === true &&
+    css`
+      display: none;
+    `}
 `;
 const ChatRoomContainer = styled.div<{ selected: boolean }>`
   width: 100%;
