@@ -219,7 +219,7 @@ const ProfileInformationContainer = styled.div`
   flex-flow: column nowrap;
   width: 100%;
   @media only screen and (min-width: 540px) {
-    gap: 3rem;
+    gap: 2rem;
     flex-flow: row nowrap;
     align-items: center;
   }
@@ -348,7 +348,9 @@ const OverflowContainer = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 20ch;
-
+  @media only screen and (min-width: 540px) {
+    max-width: 18.2ch;
+  }
   @media only screen and (min-width: 768px) {
     max-width: 30ch;
   }
