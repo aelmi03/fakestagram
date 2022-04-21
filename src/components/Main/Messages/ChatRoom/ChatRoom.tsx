@@ -5,16 +5,18 @@ import {
   changeSelectedChat,
   getSelectedChat,
 } from "../../../../features/chatRooms/chatRoomsSlice";
-import { BasicText, PostCommentText } from "../../../utils/Texts";
+import { BasicText } from "../../../utils/Texts";
 import {
   selectAllUsers,
   selectUser,
 } from "../../../../features/user/userSlice";
 import { nanoid } from "@reduxjs/toolkit";
+import { FiSend } from "react-icons/fi";
 import ReturnBack from "../../../utils/ReturnBack";
 import { useEffect, useRef, useState } from "react";
 import FlexContainer from "../../../utils/FlexContainer";
 import { doc, getFirestore, updateDoc } from "firebase/firestore";
+import Button from "../../../utils/Button";
 interface IProps {
   toggleModal: () => void;
 }
@@ -66,7 +68,7 @@ const ChatRoom = ({ toggleModal }: IProps) => {
     });
     console.log(messagesContainer.current);
   }, []);
-  return (
+  return selectedChat ? (
     <ChatRoomContainer>
       <ReturnBack
         staticPositioning={true}
@@ -118,6 +120,19 @@ const ChatRoom = ({ toggleModal }: IProps) => {
         </SendBox>
       </FlexContainer>
     </ChatRoomContainer>
+  ) : (
+    <NoSelectedChatContainer>
+      <IconContainer>
+        <FiSend />
+      </IconContainer>
+      <BasicText fontSize="2.3rem" fontWeight="500">
+        Your Messages
+      </BasicText>
+      <BasicText fontSize="1.4rem" fontWeight="500" color="grey">
+        Send messages to a friend.
+      </BasicText>
+      <Button onClick={() => toggleModal()}>Send Message</Button>
+    </NoSelectedChatContainer>
   );
 };
 const ChatRoomContainer = styled.div`
@@ -140,6 +155,19 @@ const MessageTextArea = styled.textarea`
   font-weight: 400;
   font-family: ${({ theme }) => theme.primaryFont};
 `;
+const IconContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2.5rem;
+  border-radius: 50%;
+  border: 2px solid ${({ theme }) => theme.palette.primary.contrastText};
+  svg {
+    color: ${({ theme }) => theme.palette.primary.contrastText};
+    height: 50px;
+    width: 50px;
+  }
+`;
 const SendBox = styled.div`
   display: grid;
   grid-template-columns: 1fr max-content;
@@ -149,6 +177,18 @@ const SendBox = styled.div`
   border-radius: 20px;
   border: 1px solid ${({ theme }) => theme.palette.common.grey};
   width: 100%;
+`;
+const NoSelectedChatContainer = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-flow: column nowrap;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  > :last-child {
+    margin-top: 2rem;
+  }
 `;
 const ChatMessage = styled.div<{ ownMessage: boolean }>`
   padding: 1.1rem 1.3rem;

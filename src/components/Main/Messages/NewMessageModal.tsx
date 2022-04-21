@@ -148,12 +148,13 @@ const NewMessageModalWrapper = styled.div`
   background-color: ${({ theme }) => theme.palette.primaryLight};
   height: 100%;
   width: min(100%, 500px);
-  padding: 0.3rem 0rem;
+  padding: 0.3rem 0.2rem;
   @media only screen and (min-width: 540px) {
     border-radius: 5px;
     position: relative;
     left: 50%;
     top: 50%;
+    padding: 0.3rem 0.4rem;
     transform: translate(-50%, -50%);
     max-height: 500px;
   }
