@@ -77,12 +77,21 @@ const ReturnBackWrapper = styled.div<{
       font-size: 1.6rem;
       position: static;
       border-bottom: 1px solid ${({ theme }) => theme.palette.common.grey};
+      @media only screen and (min-width: 768px) {
+        > :nth-child(1) {
+          display: none;
+        }
+        display: flex;
+        justify-content: space-between;
+        height: 57px;
+      }
     `}
     ${({ staticPositioning }) =>
     !staticPositioning &&
     css`
       @media only screen and (min-width: 768px) {
         display: none;
+        justify-items: center;
       }
     `}
 `;

@@ -37,7 +37,7 @@ const Messages = () => {
       ) : null}
       {width >= 768 ? (
         <React.Fragment>
-          <Chats toggleModal={toggleModal} />{" "}
+          <Chats toggleModal={toggleModal} smallerChatRoom={true} />{" "}
           <ChatRoom toggleModal={toggleModal} />
         </React.Fragment>
       ) : null}
@@ -56,6 +56,22 @@ const MessagesWrapper = styled.div`
   right: 0;
   bottom: 0;
   z-index: 30;
+  @media only screen and (min-width: 768px) {
+    position: static;
+    height: calc(100vh - 55px);
+    width: 100%;
+    grid-template-columns: 350px 1fr;
+    border: 1px solid ${({ theme }) => theme.palette.common.grey};
+    border-top: none;
+  }
+  @media only screen and (min-width: 1024px) {
+    height: calc(100vh - 55px - 5rem);
+    margin: 2rem 0rem;
+    border-top: 1px solid ${({ theme }) => theme.palette.common.grey};
+    width: 1100px;
+    margin: 0 auto;
+    margin-top: 2rem;
+  }
 `;
 
 export default Messages;

@@ -14,6 +14,7 @@ const FlexContainer = styled.div<{
   margin?: string;
   position?: string;
   cursor?: string;
+  maxHeight?: string;
 }>`
   display: flex;
   width: 100%;
@@ -77,6 +78,11 @@ const FlexContainer = styled.div<{
     cursor &&
     css`
       cursor: ${cursor};
+    `};
+  ${({ maxHeight }) =>
+    maxHeight &&
+    css`
+      max-height: ${maxHeight};
     `};
 `;
 

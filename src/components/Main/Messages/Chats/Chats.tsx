@@ -31,13 +31,14 @@ import { formatDistanceToNow } from "date-fns";
 interface IProps {
   toggleModal: () => void;
   hide?: boolean;
+  smallerChatRoom?: boolean;
 }
 interface ChatRoom {
   otherUser: User;
   recentMessage: RecentMessage;
   chat: Chat;
 }
-const Chats = ({ toggleModal, hide }: IProps) => {
+const Chats = ({ toggleModal, hide, smallerChatRoom }: IProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
@@ -67,9 +68,9 @@ const Chats = ({ toggleModal, hide }: IProps) => {
             if (
               selectedChat &&
               chat.id === selectedChat.id &&
-              selectedChat?.messages.length !== chat.members.length
+              selectedChat?.messages.length !== chat.messages.length
             ) {
-              console.log(chat, "chat matched");
+              console.log("chat matched");
               dispatch(changeSelectedChat(chat));
             }
             const chatRoom: ChatRoom = {
@@ -100,7 +101,7 @@ const Chats = ({ toggleModal, hide }: IProps) => {
         </BasicText>
       </FlexContainer>
       {chats.length !== 0 ? (
-        <FlexContainer direction="column">
+        <FlexContainer direction="column" overflowY="scroll">
           {chatRooms.map((chatRoom) => (
             <ChatRoomContainer
               key={chatRoom.chat.id}
@@ -163,12 +164,16 @@ const MessagesContainer = styled.div<{ hide?: boolean }>`
   display: grid;
   grid-template-rows: max-content max-content 1fr;
   gap: 1.1rem;
+  height: 100%;
   width: 100%;
   ${({ hide }) =>
     hide === true &&
     css`
       display: none;
     `}
+  @media only screen and (min-width: 768px) {
+    border-right: 1px solid ${({ theme }) => theme.palette.common.grey};
+  }
 `;
 const ChatRoomContainer = styled.div<{ selected: boolean }>`
   width: 100%;
@@ -222,6 +227,9 @@ const RecentTextContainer = styled.div`
   }
   @media only screen and (min-width: 750px) {
     max-width: 600px;
+  }
+  @media only screen and (min-width: 768px) {
+    max-width: 140px;
   }
 `;
 export default Chats;

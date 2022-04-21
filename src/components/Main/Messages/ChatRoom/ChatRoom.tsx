@@ -77,7 +77,7 @@ const ChatRoom = ({ toggleModal }: IProps) => {
       <FlexContainer
         direction="column"
         padding="0rem 1rem 1rem 1rem"
-        overflowY="scroll"
+        maxHeight="100%"
       >
         <ChatMessagesContainer
           ref={messagesContainer}
@@ -89,7 +89,7 @@ const ChatRoom = ({ toggleModal }: IProps) => {
             console.log("ello");
           }}
         >
-          {selectedChat?.messages.map((message) => (
+          {[...selectedChat!.messages].reverse().map((message) => (
             <ChatMessage
               ownMessage={message.sentBy === user.id}
               key={message.id}
@@ -125,16 +125,15 @@ const ChatRoomContainer = styled.div`
   grid-template-rows: max-content 1fr;
   height: 100%;
   max-height: 100%;
-  overflow: scroll;
 `;
 const ChatMessagesContainer = styled.div`
   display: flex;
-  align-content: flex-end;
-  flex-flow: column nowrap;
+  flex-flow: column-reverse nowrap;
   gap: 1rem;
   overflow-y: scroll !important;
   flex-grow: 1;
   padding: 1rem 0rem;
+  height: 0px;
 `;
 const MessageTextArea = styled.textarea`
   font-size: 1.3rem;
