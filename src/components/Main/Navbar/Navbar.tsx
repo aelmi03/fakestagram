@@ -35,14 +35,16 @@ const Navbar = () => {
   }, []);
   return (
     <React.Fragment>
-      <NavbarWrapper
-        hide={width <= 768 && location.pathname.includes("search")}
-      >
-        {width <= 768 && location.pathname.includes("search") ? null : (
-          <NavbarHeading>Fakestagram</NavbarHeading>
-        )}
-        {width >= 768 ? <Search /> : null}
-        <Links toggleAddPostModal={toggleAddPostModal} />
+      <NavbarWrapper>
+        <NavbarContainer
+          hide={width <= 768 && location.pathname.includes("search")}
+        >
+          {width <= 768 && location.pathname.includes("search") ? null : (
+            <NavbarHeading>Fakestagram</NavbarHeading>
+          )}
+          {width >= 768 ? <Search /> : null}
+          <Links toggleAddPostModal={toggleAddPostModal} />
+        </NavbarContainer>
       </NavbarWrapper>
       {showAddPostModal ? (
         <AddPostModal toggleAddPostModal={toggleAddPostModal} />
@@ -50,15 +52,14 @@ const Navbar = () => {
     </React.Fragment>
   );
 };
-const NavbarWrapper = styled.nav<{ hide: boolean }>`
+const NavbarContainer = styled.nav<{ hide: boolean }>`
   display: grid;
   grid-template-columns: 1fr;
   justify-items: center;
   padding: 1rem 0rem;
   width: 100%;
-  border-bottom: 1px solid ${({ theme }) => theme.palette.common.grey};
-  background-color: ${({ theme }) => theme.palette.primaryLight};
-  z-index: 10;
+  max-width: 935px;
+  z-index: 25;
   ${({ hide }) =>
     hide === true &&
     css`
@@ -68,11 +69,22 @@ const NavbarWrapper = styled.nav<{ hide: boolean }>`
     grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
     gap: 3.5rem;
-    position: sticky;
-    top: 0;
   }
   @media only screen and (min-width: 1024px) {
     gap: 1rem;
+  }
+`;
+const NavbarWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 25;
+  border-bottom: 1px solid ${({ theme }) => theme.palette.common.grey};
+  background-color: ${({ theme }) => theme.palette.primaryLight};
+
+  @media only screen and (min-width: 1024px) {
+    position: sticky;
+    top: 0;
   }
 `;
 const NavbarHeading = styled(Heading)`

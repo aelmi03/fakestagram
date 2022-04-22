@@ -155,7 +155,7 @@ const EditProfileModal = ({ toggleEditProfileModal }: IProps) => {
 };
 
 const EditProfileForm = styled.form`
-  padding: 2rem 2rem 8rem 2rem;
+  padding: 2rem;
   display: grid;
   justify-items: center;
   width: min(95%, 700px);

@@ -187,6 +187,9 @@ const SelectedPostWrapper = styled.div`
   left: 0;
   bottom: 0;
   overflow: scroll;
+  @media only screen and (min-width: 768px) {
+    z-index: 30;
+  }
   z-index: 20;
 `;
 const ButtonsContainer = styled.div`
