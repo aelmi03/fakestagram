@@ -126,8 +126,18 @@ const Chats = ({ toggleModal, hide, smallerChatRoom }: IProps) => {
                     <RecentTextContainer>
                       <BasicText
                         fontSize="1.3rem"
-                        fontWeight="500"
-                        color="grey"
+                        fontWeight={
+                          chatRoom.recentMessage.read === false &&
+                          chatRoom.recentMessage.sentBy !== user.id
+                            ? "600"
+                            : "500"
+                        }
+                        color={
+                          chatRoom.recentMessage.read === false &&
+                          chatRoom.recentMessage.sentBy !== user.id
+                            ? "black"
+                            : "grey"
+                        }
                         ellipseText={true}
                       >
                         {chatRoom.recentMessage.content}

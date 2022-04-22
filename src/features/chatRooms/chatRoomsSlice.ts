@@ -9,7 +9,13 @@ export type Message = {
   content: string;
   sentBy: string;
 };
-export type RecentMessage = Message | null;
+export type RecentMessage = {
+  timestamp: string;
+  id: string;
+  content: string;
+  sentBy: string;
+  read: boolean;
+} | null;
 export type Chat = {
   id: string;
   members: string[];

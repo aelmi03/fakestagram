@@ -33,6 +33,7 @@ export const BasicText = styled.p<{
   ellipseText?: boolean;
   wrapText?: boolean;
   fadeText?: boolean;
+  cursor?: string;
 }>`
   font-family: ${({ theme }) => theme.primaryFont};
   color: ${({ theme }) => theme.palette.primary.contrastText};
@@ -48,6 +49,7 @@ export const BasicText = styled.p<{
     css`
       color: ${({ theme }) => theme.palette.secondary.main};
     `}
+    
   ${({ ellipseText }) =>
     ellipseText === true &&
     css`
@@ -64,6 +66,11 @@ export const BasicText = styled.p<{
     fadeText === true &&
     css`
       opacity: 0.5;
+    `}
+    ${({ cursor }) =>
+    cursor &&
+    css`
+      cursor: pointer;
     `}
 `;
 export const PostCommentText = styled(PostText)`

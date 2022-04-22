@@ -4,6 +4,8 @@ import { useAppDispatch, useAppSelector } from "../../../../app/hooks";
 import {
   changeSelectedChat,
   getSelectedChat,
+  RecentMessage,
+  Message,
 } from "../../../../features/chatRooms/chatRoomsSlice";
 import { BasicText } from "../../../utils/Texts";
 import {
@@ -43,18 +45,22 @@ const ChatRoom = ({ toggleModal }: IProps) => {
   };
   const sendMessage = async () => {
     if (messageValue.replace(/ /g, "").length === 0) return;
-    const newMessage = {
+    const newMessage: Message = {
       timestamp: new Date().toString(),
       id: nanoid(),
       content: messageValue,
       sentBy: user.id,
+    };
+    const recentMessage: RecentMessage = {
+      ...newMessage,
+      read: false,
     };
     console.log(selectedChat?.messages);
     const newMessages = [...selectedChat!.messages, newMessage];
     console.log(newMessages);
     const chatRoomDoc = doc(getFirestore(), `chatRooms/${selectedChat?.id}`);
     await updateDoc(chatRoomDoc, {
-      recentMessage: newMessage,
+      recentMessage,
       messages: newMessages,
     });
     setMessageValue("");
@@ -68,6 +74,22 @@ const ChatRoom = ({ toggleModal }: IProps) => {
     });
     console.log(messagesContainer.current);
   }, []);
+  useEffect(() => {
+    const changeRecentMessageStatus = async () => {
+      const chatRoomDoc = doc(getFirestore(), `chatRooms/${selectedChat!.id}`);
+      updateDoc(chatRoomDoc, {
+        recentMessage: {
+          ...selectedChat!.recentMessage,
+          read: true,
+        },
+      });
+    };
+    if (!selectedChat || selectedChat.recentMessage === null) return;
+    const recentMessage = selectedChat.recentMessage;
+    if (recentMessage.read === false && recentMessage.sentBy !== user.id) {
+      changeRecentMessageStatus();
+    }
+  }, [selectedChat, user.id]);
   return selectedChat ? (
     <ChatRoomContainer>
       <ReturnBack
@@ -114,6 +136,7 @@ const ChatRoom = ({ toggleModal }: IProps) => {
             fontSize="1.3rem"
             fadeText={messageValue.replace(/ /g, "").length === 0}
             onClick={() => sendMessage()}
+            cursor="pointer"
           >
             Send
           </BasicText>
