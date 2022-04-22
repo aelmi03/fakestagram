@@ -57,10 +57,19 @@ const Chats = ({ toggleModal, hide, smallerChatRoom }: IProps) => {
       console.log("chat rooms forrrreaallll");
       const newChatRooms = await Promise.all(
         [...chats]
-          .sort(
-            (a, b) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          )
+          .sort((a, b) => {
+            if (a.recentMessage && b.recentMessage) {
+              return (
+                new Date(b.recentMessage.timestamp).getTime() -
+                new Date(a.recentMessage.timestamp).getTime()
+              );
+            } else {
+              return (
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
+              );
+            }
+          })
           .map(async (chat) => {
             const otherUserID =
               chat.members[0] === user.id ? chat.members[1] : chat.members[0];

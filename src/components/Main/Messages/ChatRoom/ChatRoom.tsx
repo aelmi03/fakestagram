@@ -11,6 +11,7 @@ import { BasicText } from "../../../utils/Texts";
 import {
   selectAllUsers,
   selectUser,
+  User,
 } from "../../../../features/user/userSlice";
 import { nanoid } from "@reduxjs/toolkit";
 import { FiSend } from "react-icons/fi";
@@ -26,8 +27,10 @@ const ChatRoom = ({ toggleModal }: IProps) => {
   const selectedChat = useAppSelector(getSelectedChat);
   const user = useAppSelector(selectUser);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const messagesContainer = useRef<HTMLDivElement>(null);
   const allUsers = useAppSelector(selectAllUsers);
+
   const [messageValue, setMessageValue] = useState("");
   const getUserByID = (id: string) => {
     return allUsers.find((filteredUser) => filteredUser.id === id);
@@ -35,7 +38,9 @@ const ChatRoom = ({ toggleModal }: IProps) => {
   const unselectChat = () => {
     dispatch(changeSelectedChat(null));
   };
-
+  const onChatAccountClicked = (chatAccount: User) => {
+    navigate(`/profile/${chatAccount.id}`, { replace: true });
+  };
   const getOtherUser = () => {
     const otherUser =
       selectedChat?.members[0] === user.id
@@ -95,8 +100,9 @@ const ChatRoom = ({ toggleModal }: IProps) => {
       <ReturnBack
         staticPositioning={true}
         onClick={unselectChat}
-        profilePicture={`${getOtherUser()?.profilePicture}`}
+        user={getOtherUser()}
         name={`${getOtherUser()?.fullName}`}
+        onChatAccountClicked={onChatAccountClicked}
       />
       <FlexContainer
         direction="column"

@@ -4,20 +4,23 @@ import { IoIosArrowBack } from "react-icons/io";
 import FlexContainer from "./FlexContainer";
 import CircularUserImage from "./CircularUserImage";
 import { isEntityName } from "typescript";
+import { User } from "../../features/user/userSlice";
 
 interface IProps {
   name: string;
   onClick: () => void;
   staticPositioning?: boolean;
   onChatIconClick?: () => void;
-  profilePicture?: string;
+  user?: User;
+  onChatAccountClicked?: (chatAccount: User) => void;
 }
 const ReturnBack = ({
   name,
   onClick,
   onChatIconClick,
   staticPositioning,
-  profilePicture,
+  user,
+  onChatAccountClicked,
 }: IProps) => {
   return (
     <ReturnBackWrapper
@@ -26,15 +29,19 @@ const ReturnBack = ({
       onChatIconClick={onChatIconClick}
     >
       <IoIosArrowBack onClick={onClick} data-testid="Go back" />
-      {profilePicture ? (
+      {user && onChatAccountClicked ? (
         <FlexContainer
           direction="row"
           gap="0.9rem"
           alignItems="center"
           justifyContent="center"
           padding="0rem 1rem 0rem 0rem"
+          cursor="pointer"
+          width={"max-content"}
+          margin="0 auto"
+          onClick={() => onChatAccountClicked(user)}
         >
-          <CircularUserImage size="30px" src={profilePicture} />
+          <CircularUserImage size="30px" src={user.profilePicture} />
           <NameText margin={false}>{name}</NameText>
         </FlexContainer>
       ) : (
