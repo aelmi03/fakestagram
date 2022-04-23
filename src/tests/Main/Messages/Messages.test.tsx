@@ -1,12 +1,6 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { act } from "react-dom/test-utils";
 import { ThemeProvider } from "styled-components";
-import NewMessageModal from "../../../components/Main/Messages/NewMessageModal";
-import Chats from "../../../components/Main/Messages/Chats";
-import ChatRoom from "../../../components/Main/Messages/ChatRoom";
-import { useAppSelector } from "../../../app/hooks";
-import { User } from "../../../features/user/userSlice";
 import Theme from "../../../Themes/Theme";
 import Messages from "../../../components/Main/Messages";
 let mockSelectedChat: null | Object;

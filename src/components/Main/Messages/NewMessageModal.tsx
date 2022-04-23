@@ -13,9 +13,6 @@ import {
   addDoc,
   updateDoc,
   getDoc,
-  serverTimestamp,
-  Timestamp,
-  FieldValue,
 } from "firebase/firestore";
 import UserInfo from "../../utils/UserInfo";
 import { selectUser, User } from "../../../features/user/userSlice";
@@ -35,6 +32,7 @@ const NewMessageModal = ({ toggleModal }: IProps) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
   const createChatRoom = async (secondUser: User) => {
+    console.log("testingainsd");
     const chatRoom: Chat = {
       members: [user.id, secondUser.id],
       messages: [],
@@ -98,7 +96,7 @@ const NewMessageModal = ({ toggleModal }: IProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchValue]);
   return (
-    <ModalWrapper onClick={toggleModal}>
+    <ModalWrapper onClick={toggleModal} data-testid="Modal Wrapper">
       <NewMessageModalWrapper onClick={(e) => e.stopPropagation()}>
         <ReturnBack
           name="New Message"
@@ -118,10 +116,19 @@ const NewMessageModal = ({ toggleModal }: IProps) => {
             }}
           />
         </NewMessageInputContainer>
-        <FlexContainer direction="column" padding="0.5rem" overflowY="scroll">
-          {results.length !== 0 ? (
-            results.map((user) => (
-              <UserContainer key={user.id} onClick={() => onUserClick(user)}>
+        {results.length !== 0 ? (
+          <FlexContainer
+            direction="column"
+            padding="0.5rem"
+            overflowY="scroll"
+            data-testid="Users Container"
+          >
+            {results.map((user) => (
+              <UserContainer
+                key={user.id}
+                onClick={() => onUserClick(user)}
+                data-testid={user.id}
+              >
                 <UserInfo
                   user={user}
                   width={`${window.innerWidth}`}
@@ -129,15 +136,19 @@ const NewMessageModal = ({ toggleModal }: IProps) => {
                   onClick={() => {}}
                 />
               </UserContainer>
-            ))
-          ) : !searchValue ? (
-            <ResultsText>
-              You must enter a username above to see users.
-            </ResultsText>
-          ) : (
-            <ResultsText>No results found.</ResultsText>
-          )}
-        </FlexContainer>
+            ))}
+          </FlexContainer>
+        ) : (
+          <FlexContainer direction="column" padding="0.5rem">
+            {!searchValue ? (
+              <ResultsText>
+                You must enter a username above to see users.
+              </ResultsText>
+            ) : (
+              <ResultsText>No results found.</ResultsText>
+            )}
+          </FlexContainer>
+        )}
       </NewMessageModalWrapper>
     </ModalWrapper>
   );

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import App from "../App";
 import { Provider } from "react-redux";
 import { store } from "../app/store";
@@ -33,6 +33,10 @@ jest.mock("firebase/firestore", () => {
   return {
     getFirestore: jest.fn(),
     doc: jest.fn(),
+    collection: jest.fn(),
+    where: jest.fn(),
+    getDocs: jest.fn(),
+    query: jest.fn(),
     onSnapshot: jest.fn(
       (firstArg: any, func: (arg: mockArguementType) => void) => {
         func({ data: () => mockUser });
@@ -77,12 +81,13 @@ describe("App component", () => {
   });
   it("Sets the user in the redux store if the useAuthState doesn't return null", async () => {
     mockAuthUserValue = "value is not null";
-    render(
-      <Provider store={store}>
-        <App />
-      </Provider>
-    );
-    await new Promise((resolve) => setTimeout(resolve, 200));
+    await act(async () => {
+      render(
+        <Provider store={store}>
+          <App />
+        </Provider>
+      );
+    });
     expect(store.getState().user).toEqual(mockUser);
   });
 });
