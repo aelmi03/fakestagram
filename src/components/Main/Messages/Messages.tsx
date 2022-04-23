@@ -37,7 +37,7 @@ const Messages = () => {
       ) : null}
       {width >= 768 ? (
         <React.Fragment>
-          <Chats toggleModal={toggleModal} smallerChatRoom={true} />{" "}
+          <Chats toggleModal={toggleModal} />{" "}
           <ChatRoom toggleModal={toggleModal} />
         </React.Fragment>
       ) : null}

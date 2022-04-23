@@ -31,14 +31,13 @@ import { formatDistanceToNow } from "date-fns";
 interface IProps {
   toggleModal: () => void;
   hide?: boolean;
-  smallerChatRoom?: boolean;
 }
 interface ChatRoom {
   otherUser: User;
   recentMessage: RecentMessage;
   chat: Chat;
 }
-const Chats = ({ toggleModal, hide, smallerChatRoom }: IProps) => {
+const Chats = ({ toggleModal, hide }: IProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);

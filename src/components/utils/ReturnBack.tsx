@@ -26,7 +26,7 @@ const ReturnBack = ({
     <ReturnBackWrapper
       data-testid="Return Back Wrapper"
       staticPositioning={staticPositioning}
-      onChatIconClick={onChatIconClick}
+      chatIconClick={onChatIconClick}
     >
       <IoIosArrowBack onClick={onClick} data-testid="Go back" />
       {user && onChatAccountClicked ? (
@@ -53,7 +53,7 @@ const ReturnBack = ({
 };
 const ReturnBackWrapper = styled.div<{
   staticPositioning?: boolean;
-  onChatIconClick?: () => void;
+  chatIconClick?: () => void;
 }>`
   width: 100%;
   padding: 1.3rem 1.6rem;
@@ -71,8 +71,8 @@ const ReturnBackWrapper = styled.div<{
     width: 25px;
     cursor: pointer;
   }
-  ${({ onChatIconClick }) =>
-    onChatIconClick &&
+  ${({ chatIconClick }) =>
+    chatIconClick &&
     css`
       p {
         margin-left: 20px;
