@@ -19,14 +19,7 @@ import {
   User,
   selectAllUsers,
 } from "../../../../features/user/userSlice";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  getFirestore,
-  query,
-} from "firebase/firestore";
+
 import { formatDistanceToNow } from "date-fns";
 interface IProps {
   toggleModal: () => void;

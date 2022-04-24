@@ -3,7 +3,6 @@ import userEvent from "@testing-library/user-event";
 import { act } from "react-dom/test-utils";
 import { ThemeProvider } from "styled-components";
 import NewMessageModal from "../../../components/Main/Messages/NewMessageModal";
-import { useAppSelector } from "../../../app/hooks";
 import { Provider } from "react-redux";
 import { store } from "../../../app/store";
 import { addDoc } from "firebase/firestore";
@@ -120,6 +119,12 @@ describe("NewMessageModal Component", () => {
     expect(
       screen.getByText("You must enter a username above to see users.")
     ).toBeInTheDocument();
+  });
+  it("shows text saying there are no results if there is no user with a username that matches the input", async () => {
+    await act(async () => {
+      userEvent.type(screen.getByLabelText("To:"), "z");
+    });
+    expect(screen.getByText("No results found.")).toBeInTheDocument();
   });
   it("will properly filter the shown users based on their usernames so the shown users will have usernames that start with the input value, and won't show any users if the input value is empty", async () => {
     expect(screen.queryByTestId("Users Container")).not.toBeInTheDocument();
