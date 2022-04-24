@@ -74,9 +74,6 @@ jest.mock("react-router-dom", () => {
 jest.mock("../../../../features/chatRooms/chatRoomsSlice", () => {
   return {
     ...jest.requireActual("../../../../features/chatRooms/chatRoomsSlice"),
-
-    default: jest.requireActual("../../../../features/chatRooms/chatRoomsSlice")
-      .default,
     selectChats: () => mockChats,
     __esModule: true,
   };
@@ -85,8 +82,6 @@ jest.mock("../../../../features/chatRooms/chatRoomsSlice", () => {
 jest.mock("../../../../features/user/userSlice", () => {
   return {
     ...jest.requireActual("../../../../features/user/userSlice"),
-    default: jest.requireActual("../../../../features/chatRooms/chatRoomsSlice")
-      .default,
     selectAllUsers: () => mockUsers,
     selectUser: () => mockUser,
     __esModule: true,
@@ -183,6 +178,10 @@ describe("Chats Component", () => {
         </Provider>
       </ThemeProvider>
     );
+    expect(
+      screen.queryByRole("button", { name: "Start a Message" })
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText("No Messages")).not.toBeInTheDocument();
     expect(screen.getByTestId("Chats Container").children.length).toBe(2);
   });
   it("renders the correct information for each chat, and will show the recent message information if it is not null", () => {
