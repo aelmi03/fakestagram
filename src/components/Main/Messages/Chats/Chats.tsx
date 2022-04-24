@@ -45,43 +45,41 @@ const Chats = ({ toggleModal, hide }: IProps) => {
     dispatch(changeSelectedChat(clickedChatRoom.chat));
   };
   useEffect(() => {
-    const initializeChatRooms = async () => {
+    const initializeChatRooms = () => {
       console.log("chat rooms forrrreaallll");
-      const newChatRooms = await Promise.all(
-        [...chats]
-          .sort((a, b) => {
-            if (a.recentMessage && b.recentMessage) {
-              return (
-                new Date(b.recentMessage.timestamp).getTime() -
-                new Date(a.recentMessage.timestamp).getTime()
-              );
-            } else {
-              return (
-                new Date(b.createdAt).getTime() -
-                new Date(a.createdAt).getTime()
-              );
-            }
-          })
-          .map(async (chat) => {
-            const otherUserID =
-              chat.members[0] === user.id ? chat.members[1] : chat.members[0];
-            const otherUser = getOtherUser(otherUserID);
-            if (
-              selectedChat &&
-              chat.id === selectedChat.id &&
-              selectedChat?.messages.length !== chat.messages.length
-            ) {
-              console.log("chat matched");
-              dispatch(changeSelectedChat(chat));
-            }
-            const chatRoom: ChatRoom = {
-              otherUser,
-              recentMessage: chat.recentMessage,
-              chat,
-            };
-            return chatRoom;
-          })
-      );
+      const newChatRooms = [...chats]
+        .sort((a, b) => {
+          if (a.recentMessage && b.recentMessage) {
+            return (
+              new Date(b.recentMessage.timestamp).getTime() -
+              new Date(a.recentMessage.timestamp).getTime()
+            );
+          } else {
+            return (
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+            );
+          }
+        })
+        .map((chat) => {
+          const otherUserID =
+            chat.members[0] === user.id ? chat.members[1] : chat.members[0];
+          const otherUser = getOtherUser(otherUserID);
+          if (
+            selectedChat &&
+            chat.id === selectedChat.id &&
+            selectedChat?.messages.length !== chat.messages.length
+          ) {
+            console.log("chat matched");
+            dispatch(changeSelectedChat(chat));
+          }
+          const chatRoom: ChatRoom = {
+            otherUser,
+            recentMessage: chat.recentMessage,
+            chat,
+          };
+          return chatRoom;
+        });
+
       setChatRooms(newChatRooms);
     };
     initializeChatRooms();
@@ -89,7 +87,7 @@ const Chats = ({ toggleModal, hide }: IProps) => {
   }, [chats]);
 
   return (
-    <MessagesContainer hide={hide}>
+    <MessagesContainer hide={hide} data-testid="Chats Wrapper">
       <ReturnBack
         staticPositioning={true}
         onClick={() => navigate("/home", { replace: true })}
@@ -102,16 +100,22 @@ const Chats = ({ toggleModal, hide }: IProps) => {
         </BasicText>
       </FlexContainer>
       {chats.length !== 0 ? (
-        <FlexContainer direction="column" overflowY="scroll">
+        <FlexContainer
+          direction="column"
+          overflowY="scroll"
+          data-testid="Chats Container"
+        >
           {chatRooms.map((chatRoom) => (
             <ChatRoomContainer
               key={chatRoom.chat.id}
+              data-testid={`${chatRoom.chat.id}`}
               selected={chatRoom.chat.id === selectedChat?.id}
               onClick={() => onChatRoomClick(chatRoom)}
             >
               <CircularUserImage
                 size="56px"
                 src={chatRoom.otherUser.profilePicture}
+                data-testid="Profile Picture"
               />
               <FlexContainer direction="column" gap="0.2rem">
                 <BasicText fontSize="1.3rem" fontWeight="500">

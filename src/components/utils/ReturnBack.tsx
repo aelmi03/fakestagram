@@ -47,7 +47,9 @@ const ReturnBack = ({
       ) : (
         <NameText>{name}</NameText>
       )}
-      {onChatIconClick ? <FaRegEdit onClick={onChatIconClick} /> : null}
+      {onChatIconClick ? (
+        <FaRegEdit onClick={onChatIconClick} data-testid="Chat Icon" />
+      ) : null}
     </ReturnBackWrapper>
   );
 };
