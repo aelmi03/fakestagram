@@ -39,6 +39,7 @@ const ReturnBack = ({
           cursor="pointer"
           width={"max-content"}
           margin="0 auto"
+          data-testid="Profile Picture and Username Container"
           onClick={() => onChatAccountClicked(user)}
         >
           <CircularUserImage size="30px" src={user.profilePicture} />

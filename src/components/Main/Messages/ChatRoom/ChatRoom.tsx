@@ -96,7 +96,7 @@ const ChatRoom = ({ toggleModal }: IProps) => {
     }
   }, [selectedChat, user.id]);
   return selectedChat ? (
-    <ChatRoomContainer>
+    <ChatRoomContainer data-testid="ChatRoom Container">
       <ReturnBack
         staticPositioning={true}
         onClick={unselectChat}
@@ -111,6 +111,7 @@ const ChatRoom = ({ toggleModal }: IProps) => {
       >
         <ChatMessagesContainer
           ref={messagesContainer}
+          data-testid="ChatMessages Container"
           onClick={() => {
             messagesContainer?.current?.scrollIntoView({
               behavior: "smooth",
@@ -123,6 +124,7 @@ const ChatRoom = ({ toggleModal }: IProps) => {
             <ChatMessage
               ownMessage={message.sentBy === user.id}
               key={message.id}
+              data-testid={message.id}
             >
               {message.content}
             </ChatMessage>
@@ -150,7 +152,7 @@ const ChatRoom = ({ toggleModal }: IProps) => {
       </FlexContainer>
     </ChatRoomContainer>
   ) : (
-    <NoSelectedChatContainer>
+    <NoSelectedChatContainer data-testid="NoSelectedChat Container">
       <IconContainer>
         <FiSend />
       </IconContainer>
