@@ -28,19 +28,7 @@ export const userSlice = createSlice({
     },
   },
 });
-export const usersSlice = createSlice({
-  name: "users",
-  initialState: [] as User[],
-  reducers: {
-    setUsers(state, action: PayloadAction<User[]>) {
-      return action.payload;
-    },
-  },
-});
 
-export const selectAllUsers = (state: RootState) => state.users;
-export const { setUsers } = usersSlice.actions;
 export const selectUser = (state: RootState) => state.user;
 export const { setUser } = userSlice.actions;
 export default userSlice.reducer;
-export const usersReducer = usersSlice.reducer;

@@ -14,11 +14,8 @@ import {
 } from "../../../../features/chatRooms/chatRoomsSlice";
 import Button from "../../../utils/Button";
 import { useEffect, useState } from "react";
-import {
-  selectUser,
-  User,
-  selectAllUsers,
-} from "../../../../features/user/userSlice";
+import { selectUser, User } from "../../../../features/user/userSlice";
+import { selectAllUsers } from "../../../../features/users/usersSlice";
 
 import { formatDistanceToNow } from "date-fns";
 interface IProps {

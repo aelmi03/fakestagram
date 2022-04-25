@@ -70,8 +70,14 @@ jest.mock("../../../../features/chatRooms/chatRoomsSlice", () => {
 jest.mock("../../../../features/user/userSlice", () => {
   return {
     ...jest.requireActual("../../../../features/user/userSlice"),
-    selectAllUsers: () => [mockOtherUser],
     selectUser: () => mockUser,
+    __esModule: true,
+  };
+});
+jest.mock("../../../../features/users/usersSlice", () => {
+  return {
+    ...jest.requireActual("../../../../features/users/usersSlice"),
+    selectAllUsers: () => [mockOtherUser],
     __esModule: true,
   };
 });

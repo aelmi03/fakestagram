@@ -8,11 +8,8 @@ import {
   Message,
 } from "../../../../features/chatRooms/chatRoomsSlice";
 import { BasicText } from "../../../utils/Texts";
-import {
-  selectAllUsers,
-  selectUser,
-  User,
-} from "../../../../features/user/userSlice";
+import { selectUser, User } from "../../../../features/user/userSlice";
+import { selectAllUsers } from "../../../../features/users/usersSlice";
 import { nanoid } from "@reduxjs/toolkit";
 import { FiSend } from "react-icons/fi";
 import ReturnBack from "../../../utils/ReturnBack";
