@@ -3,7 +3,6 @@ import { FaRegEdit } from "react-icons/fa";
 import { IoIosArrowBack } from "react-icons/io";
 import FlexContainer from "./FlexContainer";
 import CircularUserImage from "./CircularUserImage";
-import { isEntityName } from "typescript";
 import { User } from "../../features/user/userSlice";
 
 interface IProps {

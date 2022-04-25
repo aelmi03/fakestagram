@@ -11,8 +11,7 @@ import {
 } from "../../../../features/chatRooms/chatRoomsSlice";
 import { store } from "../../../../app/store";
 import ChatRoom from "../../../../components/Main/Messages/ChatRoom";
-import { nanoid } from "@reduxjs/toolkit";
-import { doc, getFirestore, updateDoc } from "firebase/firestore";
+import { updateDoc } from "firebase/firestore";
 import { User } from "../../../../features/user/userSlice";
 const mockUser: User = {
   fullName: "John Doe",
