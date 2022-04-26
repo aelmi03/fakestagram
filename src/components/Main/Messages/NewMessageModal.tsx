@@ -4,23 +4,11 @@ import FlexContainer from "../../utils/FlexContainer";
 import ModalWrapper from "../../utils/ModalWrapper";
 import ReturnBack from "../../utils/ReturnBack";
 import { useAppDispatch } from "../../../app/hooks";
-import {
-  query,
-  collection,
-  getFirestore,
-  getDocs,
-  where,
-  addDoc,
-  updateDoc,
-  getDoc,
-} from "firebase/firestore";
+import { query, collection, getFirestore, getDocs } from "firebase/firestore";
 import { messageUser } from "../../utils/utilityFunctions";
 import UserInfo from "../../utils/UserInfo";
 import { selectUser, User } from "../../../features/user/userSlice";
-import {
-  changeSelectedChat,
-  Chat,
-} from "../../../features/chatRooms/chatRoomsSlice";
+import {} from "../../../features/chatRooms/chatRoomsSlice";
 import { PostGreyText } from "../../utils/Texts";
 import { useAppSelector } from "../../../app/hooks";
 interface IProps {

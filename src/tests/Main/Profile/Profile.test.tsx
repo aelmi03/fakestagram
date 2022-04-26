@@ -1,6 +1,6 @@
 import userEvent from "@testing-library/user-event";
 import { act, render, screen } from "@testing-library/react";
-import { Timestamp } from "firebase/firestore";
+import { Timestamp, addDoc } from "firebase/firestore";
 import Post from "../../../components/utils/PostInterface";
 import { User } from "../../../features/user/userSlice";
 import Profile from "../../../components/Main/Profile";
@@ -10,6 +10,7 @@ import { Provider } from "react-redux";
 import { store } from "../../../app/store";
 import { updateFollowing } from "../../../components/utils/utilityFunctions";
 import { signOut } from "firebase/auth";
+import { Chat, Message } from "../../../features/chatRooms/chatRoomsSlice";
 
 let mockUser: User;
 let mockProfileUser: User;
@@ -24,10 +25,25 @@ let mockPost: Post = {
   id: "fakePostID",
   imgSrc: "fakeImgSrc",
 };
+let mockChat: Chat = {
+  messages: [] as Message[],
+  members: ["randomFirstUser", "randomSecondUser"],
+  recentMessage: null,
+  createdAt: new Date("2022-09-26T00:00:00.000Z").toString(),
+  id: "123",
+};
 type mockProps = {
   changePostToShow: (post: Post | null) => void;
   post?: Post;
 };
+let mockChats = {
+  docs: [
+    {
+      data: () => mockChat,
+    },
+  ],
+};
+
 jest.mock("../../../components/Main/Profile/ProfilePosts", () => {
   return ({ changePostToShow }: mockProps) => (
     <div onClick={() => changePostToShow(mockPost)}>
@@ -96,8 +112,23 @@ jest.mock("firebase/firestore", () => {
       }
     ),
     doc: jest.fn(),
+    getDocs: async () => mockChats,
+    getDoc: () => {
+      return { data: () => mockChat };
+    },
+
+    where: jest.fn(),
+    addDoc: jest.fn().mockReturnValue({ id: "random" }),
+    updateDoc: jest.fn(),
+    collection: jest.fn(),
+    query: jest.fn(),
   };
 });
+const mockDate = new Date("2022-09-26T00:00:00.000Z");
+let spy = jest.spyOn(global, "Date").mockImplementation((): any => {
+  return mockDate;
+});
+Date.now = jest.fn();
 jest.mock("../../../app/hooks", () => {
   return {
     ...jest.requireActual("../../../app/hooks"),
@@ -131,6 +162,9 @@ describe("Profile Component", () => {
   });
   afterEach(() => {
     jest.clearAllMocks();
+  });
+  afterAll(() => {
+    spy.mockRestore();
   });
   it("renders an Edit Profile, and Log Out button if the user is viewing their own profile", async () => {
     mockProfileUser.id = "fakeUserID";
@@ -257,6 +291,48 @@ describe("Profile Component", () => {
     expect(signOut).toHaveBeenCalledTimes(0);
     userEvent.click(screen.getByRole("button", { name: "Log out" }));
     expect(signOut).toHaveBeenCalledTimes(1);
+  });
+  it("will change the selected chat in the redux store when the Message button is clicked to the that already exists if the user has previously messaged the profile user's account", async () => {
+    await act(async () => {
+      render(
+        <ThemeProvider theme={Theme}>
+          <Provider store={store}>
+            <Profile />
+          </Provider>
+        </ThemeProvider>
+      );
+    });
+    await act(async () => {
+      userEvent.click(screen.getByRole("button", { name: "Message" }));
+    });
+    expect(addDoc as jest.Mock).toHaveBeenCalledTimes(0);
+    expect(store.getState().chatRooms.selectedChat).toEqual(mockChat);
+  });
+  it("it will update the firebase database and change the selected chat in the redux store when the Message button is clicked to the one that was newly created", async () => {
+    mockChats = {
+      docs: [],
+    };
+    await act(async () => {
+      render(
+        <ThemeProvider theme={Theme}>
+          <Provider store={store}>
+            <Profile />
+          </Provider>
+        </ThemeProvider>
+      );
+    });
+    await act(async () => {
+      userEvent.click(screen.getByRole("button", { name: "Message" }));
+    });
+    expect(addDoc as jest.Mock).toHaveBeenCalledTimes(1);
+    expect((addDoc as jest.Mock).mock.calls[0][1]).toEqual({
+      createdAt: new Date().toString(),
+      id: "",
+      members: [mockUser.id, mockProfileUser.id],
+      messages: [],
+      recentMessage: null,
+    });
+    expect(store.getState().chatRooms.selectedChat).toEqual(mockChat);
   });
   it("calls the updateFollowing function from the utilityFunctions file when the Follow button is clicked", async () => {
     await act(async () => {
