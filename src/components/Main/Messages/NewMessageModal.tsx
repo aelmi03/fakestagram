@@ -14,6 +14,7 @@ import {
   updateDoc,
   getDoc,
 } from "firebase/firestore";
+import { messageUser } from "../../utils/utilityFunctions";
 import UserInfo from "../../utils/UserInfo";
 import { selectUser, User } from "../../../features/user/userSlice";
 import {
@@ -31,38 +32,9 @@ const NewMessageModal = ({ toggleModal }: IProps) => {
   const [results, setResults] = useState<User[]>([]);
   const dispatch = useAppDispatch();
   const user = useAppSelector(selectUser);
-  const createChatRoom = async (secondUser: User) => {
-    console.log("testingainsd");
-    const chatRoom: Chat = {
-      members: [user.id, secondUser.id],
-      messages: [],
-      createdAt: new Date().toString(),
-      recentMessage: null,
-      id: "",
-    };
-    const chatRoomDoc = await addDoc(
-      collection(getFirestore(), "chatRooms"),
-      chatRoom
-    );
-    updateDoc(chatRoomDoc, {
-      id: chatRoomDoc.id,
-    });
-    const chatRoomData = (await getDoc(chatRoomDoc)).data() as Chat;
-    return chatRoomData;
-  };
+
   const onUserClick = async (clickedUser: User) => {
-    const chatRoomQuery = query(
-      collection(getFirestore(), "chatRooms"),
-      where("members", "in", [[user.id, clickedUser.id]])
-    );
-    const chatRoomDoc = await getDocs(chatRoomQuery);
-    console.log(chatRoomDoc.docs.length);
-    if (chatRoomDoc.docs.length === 0) {
-      const chatRoom = await createChatRoom(clickedUser);
-      dispatch(changeSelectedChat(chatRoom));
-    } else {
-      dispatch(changeSelectedChat(chatRoomDoc.docs[0].data() as Chat));
-    }
+    await messageUser(user, clickedUser, dispatch);
     toggleModal();
   };
   useEffect(() => {

@@ -41,7 +41,7 @@ const ReturnBack = ({
           data-testid="Profile Picture and Username Container"
           onClick={() => onChatAccountClicked(user)}
         >
-          <CircularUserImage size="30px" src={user.profilePicture} />
+          <AccountImage size="30px" src={user.profilePicture} />
           <NameText margin={false}>{name}</NameText>
         </FlexContainer>
       ) : (
@@ -103,6 +103,13 @@ const ReturnBackWrapper = styled.div<{
         justify-items: center;
       }
     `}
+`;
+const AccountImage = styled(CircularUserImage)`
+  @media only screen and (min-width: 540px) {
+    width: 45px;
+    height: 45px;
+    min-width: 45px;
+  }
 `;
 const NameText = styled.p<{ margin?: boolean }>`
   font-family: ${({ theme }) => theme.primaryFont};

@@ -6,7 +6,8 @@ import { User } from "../../../features/user/userSlice";
 import Profile from "../../../components/Main/Profile";
 import { ThemeProvider } from "styled-components";
 import Theme from "../../../Themes/Theme";
-
+import { Provider } from "react-redux";
+import { store } from "../../../app/store";
 import { updateFollowing } from "../../../components/utils/utilityFunctions";
 import { signOut } from "firebase/auth";
 
@@ -50,6 +51,7 @@ jest.mock("../../../components/Main/Posts/StandardPost", () => {
     </div>
   );
 });
+
 jest.mock("../../../components/Main/Profile/EditProfileModal", () => {
   type mockEditProfileProps = {
     toggleEditProfileModal: () => void;
@@ -98,9 +100,12 @@ jest.mock("firebase/firestore", () => {
 });
 jest.mock("../../../app/hooks", () => {
   return {
+    ...jest.requireActual("../../../app/hooks"),
     useAppSelector: () => mockUser,
   };
 });
+let mockNavigateFunction = jest.fn();
+
 jest.mock("react-router-dom", () => {
   return {
     useParams: jest.fn(() => {
@@ -108,6 +113,7 @@ jest.mock("react-router-dom", () => {
         userID: "randomUserID",
       };
     }),
+    useNavigate: () => mockNavigateFunction,
   };
 });
 describe("Profile Component", () => {
@@ -131,7 +137,9 @@ describe("Profile Component", () => {
     await act(async () => {
       render(
         <ThemeProvider theme={Theme}>
-          <Profile />
+          <Provider store={store}>
+            <Profile />
+          </Provider>
         </ThemeProvider>
       );
     });
@@ -142,7 +150,9 @@ describe("Profile Component", () => {
     await act(async () => {
       render(
         <ThemeProvider theme={Theme}>
-          <Profile />
+          <Provider store={store}>
+            <Profile />
+          </Provider>
         </ThemeProvider>
       );
     });
@@ -156,7 +166,9 @@ describe("Profile Component", () => {
     await act(async () => {
       render(
         <ThemeProvider theme={Theme}>
-          <Profile />
+          <Provider store={store}>
+            <Profile />
+          </Provider>
         </ThemeProvider>
       );
     });
@@ -175,7 +187,9 @@ describe("Profile Component", () => {
     await act(async () => {
       render(
         <ThemeProvider theme={Theme}>
-          <Profile />
+          <Provider store={store}>
+            <Profile />
+          </Provider>
         </ThemeProvider>
       );
     });
@@ -189,7 +203,9 @@ describe("Profile Component", () => {
     await act(async () => {
       render(
         <ThemeProvider theme={Theme}>
-          <Profile />
+          <Provider store={store}>
+            <Profile />
+          </Provider>
         </ThemeProvider>
       );
     });
@@ -211,7 +227,9 @@ describe("Profile Component", () => {
     await act(async () => {
       render(
         <ThemeProvider theme={Theme}>
-          <Profile />
+          <Provider store={store}>
+            <Profile />
+          </Provider>
         </ThemeProvider>
       );
     });
@@ -230,7 +248,9 @@ describe("Profile Component", () => {
     await act(async () => {
       render(
         <ThemeProvider theme={Theme}>
-          <Profile />
+          <Provider store={store}>
+            <Profile />
+          </Provider>
         </ThemeProvider>
       );
     });
@@ -242,7 +262,9 @@ describe("Profile Component", () => {
     await act(async () => {
       render(
         <ThemeProvider theme={Theme}>
-          <Profile />
+          <Provider store={store}>
+            <Profile />
+          </Provider>
         </ThemeProvider>
       );
     });
@@ -257,7 +279,9 @@ describe("Profile Component", () => {
     await act(async () => {
       render(
         <ThemeProvider theme={Theme}>
-          <Profile />
+          <Provider store={store}>
+            <Profile />
+          </Provider>
         </ThemeProvider>
       );
     });
@@ -271,7 +295,9 @@ describe("Profile Component", () => {
     await act(async () => {
       render(
         <ThemeProvider theme={Theme}>
-          <Profile />
+          <Provider store={store}>
+            <Profile />
+          </Provider>
         </ThemeProvider>
       );
     });
@@ -297,7 +323,9 @@ describe("Profile Component", () => {
     await act(async () => {
       render(
         <ThemeProvider theme={Theme}>
-          <Profile />
+          <Provider store={store}>
+            <Profile />
+          </Provider>
         </ThemeProvider>
       );
     });

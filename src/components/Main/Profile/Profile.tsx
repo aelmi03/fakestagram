@@ -1,16 +1,17 @@
 import styled, { css } from "styled-components";
 import { selectUser, User } from "../../../features/user/userSlice";
-import { useAppSelector } from "../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import ProfilePosts from "./ProfilePosts";
 import EditProfileModal from "./EditProfileModal";
 import React, { useState, useEffect } from "react";
 import { getAuth, signOut } from "firebase/auth";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { doc, getFirestore, onSnapshot, Unsubscribe } from "firebase/firestore";
 import {
   followsOtherUser,
   getFollowers,
   getProfileUserPosts,
+  messageUser,
   updateFollowing,
 } from "../../utils/utilityFunctions";
 import Post from "../../utils/PostInterface";
@@ -25,8 +26,13 @@ const Profile = () => {
   const [postToShow, setPostToShow] = useState<null | Post>(null);
   const [followersCount, setFollowersCount] = useState(0);
   const [postsCount, setPostsCount] = useState(0);
+  const dispatch = useAppDispatch();
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
-
+  const navigate = useNavigate();
+  const onMessageClicked = async (clickedUser: User) => {
+    await messageUser(user, clickedUser, dispatch);
+    navigate("/chats");
+  };
   const changePostToShow = (post: Post | null) => {
     setPostToShow(post);
   };
@@ -121,7 +127,9 @@ const Profile = () => {
                       ? "Following"
                       : "Follow"}
                   </ProfileButton>
-                  <ProfileButton>Message</ProfileButton>
+                  <ProfileButton onClick={() => onMessageClicked(profileUser)}>
+                    Message
+                  </ProfileButton>
                 </React.Fragment>
               )}
             </ButtonsContainer>

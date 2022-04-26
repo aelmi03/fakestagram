@@ -8,9 +8,16 @@ import {
   collection,
   where,
   getDocs,
+  getDoc,
   DocumentData,
+  addDoc,
 } from "firebase/firestore";
 import { User } from "../../features/user/userSlice";
+import {
+  changeSelectedChat,
+  Chat,
+} from "../../features/chatRooms/chatRoomsSlice";
+import { useAppDispatch } from "../../app/hooks";
 import Post from "./PostInterface";
 export const checkEquality = (left: any, right: any) => {
   let areEqual = true;
@@ -93,4 +100,42 @@ export const getProfileUserPosts = async (profileUser: User) => {
     (doc: DocumentData) => doc.data() as Post
   );
   return posts;
+};
+
+export const createChatRoom = async (user: User, secondUser: User) => {
+  console.log("testingainsd");
+  const chatRoom: Chat = {
+    members: [user.id, secondUser.id],
+    messages: [],
+    createdAt: new Date().toString(),
+    recentMessage: null,
+    id: "",
+  };
+  const chatRoomDoc = await addDoc(
+    collection(getFirestore(), "chatRooms"),
+    chatRoom
+  );
+  updateDoc(chatRoomDoc, {
+    id: chatRoomDoc.id,
+  });
+  const chatRoomData = (await getDoc(chatRoomDoc)).data() as Chat;
+  return chatRoomData;
+};
+export const messageUser = async (
+  user: User,
+  clickedUser: User,
+  dispatch: ReturnType<typeof useAppDispatch>
+) => {
+  const chatRoomQuery = query(
+    collection(getFirestore(), "chatRooms"),
+    where("members", "in", [[user.id, clickedUser.id]])
+  );
+  const chatRoomDoc = await getDocs(chatRoomQuery);
+  console.log(chatRoomDoc.docs.length);
+  if (chatRoomDoc.docs.length === 0) {
+    const chatRoom = await createChatRoom(user, clickedUser);
+    dispatch(changeSelectedChat(chatRoom));
+  } else {
+    dispatch(changeSelectedChat(chatRoomDoc.docs[0].data() as Chat));
+  }
 };
