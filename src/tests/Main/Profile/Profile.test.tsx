@@ -10,6 +10,8 @@ import { Provider } from "react-redux";
 import { store } from "../../../app/store";
 import { updateFollowing } from "../../../components/utils/utilityFunctions";
 import { signOut } from "firebase/auth";
+import { selectAllUsers } from "../../../features/users/usersSlice";
+import { selectUser } from "../../../features/user/userSlice";
 import { Chat, Message } from "../../../features/chatRooms/chatRoomsSlice";
 
 let mockUser: User;
@@ -46,7 +48,12 @@ let mockChats = {
 
 jest.mock("../../../components/Main/Profile/ProfilePosts", () => {
   return ({ changePostToShow }: mockProps) => (
-    <div onClick={() => changePostToShow(mockPost)}>
+    <div
+      onClick={() => {
+        console.log("PROFILE POST MOCKED", mockPost);
+        changePostToShow(mockPost);
+      }}
+    >
       Profile Posts Component
     </div>
   );
@@ -67,7 +74,9 @@ jest.mock("../../../components/Main/Posts/StandardPost", () => {
     </div>
   );
 });
-
+const mockUseParamsValue = {
+  userID: "randomUserID",
+};
 jest.mock("../../../components/Main/Profile/EditProfileModal", () => {
   type mockEditProfileProps = {
     toggleEditProfileModal: () => void;
@@ -96,7 +105,18 @@ jest.mock("firebase/auth", () => {
     signOut: jest.fn(),
   };
 });
-
+jest.mock("../../../features/users/usersSlice", () => {
+  return {
+    ...jest.requireActual("../../../features/users/usersSlice"),
+    selectAllUsers: () => [mockProfileUser],
+  };
+});
+jest.mock("../../../features/user/userSlice", () => {
+  return {
+    ...jest.requireActual("../../../features/user/userSlice"),
+    selectUser: () => mockUser,
+  };
+});
 jest.mock("firebase/firestore", () => {
   type mockSnapshotArguement = {
     data: () => typeof mockUser;
@@ -132,18 +152,14 @@ Date.now = jest.fn();
 jest.mock("../../../app/hooks", () => {
   return {
     ...jest.requireActual("../../../app/hooks"),
-    useAppSelector: () => mockUser,
+    useAppSelector: (func: () => void) => func(),
   };
 });
 let mockNavigateFunction = jest.fn();
 
 jest.mock("react-router-dom", () => {
   return {
-    useParams: jest.fn(() => {
-      return {
-        userID: "randomUserID",
-      };
-    }),
+    useParams: jest.fn(() => mockUseParamsValue),
     useNavigate: () => mockNavigateFunction,
   };
 });

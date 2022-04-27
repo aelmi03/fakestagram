@@ -35,6 +35,7 @@ const Profile = () => {
     await messageUser(user, clickedUser, dispatch);
     navigate("/chats");
   };
+  console.log(postToShow);
   const changePostToShow = (post: Post | null) => {
     setPostToShow(post);
   };

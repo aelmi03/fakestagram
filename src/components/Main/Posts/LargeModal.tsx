@@ -70,6 +70,7 @@ const LargeModal = React.memo(
                   onClick={() =>
                     navigate(`/profile/${postUser.id}`, { replace: true })
                   }
+                  data-testid="Post User"
                 >
                   <CircularUserImage
                     src={postUser.profilePicture}

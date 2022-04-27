@@ -30,6 +30,14 @@ let mockPost: Post = {
 };
 
 type fakeComment = { content: string };
+let mockNavigateFunction = jest.fn();
+jest.mock("react-router-dom", () => {
+  return {
+    useNavigate: jest.fn(() => {
+      return mockNavigateFunction;
+    }),
+  };
+});
 jest.mock("date-fns", () => {
   return { formatDistanceToNow: () => "2h" };
 });
@@ -137,5 +145,24 @@ describe("Large Modal component", () => {
     userEvent.click(screen.getByTestId("Large Modal Wrapper"));
     expect(changePostToShow).toHaveBeenCalledTimes(1);
     expect(changeModalStatus).toHaveBeenCalledTimes(0);
+  });
+  it("will navigate to the post user's account when the username or profile picture is clicked", () => {
+    render(
+      <ThemeProvider theme={Theme}>
+        <LargeModal
+          post={mockPost}
+          postUser={mockUser}
+          changeLikesModalStatus={changeLikesModalStatus}
+          changeModalStatus={changeModalStatus}
+          changePostToShow={changePostToShow}
+        />
+      </ThemeProvider>
+    );
+    expect(mockNavigateFunction).toHaveBeenCalledTimes(0);
+    userEvent.click(screen.getByTestId("Post User"));
+    expect(mockNavigateFunction).toHaveBeenCalledTimes(1);
+    expect(mockNavigateFunction.mock.calls[0][0]).toBe(
+      `/profile/${mockUser.id}`
+    );
   });
 });
