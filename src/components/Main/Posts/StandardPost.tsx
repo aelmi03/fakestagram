@@ -36,9 +36,8 @@ const StandardPost = React.memo(
     const [postInfo, setPostInfo] = useState<Post>(post);
     const [showPostModal, setShowPostModal] = useState(!isOnHomePosts);
     const [width, setWidth] = useState(window.innerWidth);
-    const [showLikesModal, setShowLikesModal] = useState(false);
+    const [showLikesModal, setShowLikesModal] = useState(true);
     const [showDeleteButton, setShowDeleteButton] = useState(false);
-    const [postUserChanged, setPostUserChanged] = useState(false);
 
     const changeModalStatus = () => {
       setShowPostModal((prevBoolean) => !prevBoolean);
@@ -51,14 +50,7 @@ const StandardPost = React.memo(
         setShowPostModal(false);
       }
     }, []);
-    useEffect(() => {
-      if (postUserChanged === false) {
-        setPostUserChanged(true);
-        return;
-      }
-      setShowPostModal(false);
-      console.log("CHANGING POST TO SHOW TO FALSE");
-    }, [postUser.id]);
+
     useEffect(() => {
       let hasFetched = false;
       const postDoc = doc(getFirestore(), `posts/${postInfo.id}`);
@@ -210,7 +202,6 @@ const PostWrapper = styled.div<{ isOnHomePosts: boolean }>`
   margin-top: 4rem;
   display: grid;
   gap: 1rem;
-  margin-bottom: 5.1rem;
   background-color: ${({ theme }) => theme.palette.primaryLight};
   svg {
     height: 28px;

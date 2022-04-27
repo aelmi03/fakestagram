@@ -107,6 +107,8 @@ const ReturnBackWrapper = styled.div<{
         > :nth-child(1) {
           display: block;
         }
+        display: grid;
+        grid-template-columns: max-content 1fr;
       }
     `}
     ${({ staticPositioning }) =>

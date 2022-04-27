@@ -20,7 +20,7 @@ const LikesModal = ({ post, changeLikesModalStatus }: IProps) => {
     <ModalWrapper>
       <LikesModalWrapper>
         <ReturnBack
-          name=""
+          name="Likes"
           onClick={changeLikesModalStatus}
           staticPositioning={true}
           keepBackIcon={true}
@@ -38,7 +38,7 @@ const LikesModal = ({ post, changeLikesModalStatus }: IProps) => {
   );
 };
 const LikesModalWrapper = styled.div`
-  padding: 2rem;
+  padding: 0.5rem;
   display: grid;
   grid-template-rows: max-content 1fr;
   justify-items: center;

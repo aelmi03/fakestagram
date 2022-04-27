@@ -55,7 +55,7 @@ const MessagesWrapper = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 30;
+  z-index: 32;
   @media only screen and (min-width: 768px) {
     position: static;
     height: calc(100vh - 55px);

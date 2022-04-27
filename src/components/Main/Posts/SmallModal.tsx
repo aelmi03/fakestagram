@@ -19,7 +19,7 @@ const SmallModal = ({ post, postUser, changeModalStatus }: IProps) => {
       <FlexContainer direction="column" height="100%">
         <FlexContainer
           direction="column"
-          height="80%"
+          height="100%"
           overflowY="scroll"
           padding={"1.5rem 1.2rem;"}
         >
@@ -40,24 +40,15 @@ const SmallModal = ({ post, postUser, changeModalStatus }: IProps) => {
 
           <Comments post={post} />
         </FlexContainer>
-        <ReturnBackWrapper>
-          <AddComment post={post} />
-        </ReturnBackWrapper>
+        <AddComment post={post} />
       </FlexContainer>
     </SmallModalWrapper>
   );
 };
 const SmallModalWrapper = styled(ModalWrapper)`
-  z-index: 10;
+  z-index: 40;
   background-color: ${({ theme }) => theme.palette.primary.main};
   margin-top: 5rem;
-  margin-bottom: 3rem;
 `;
-const ReturnBackWrapper = styled.div`
-  position: fixed;
-  bottom: 6.5rem;
-  left: 0;
-  right: 0;
-  z-index: 11;
-`;
+
 export default SmallModal;
