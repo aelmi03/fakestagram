@@ -32,7 +32,7 @@ const LikesModal = ({ post, changeLikesModalStatus }: IProps) => {
           overflowY="scroll"
           gap="1.5rem"
         >
-          {post.likes.length < 0 ? (
+          {post.likes.length > 0 ? (
             post.likes.map((id: string) => {
               const likedUser: User =
                 id === user.id

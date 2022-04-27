@@ -18,10 +18,12 @@ import Post from "../../utils/PostInterface";
 import StandardPost from "../Posts/StandardPost";
 import ReturnBack from "../../utils/ReturnBack";
 import { checkEquality } from "../../utils/utilityFunctions";
+import { selectAllUsers } from "../../../features/users/usersSlice";
 
 const Profile = () => {
   let params = useParams();
   const user = useAppSelector(selectUser, checkEquality);
+  const users = useAppSelector(selectAllUsers);
   const [profileUser, setProfileUser] = useState<User>({} as User);
   const [postToShow, setPostToShow] = useState<null | Post>(null);
   const [followersCount, setFollowersCount] = useState(0);
@@ -160,6 +162,7 @@ const Profile = () => {
       <ProfilePosts
         profileUser={profileUser}
         changePostToShow={changePostToShow}
+        key={profileUser.id}
       />
       {showEditProfileModal ? (
         <EditProfileModal toggleEditProfileModal={toggleEditProfileModal} />
@@ -169,7 +172,11 @@ const Profile = () => {
           <ReturnBack name="Posts" onClick={() => changePostToShow(null)} />
           <StandardPost
             post={postToShow}
-            postUser={profileUser}
+            postUser={
+              postToShow.postedBy === user.id
+                ? user
+                : users.filter((user) => user.id === postToShow.postedBy)[0]
+            }
             isOnHomePosts={false}
             changePostToShow={changePostToShow}
           />

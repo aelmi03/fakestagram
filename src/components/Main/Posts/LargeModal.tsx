@@ -13,6 +13,7 @@ import Comment from "./Comment";
 import { formatDistanceToNow } from "date-fns";
 import { checkEquality, deletePost } from "../../utils/utilityFunctions";
 import AddComment from "./AddComment";
+import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../../app/hooks";
 import DeletePostButton from "../../utils/DeletePostButton";
 import PostIcons from "./PostIcons";
@@ -34,6 +35,7 @@ const LargeModal = React.memo(
     console.log("large modal");
     const [showDeleteButton, setShowDeleteButton] = useState(false);
     const user = useAppSelector(selectUser, checkEquality);
+    const navigate = useNavigate();
     return (
       <ModalWrapper
         onClick={() => {
@@ -59,7 +61,16 @@ const LargeModal = React.memo(
                 justifyContent="space-between"
                 padding="1rem 1rem"
               >
-                <FlexContainer direction="row" gap="1rem" alignItems="center">
+                <FlexContainer
+                  direction="row"
+                  gap="1rem"
+                  alignItems="center"
+                  cursor="pointer"
+                  width="max-content"
+                  onClick={() =>
+                    navigate(`/profile/${postUser.id}`, { replace: true })
+                  }
+                >
                   <CircularUserImage
                     src={postUser.profilePicture}
                     alt={"avatar of profile user"}
