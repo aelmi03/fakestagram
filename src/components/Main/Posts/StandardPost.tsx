@@ -21,6 +21,7 @@ import DeletePostButton from "../../utils/DeletePostButton";
 import CircularUserImage from "../../utils/CircularUserImage";
 import PostIcons from "./PostIcons";
 import { useNavigate } from "react-router-dom";
+import LikesModal from "./LikesModal";
 interface IProps {
   post: Post;
   postUser: User;
@@ -35,9 +36,13 @@ const StandardPost = React.memo(
     const [postInfo, setPostInfo] = useState<Post>(post);
     const [showPostModal, setShowPostModal] = useState(!isOnHomePosts);
     const [width, setWidth] = useState(window.innerWidth);
+    const [showLikesModal, setShowLikesModal] = useState(false);
     const [showDeleteButton, setShowDeleteButton] = useState(false);
     const changeModalStatus = () => {
       setShowPostModal((prevBoolean) => !prevBoolean);
+    };
+    const changeLikesModalStatus = () => {
+      setShowLikesModal((prevBoolean) => !prevBoolean);
     };
     useEffect(() => {
       if (width < 768 && isOnHomePosts === false) {
@@ -176,6 +181,12 @@ const StandardPost = React.memo(
             changeModalStatus={changeModalStatus}
             width={width}
             changePostToShow={changePostToShow}
+          />
+        )}
+        {showLikesModal === true && (
+          <LikesModal
+            post={postInfo}
+            changeLikesModalStatus={changeLikesModalStatus}
           />
         )}
       </PostWrapper>

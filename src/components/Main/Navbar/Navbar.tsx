@@ -43,12 +43,14 @@ const Navbar = () => {
             <NavbarHeading>Fakestagram</NavbarHeading>
           )}
           {width >= 768 ? <Search /> : null}
-          <Links toggleAddPostModal={toggleAddPostModal} />
+          {width >= 768 && <Links toggleAddPostModal={toggleAddPostModal} />}
         </NavbarContainer>
       </NavbarWrapper>
       {showAddPostModal ? (
         <AddPostModal toggleAddPostModal={toggleAddPostModal} />
-      ) : null}
+      ) : (
+        width < 768 && <Links toggleAddPostModal={toggleAddPostModal} />
+      )}
     </React.Fragment>
   );
 };
@@ -59,7 +61,7 @@ const NavbarContainer = styled.nav<{ hide: boolean }>`
   padding: 1rem 0rem;
   width: 100%;
   max-width: 935px;
-  z-index: 25;
+  z-index: 15;
   ${({ hide }) =>
     hide === true &&
     css`
@@ -78,13 +80,12 @@ const NavbarWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-  z-index: 25;
   border-bottom: 1px solid ${({ theme }) => theme.palette.common.grey};
   background-color: ${({ theme }) => theme.palette.primaryLight};
-
+  position: sticky;
+  top: 0;
+  z-index: 9;
   @media only screen and (min-width: 1024px) {
-    position: sticky;
-    top: 0;
   }
 `;
 const NavbarHeading = styled(Heading)`

@@ -12,6 +12,7 @@ interface IProps {
   onChatIconClick?: () => void;
   user?: User;
   onChatAccountClicked?: (chatAccount: User) => void;
+  keepBackIcon?: boolean;
 }
 const ReturnBack = ({
   name,
@@ -20,12 +21,14 @@ const ReturnBack = ({
   staticPositioning,
   user,
   onChatAccountClicked,
+  keepBackIcon,
 }: IProps) => {
   return (
     <ReturnBackWrapper
       data-testid="Return Back Wrapper"
       staticPositioning={staticPositioning}
       chatIconClick={onChatIconClick}
+      keepBackIcon={keepBackIcon}
     >
       <IoIosArrowBack onClick={onClick} data-testid="Go back" />
       {user && onChatAccountClicked ? (
@@ -56,6 +59,7 @@ const ReturnBack = ({
 const ReturnBackWrapper = styled.div<{
   staticPositioning?: boolean;
   chatIconClick?: () => void;
+  keepBackIcon?: boolean;
 }>`
   width: 100%;
   padding: 1.3rem 1.6rem;
@@ -67,6 +71,8 @@ const ReturnBackWrapper = styled.div<{
   z-index: 5;
   top: 0px;
   left: 0px;
+  border-bottom: 1px solid ${({ theme }) => theme.palette.common.grey};
+
   svg {
     color: ${({ theme }) => theme.palette.primary.contrastText};
     height: 25px;
@@ -85,7 +91,6 @@ const ReturnBackWrapper = styled.div<{
     css`
       font-size: 1.6rem;
       position: static;
-      border-bottom: 1px solid ${({ theme }) => theme.palette.common.grey};
       @media only screen and (min-width: 768px) {
         > :nth-child(1) {
           display: none;
@@ -93,6 +98,15 @@ const ReturnBackWrapper = styled.div<{
         display: flex;
         justify-content: space-between;
         height: 57px;
+      }
+    `}
+    ${({ keepBackIcon }) =>
+    keepBackIcon === true &&
+    css`
+      @media only screen and (min-width: 768px) {
+        > :nth-child(1) {
+          display: block;
+        }
       }
     `}
     ${({ staticPositioning }) =>

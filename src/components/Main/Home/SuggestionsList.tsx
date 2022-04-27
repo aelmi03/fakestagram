@@ -10,24 +10,14 @@ import {
 import FlexContainer from "../../utils/FlexContainer";
 import UserInfo from "../../utils/UserInfo";
 import { useAppSelector } from "../../../app/hooks";
-import {
-  followsOtherUser,
-  updateFollowing,
-} from "../../utils/utilityFunctions";
-import { useNavigate } from "react-router-dom";
+import { followsOtherUser } from "../../utils/utilityFunctions";
 import { selectUser, User } from "../../../features/user/userSlice";
 import Button from "../../utils/Button";
 import styled from "styled-components";
+import UserDetail from "../../utils/UserDetail";
 const SuggestionsList = () => {
   const user = useAppSelector(selectUser);
   const [suggestedUsers, setSuggestedUsers] = useState<User[]>([]);
-  const navigate = useNavigate();
-  const onUserClick = (clickedUser: User) => {
-    navigate(`/profile/${clickedUser.id}`, { replace: true });
-  };
-  const onButtonClick = (clickedUser: User) => {
-    updateFollowing(user, clickedUser);
-  };
   useEffect(() => {
     const getSuggestedAccounts = async () => {
       const suggestedUsersQuery = query(
@@ -50,31 +40,7 @@ const SuggestionsList = () => {
       <SuggestionsListTitle>Suggestions For You</SuggestionsListTitle>
       <SuggestionsListContainer data-testid="SuggestionsList Container">
         {suggestedUsers.map((suggestedUser) => (
-          <FlexContainer
-            direction="row"
-            justifyContent="space-between"
-            key={suggestedUser.id}
-            alignItems="center"
-            data-testid={`${suggestedUser.id}`}
-          >
-            <UserInfo
-              user={suggestedUser}
-              width="max-content"
-              onClick={onUserClick}
-            />
-            {followsOtherUser(user, suggestedUser) ? (
-              <Button
-                color="white"
-                onClick={() => onButtonClick(suggestedUser)}
-              >
-                Following
-              </Button>
-            ) : (
-              <Button onClick={() => onButtonClick(suggestedUser)}>
-                Follow
-              </Button>
-            )}
-          </FlexContainer>
+          <UserDetail otherUser={suggestedUser} key={suggestedUser.id} />
         ))}
       </SuggestionsListContainer>
     </SuggestionsListWrapper>
