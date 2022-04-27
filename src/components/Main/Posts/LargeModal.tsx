@@ -110,6 +110,7 @@ const LargeModal = React.memo(
                 post={post}
                 user={user}
                 changeModalStatus={changeModalStatus}
+                largeModal={true}
               />
               <PostTextBold>
                 {post.likes.length} {post.likes.length === 1 ? "like" : "likes"}

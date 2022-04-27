@@ -38,6 +38,8 @@ const StandardPost = React.memo(
     const [width, setWidth] = useState(window.innerWidth);
     const [showLikesModal, setShowLikesModal] = useState(false);
     const [showDeleteButton, setShowDeleteButton] = useState(false);
+    const [postUserChanged, setPostUserChanged] = useState(false);
+
     const changeModalStatus = () => {
       setShowPostModal((prevBoolean) => !prevBoolean);
     };
@@ -49,6 +51,14 @@ const StandardPost = React.memo(
         setShowPostModal(false);
       }
     }, []);
+    useEffect(() => {
+      if (postUserChanged === false) {
+        setPostUserChanged(true);
+        return;
+      }
+      setShowPostModal(false);
+      console.log("CHANGING POST TO SHOW TO FALSE");
+    }, [postUser.id]);
     useEffect(() => {
       let hasFetched = false;
       const postDoc = doc(getFirestore(), `posts/${postInfo.id}`);
@@ -148,6 +158,7 @@ const StandardPost = React.memo(
               user={user}
               changeModalStatus={changeModalStatus}
               changePostToShow={changePostToShow}
+              largeModal={false}
             />
             <FlexContainer direction="row" gap="0.6rem">
               <PostTextBold>

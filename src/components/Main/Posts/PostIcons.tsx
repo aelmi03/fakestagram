@@ -20,12 +20,14 @@ interface IProps {
   user: User;
   changeModalStatus: () => void;
   changePostToShow?: (post: Post | null) => void;
+  largeModal?: boolean;
 }
 const PostIcons = ({
   user,
   post,
   changeModalStatus,
   changePostToShow,
+  largeModal,
 }: IProps) => {
   return (
     <FlexContainer
@@ -33,7 +35,7 @@ const PostIcons = ({
       justifyContent="space-between"
       alignItems="center"
     >
-      <PostIconsContainer changePostToShow={changePostToShow}>
+      <PostIconsContainer largeModal={largeModal}>
         {userHasLikedPost(user, post) ? (
           <BsSuitHeartFill
             style={{ color: "red" }}
@@ -71,24 +73,21 @@ const PostIcons = ({
   );
 };
 const PostIconsContainer = styled.div<{
-  changePostToShow?: (post: Post | null) => void;
+  largeModal?: boolean;
 }>`
   display: flex;
   gap: 1.5rem;
   width: max-content;
   align-content: center;
-  > {
-    :nth-child(2) {
-      display: none;
-    }
-  }
-  ${({ changePostToShow }) =>
-    changePostToShow &&
+
+  ${({ largeModal }) =>
+    largeModal === true &&
     css`
-       > {
-    :nth-child(2) {
-      display: block;
-    }
+      > {
+        :nth-child(2) {
+          display: none;
+        }
+      }
     `}
 `;
 export default PostIcons;

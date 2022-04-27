@@ -70,6 +70,9 @@ const Profile = () => {
     updateFollowersCount();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profileUser]);
+  useEffect(() => {
+    setPostToShow(null);
+  }, [params]);
 
   console.log(profileUser, "PROFILE " + params.userID);
 
@@ -162,7 +165,7 @@ const Profile = () => {
         <EditProfileModal toggleEditProfileModal={toggleEditProfileModal} />
       ) : null}
       {postToShow !== null && (
-        <SelectedPostWrapper>
+        <SelectedPostWrapper key={postToShow.id}>
           <ReturnBack name="Posts" onClick={() => changePostToShow(null)} />
           <StandardPost
             post={postToShow}
