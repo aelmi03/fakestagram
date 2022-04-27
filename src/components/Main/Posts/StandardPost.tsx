@@ -186,6 +186,7 @@ const StandardPost = React.memo(
             changeModalStatus={changeModalStatus}
             width={width}
             changePostToShow={changePostToShow}
+            changeLikesModalStatus={changeLikesModalStatus}
           />
         )}
         {showLikesModal === true && (

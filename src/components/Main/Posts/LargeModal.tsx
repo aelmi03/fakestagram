@@ -21,9 +21,16 @@ interface IProps {
   postUser: User;
   changeModalStatus: () => void;
   changePostToShow?: (post: Post | null) => void;
+  changeLikesModalStatus: () => void;
 }
 const LargeModal = React.memo(
-  ({ post, postUser, changeModalStatus, changePostToShow }: IProps) => {
+  ({
+    post,
+    postUser,
+    changeModalStatus,
+    changePostToShow,
+    changeLikesModalStatus,
+  }: IProps) => {
     console.log("large modal");
     const [showDeleteButton, setShowDeleteButton] = useState(false);
     const user = useAppSelector(selectUser, checkEquality);
@@ -112,9 +119,13 @@ const LargeModal = React.memo(
                 changeModalStatus={changeModalStatus}
                 largeModal={true}
               />
-              <PostTextBold>
-                {post.likes.length} {post.likes.length === 1 ? "like" : "likes"}
-              </PostTextBold>
+              {post.likes.length > 0 ? (
+                <PostTextBold cursor="pointer" onClick={changeLikesModalStatus}>
+                  {post.likes.length}{" "}
+                  {post.likes.length === 1 ? "like" : "likes"}
+                </PostTextBold>
+              ) : null}
+
               <PostGreyText>{`${formatDistanceToNow(
                 post.timestamp.toDate()
               )} ago`}</PostGreyText>

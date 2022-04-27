@@ -60,8 +60,10 @@ jest.mock("../../../components/utils/utilityFunctions", () => {
 describe("Large Modal component", () => {
   let changeModalStatus: jest.Mock;
   let changePostToShow: jest.Mock;
+  let changeLikesModalStatus: jest.Mock;
 
   beforeEach(() => {
+    changeLikesModalStatus = jest.fn();
     changeModalStatus = jest.fn();
     changePostToShow = jest.fn((post: Post | null) => {});
   });
@@ -75,6 +77,7 @@ describe("Large Modal component", () => {
         <LargeModal
           post={mockPost}
           postUser={mockUser}
+          changeLikesModalStatus={changeLikesModalStatus}
           changeModalStatus={changeModalStatus}
           changePostToShow={changePostToShow}
         />
@@ -88,6 +91,7 @@ describe("Large Modal component", () => {
         <LargeModal
           post={mockPost}
           postUser={mockUser}
+          changeLikesModalStatus={changeLikesModalStatus}
           changeModalStatus={changeModalStatus}
           changePostToShow={changePostToShow}
         />
@@ -108,6 +112,7 @@ describe("Large Modal component", () => {
           post={mockPost}
           postUser={mockUser}
           changeModalStatus={changeModalStatus}
+          changeLikesModalStatus={changeLikesModalStatus}
         />
       </ThemeProvider>
     );
@@ -122,6 +127,7 @@ describe("Large Modal component", () => {
         <LargeModal
           post={mockPost}
           postUser={mockUser}
+          changeLikesModalStatus={changeLikesModalStatus}
           changeModalStatus={changeModalStatus}
           changePostToShow={changePostToShow}
         />

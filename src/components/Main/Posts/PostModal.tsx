@@ -9,6 +9,7 @@ interface IProps {
   changeModalStatus: () => void;
   width: number;
   changePostToShow?: (post: Post | null) => void;
+  changeLikesModalStatus: () => void;
 }
 const PostModal = ({
   post,
@@ -16,6 +17,7 @@ const PostModal = ({
   changeModalStatus,
   width,
   changePostToShow,
+  changeLikesModalStatus,
 }: IProps) => {
   if (width >= 768) {
     return (
@@ -24,6 +26,7 @@ const PostModal = ({
         postUser={postUser}
         changeModalStatus={changeModalStatus}
         changePostToShow={changePostToShow}
+        changeLikesModalStatus={changeLikesModalStatus}
       />
     );
   }

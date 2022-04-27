@@ -25,7 +25,12 @@ const LikesModal = ({ post, changeLikesModalStatus }: IProps) => {
           staticPositioning={true}
           keepBackIcon={true}
         ></ReturnBack>
-        <FlexContainer direction="column" padding="0.5rem" overflowY="scroll">
+        <FlexContainer
+          direction="column"
+          padding="0.5rem"
+          overflowY="scroll"
+          gap="1.5rem"
+        >
           {post.likes.map((id: string) => {
             const likedUser: User =
               id === user.id ? user : users.filter((user) => user.id === id)[0];

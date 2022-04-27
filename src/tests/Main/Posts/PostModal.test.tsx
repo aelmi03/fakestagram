@@ -8,6 +8,7 @@ import { Timestamp } from "firebase/firestore";
 
 const changeModalStatus = jest.fn();
 const changePostToShow = jest.fn();
+const changeLikesModalStatus = jest.fn();
 const mockPost: Post = {
   postedBy: "randomID",
   comments: [],
@@ -41,6 +42,7 @@ describe("Post Modal Component", () => {
           postUser={mockUser}
           changeModalStatus={changeModalStatus}
           changePostToShow={changePostToShow}
+          changeLikesModalStatus={changeLikesModalStatus}
           width={767}
         />
       </ThemeProvider>
@@ -56,6 +58,7 @@ describe("Post Modal Component", () => {
           postUser={mockUser}
           changeModalStatus={changeModalStatus}
           changePostToShow={changePostToShow}
+          changeLikesModalStatus={changeLikesModalStatus}
           width={768}
         />
       </ThemeProvider>
