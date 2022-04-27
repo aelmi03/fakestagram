@@ -36,7 +36,7 @@ const StandardPost = React.memo(
     const [postInfo, setPostInfo] = useState<Post>(post);
     const [showPostModal, setShowPostModal] = useState(!isOnHomePosts);
     const [width, setWidth] = useState(window.innerWidth);
-    const [showLikesModal, setShowLikesModal] = useState(true);
+    const [showLikesModal, setShowLikesModal] = useState(false);
     const [showDeleteButton, setShowDeleteButton] = useState(false);
 
     const changeModalStatus = () => {
@@ -152,12 +152,14 @@ const StandardPost = React.memo(
               changePostToShow={changePostToShow}
               largeModal={false}
             />
-            <FlexContainer direction="row" gap="0.6rem">
-              <PostTextBold>
-                {postInfo.likes.length}{" "}
-                {postInfo.likes.length === 1 ? "like" : "likes"}
-              </PostTextBold>
-            </FlexContainer>
+            {postInfo.likes.length > 0 ? (
+              <FlexContainer direction="row" gap="0.6rem">
+                <PostTextBold onClick={changeLikesModalStatus} cursor="pointer">
+                  {postInfo.likes.length}{" "}
+                  {postInfo.likes.length === 1 ? "like" : "likes"}
+                </PostTextBold>
+              </FlexContainer>
+            ) : null}
             <PostText>
               <PostTextBold cursor="pointer">{postUser.username}</PostTextBold>
               &nbsp;&nbsp;{post.caption}
