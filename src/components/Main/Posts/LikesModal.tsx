@@ -6,6 +6,7 @@ import FlexContainer from "../../utils/FlexContainer";
 import ModalWrapper from "../../utils/ModalWrapper";
 import Post from "../../utils/PostInterface";
 import ReturnBack from "../../utils/ReturnBack";
+import { BasicText } from "../../utils/Texts";
 import UserDetail from "../../utils/UserDetail";
 
 interface IProps {
@@ -31,12 +32,22 @@ const LikesModal = ({ post, changeLikesModalStatus }: IProps) => {
           overflowY="scroll"
           gap="1.5rem"
         >
-          {post.likes.map((id: string) => {
-            const likedUser: User =
-              id === user.id ? user : users.filter((user) => user.id === id)[0];
+          {post.likes.length < 0 ? (
+            post.likes.map((id: string) => {
+              const likedUser: User =
+                id === user.id
+                  ? user
+                  : users.filter((user) => user.id === id)[0];
 
-            return <UserDetail otherUser={likedUser} />;
-          })}
+              return <UserDetail otherUser={likedUser} />;
+            })
+          ) : (
+            <TextContainer>
+              <BasicText fontSize="1.3rem" color="grey" fontWeight="500">
+                There are no likes on this post.
+              </BasicText>
+            </TextContainer>
+          )}
         </FlexContainer>
       </LikesModalWrapper>
     </ModalWrapper>
@@ -62,5 +73,12 @@ const LikesModalWrapper = styled.div`
     max-height: 400px;
     border-radius: 5px;
   }
+`;
+const TextContainer = styled.div`
+  position: relative;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
 `;
 export default LikesModal;
