@@ -4,28 +4,31 @@ import { selectUser, User } from "../../../features/user/userSlice";
 import { selectAllUsers } from "../../../features/users/usersSlice";
 import FlexContainer from "../../utils/FlexContainer";
 import ModalWrapper from "../../utils/ModalWrapper";
-import Post from "../../utils/PostInterface";
 import ReturnBack from "../../utils/ReturnBack";
 import { BasicText } from "../../utils/Texts";
 import UserDetail from "../../utils/UserDetail";
 
 interface IProps {
-  post: Post;
-  changeLikesModalStatus: () => void;
+  name: string;
+  usersID: string[];
+  changeModalStatus: () => void;
+  noUsersMessage: string;
 }
-const LikesModal = ({ post, changeLikesModalStatus }: IProps) => {
+const Modal = ({
+  usersID,
+  changeModalStatus,
+  name,
+  noUsersMessage,
+}: IProps) => {
   const users = useAppSelector(selectAllUsers);
   const user = useAppSelector(selectUser);
 
   return (
-    <ModalWrapper
-      onClick={changeLikesModalStatus}
-      data-testid="LikesModal Wrapper"
-    >
+    <ModalWrapper onClick={changeModalStatus} data-testid="LikesModal Wrapper">
       <LikesModalWrapper onClick={(e) => e.stopPropagation()}>
         <ReturnBack
-          name="Likes"
-          onClick={changeLikesModalStatus}
+          name={name}
+          onClick={changeModalStatus}
           staticPositioning={true}
           keepBackIcon={true}
         ></ReturnBack>
@@ -35,8 +38,8 @@ const LikesModal = ({ post, changeLikesModalStatus }: IProps) => {
           overflowY="scroll"
           gap="1.5rem"
         >
-          {post.likes.length > 0 ? (
-            post.likes.map((id: string) => {
+          {usersID.length > 0 ? (
+            usersID.map((id: string) => {
               const likedUser: User =
                 id === user.id
                   ? user
@@ -47,7 +50,7 @@ const LikesModal = ({ post, changeLikesModalStatus }: IProps) => {
           ) : (
             <TextContainer>
               <BasicText fontSize="1.3rem" color="grey" fontWeight="500">
-                There are no likes on this post.
+                {noUsersMessage}
               </BasicText>
             </TextContainer>
           )}
@@ -72,7 +75,7 @@ const LikesModalWrapper = styled.div`
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    max-width: 550px;
+    max-width: 450px;
     max-height: 400px;
     border-radius: 5px;
   }
@@ -84,4 +87,4 @@ const TextContainer = styled.div`
   transform: translate(-50%, -50%);
   text-align: center;
 `;
-export default LikesModal;
+export default Modal;

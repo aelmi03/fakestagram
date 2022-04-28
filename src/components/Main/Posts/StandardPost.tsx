@@ -21,7 +21,7 @@ import DeletePostButton from "../../utils/DeletePostButton";
 import CircularUserImage from "../../utils/CircularUserImage";
 import PostIcons from "./PostIcons";
 import { useNavigate } from "react-router-dom";
-import LikesModal from "./LikesModal";
+import Modal from "./Modal";
 interface IProps {
   post: Post;
   postUser: User;
@@ -190,9 +190,11 @@ const StandardPost = React.memo(
           />
         )}
         {showLikesModal === true && (
-          <LikesModal
-            post={postInfo}
-            changeLikesModalStatus={changeLikesModalStatus}
+          <Modal
+            name={"Likes"}
+            usersID={post.likes}
+            changeModalStatus={changeLikesModalStatus}
+            noUsersMessage="There are no likes on this post"
           />
         )}
       </PostWrapper>

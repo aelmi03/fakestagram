@@ -5,7 +5,7 @@ import { ThemeProvider } from "styled-components";
 import Post from "../../../components/utils/PostInterface";
 import { User } from "../../../features/user/userSlice";
 import Theme from "../../../Themes/Theme";
-import LikesModal from "../../../components/Main/Posts/LikesModal";
+import Modal from "../../../components/Main/Posts/Modal";
 import { store } from "../../../app/store";
 import { Provider } from "react-redux";
 const changeLikesModalStatus = jest.fn();
@@ -36,7 +36,7 @@ jest.mock("../../../features/users/usersSlice", () => {
 });
 jest.mock("../../../components/utils/UserDetail", () => {
   return ({ otherUser }: { otherUser: User }) => (
-    <div data-testid="Liked User">
+    <div data-testid="User">
       <h1>{otherUser.fullName}</h1>
       <h1>{otherUser.username}</h1>
     </div>
@@ -65,13 +65,15 @@ describe("LikesModal Component", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-  it("calls the changeLikesModalStatus if the Modal Wrapper is clicked", () => {
+  it("calls the changeModalStatus prop function if the Modal Wrapper is clicked", () => {
     render(
       <ThemeProvider theme={Theme}>
         <Provider store={store}>
-          <LikesModal
-            post={mockPost}
-            changeLikesModalStatus={changeLikesModalStatus}
+          <Modal
+            changeModalStatus={changeLikesModalStatus}
+            usersID={mockPost.likes}
+            name="Modal"
+            noUsersMessage="There are no likes on this post."
           />
         </Provider>
       </ThemeProvider>
@@ -79,13 +81,30 @@ describe("LikesModal Component", () => {
     userEvent.click(screen.getByTestId("LikesModal Wrapper"));
     expect(changeLikesModalStatus).toHaveBeenCalledTimes(1);
   });
-  it("calls the changeLikesModalStatus if the Go Back icon is clicked", () => {
+  it("renders the heading that is equal to the string name prop passed in", () => {
     render(
       <ThemeProvider theme={Theme}>
         <Provider store={store}>
-          <LikesModal
-            post={mockPost}
-            changeLikesModalStatus={changeLikesModalStatus}
+          <Modal
+            changeModalStatus={changeLikesModalStatus}
+            usersID={mockPost.likes}
+            name="Modal"
+            noUsersMessage="There are no likes on this post."
+          />
+        </Provider>
+      </ThemeProvider>
+    );
+    expect(screen.getByText("Modal")).toBeInTheDocument();
+  });
+  it("calls the changeModalStatus prop function if the Go Back icon is clicked", () => {
+    render(
+      <ThemeProvider theme={Theme}>
+        <Provider store={store}>
+          <Modal
+            changeModalStatus={changeLikesModalStatus}
+            usersID={mockPost.likes}
+            name="Modal"
+            noUsersMessage="There are no likes on this post."
           />
         </Provider>
       </ThemeProvider>
@@ -94,14 +113,16 @@ describe("LikesModal Component", () => {
     userEvent.click(screen.getByTestId("Go back"));
     expect(changeLikesModalStatus).toHaveBeenCalledTimes(1);
   });
-  it("will show a message saying there are no likes if the post has zero likes", () => {
+  it("will show the noUsersMessage string prop if the usersID is empty", () => {
     mockPost.likes = [];
     render(
       <ThemeProvider theme={Theme}>
         <Provider store={store}>
-          <LikesModal
-            post={mockPost}
-            changeLikesModalStatus={changeLikesModalStatus}
+          <Modal
+            changeModalStatus={changeLikesModalStatus}
+            usersID={mockPost.likes}
+            name="Modal"
+            noUsersMessage="There are no likes on this post."
           />
         </Provider>
       </ThemeProvider>
@@ -110,13 +131,15 @@ describe("LikesModal Component", () => {
       screen.getByText("There are no likes on this post.")
     ).toBeInTheDocument();
   });
-  it("will show a message saying there are no likes if the post has zero likes", () => {
+  it("won't show the noUsersMessage string prop if the usersID is not empty", () => {
     render(
       <ThemeProvider theme={Theme}>
         <Provider store={store}>
-          <LikesModal
-            post={mockPost}
-            changeLikesModalStatus={changeLikesModalStatus}
+          <Modal
+            changeModalStatus={changeLikesModalStatus}
+            usersID={mockPost.likes}
+            name="Modal"
+            noUsersMessage="There are no likes on this post."
           />
         </Provider>
       </ThemeProvider>
@@ -125,38 +148,42 @@ describe("LikesModal Component", () => {
       screen.queryByText("There are no likes on this post.")
     ).not.toBeInTheDocument();
   });
-  it("will show the correct number of users that liked the post", () => {
+  it("will show the correct number of users ", () => {
     render(
       <ThemeProvider theme={Theme}>
         <Provider store={store}>
-          <LikesModal
-            post={mockPost}
-            changeLikesModalStatus={changeLikesModalStatus}
+          <Modal
+            changeModalStatus={changeLikesModalStatus}
+            usersID={mockPost.likes}
+            name="Modal"
+            noUsersMessage="There are no likes on this post."
           />
         </Provider>
       </ThemeProvider>
     );
-    expect(screen.getAllByTestId("Liked User").length).toBe(2);
+    expect(screen.getAllByTestId("User").length).toBe(2);
   });
   it("passes in the correct user object to each UserDetail component", () => {
     render(
       <ThemeProvider theme={Theme}>
         <Provider store={store}>
-          <LikesModal
-            post={mockPost}
-            changeLikesModalStatus={changeLikesModalStatus}
+          <Modal
+            changeModalStatus={changeLikesModalStatus}
+            usersID={mockPost.likes}
+            name="Modal"
+            noUsersMessage="There are no likes on this post."
           />
         </Provider>
       </ThemeProvider>
     );
-    const firstUser = screen.getAllByTestId("Liked User")[0];
+    const firstUser = screen.getAllByTestId("User")[0];
     expect(
       within(firstUser).getByText(`${mockUser.fullName}`)
     ).toBeInTheDocument();
     expect(
       within(firstUser).getByText(`${mockUser.username}`)
     ).toBeInTheDocument();
-    const secondUser = screen.getAllByTestId("Liked User")[1];
+    const secondUser = screen.getAllByTestId("User")[1];
     expect(
       within(secondUser).getByText(`${mockSecondUser.fullName}`)
     ).toBeInTheDocument();
