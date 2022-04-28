@@ -10,8 +10,6 @@ import { Provider } from "react-redux";
 import { store } from "../../../app/store";
 import { updateFollowing } from "../../../components/utils/utilityFunctions";
 import { signOut } from "firebase/auth";
-import { selectAllUsers } from "../../../features/users/usersSlice";
-import { selectUser } from "../../../features/user/userSlice";
 import { Chat, Message } from "../../../features/chatRooms/chatRoomsSlice";
 
 let mockUser: User;

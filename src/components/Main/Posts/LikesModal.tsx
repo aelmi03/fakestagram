@@ -18,7 +18,10 @@ const LikesModal = ({ post, changeLikesModalStatus }: IProps) => {
   const user = useAppSelector(selectUser);
 
   return (
-    <ModalWrapper onClick={changeLikesModalStatus}>
+    <ModalWrapper
+      onClick={changeLikesModalStatus}
+      data-testid="LikesModal Wrapper"
+    >
       <LikesModalWrapper onClick={(e) => e.stopPropagation()}>
         <ReturnBack
           name="Likes"
@@ -39,7 +42,7 @@ const LikesModal = ({ post, changeLikesModalStatus }: IProps) => {
                   ? user
                   : users.filter((user) => user.id === id)[0];
 
-              return <UserDetail otherUser={likedUser} />;
+              return <UserDetail otherUser={likedUser} key={likedUser.id} />;
             })
           ) : (
             <TextContainer>
