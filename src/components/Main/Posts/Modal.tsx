@@ -40,12 +40,12 @@ const Modal = ({
         >
           {usersID.length > 0 ? (
             usersID.map((id: string) => {
-              const likedUser: User =
+              const userToShow: User =
                 id === user.id
                   ? user
                   : users.filter((user) => user.id === id)[0];
 
-              return <UserDetail otherUser={likedUser} key={likedUser.id} />;
+              return <UserDetail otherUser={userToShow} key={userToShow.id} />;
             })
           ) : (
             <TextContainer>

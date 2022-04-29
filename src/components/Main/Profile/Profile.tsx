@@ -16,9 +16,11 @@ import {
 } from "../../utils/utilityFunctions";
 import Post from "../../utils/PostInterface";
 import StandardPost from "../Posts/StandardPost";
+import Modal from "../Posts/Modal";
 import ReturnBack from "../../utils/ReturnBack";
 import { checkEquality } from "../../utils/utilityFunctions";
 import { selectAllUsers } from "../../../features/users/usersSlice";
+import { BasicText } from "../../utils/Texts";
 
 const Profile = () => {
   let params = useParams();
@@ -26,7 +28,9 @@ const Profile = () => {
   const users = useAppSelector(selectAllUsers);
   const [profileUser, setProfileUser] = useState<User>({} as User);
   const [postToShow, setPostToShow] = useState<null | Post>(null);
-  const [followersCount, setFollowersCount] = useState(0);
+  const [followers, setFollowers] = useState<string[]>([]);
+  const [followersModalStatus, setFollowersModalStatus] = useState(false);
+  const [followingModalStatus, setFollowingModalStatus] = useState(false);
   const [postsCount, setPostsCount] = useState(0);
   const dispatch = useAppDispatch();
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
@@ -39,6 +43,12 @@ const Profile = () => {
   const changePostToShow = (post: Post | null) => {
     setPostToShow(post);
   };
+  const changeFollowersModalStatus = () => {
+    setFollowersModalStatus((prevBoolean) => !prevBoolean);
+  };
+  const changeFollowingModalStatus = () => {
+    setFollowingModalStatus((prevBoolean) => !prevBoolean);
+  };
   const updatePostsCount = async () => {
     if (profileUser.savedPosts === undefined) return;
     const posts = await getProfileUserPosts(profileUser);
@@ -48,7 +58,8 @@ const Profile = () => {
     console.log("WE LIT");
     if (profileUser.savedPosts === undefined) return;
     const followers = await getFollowers(profileUser);
-    setFollowersCount(followers.length);
+    const followersID = followers.map((user) => user.id);
+    setFollowers(followersID);
   };
 
   useEffect(() => {
@@ -75,6 +86,8 @@ const Profile = () => {
   }, [profileUser]);
   useEffect(() => {
     setPostToShow(null);
+    setFollowersModalStatus(false);
+    setFollowingModalStatus(false);
   }, [params]);
 
   console.log(profileUser, "PROFILE " + params.userID);
@@ -141,19 +154,38 @@ const Profile = () => {
             </ButtonsContainer>
           </ProfileInformationContainer>
           <ProfileUserInfo>
-            <BoldInfo data-testid="Posts">
+            <BasicText fontWeight="700" fontSize="1.4rem" data-testid="Posts">
               {postsCount} <ProfileInfo>posts</ProfileInfo>
-            </BoldInfo>
-            <BoldInfo data-testid="Followers">
-              {followersCount} <ProfileInfo>followers</ProfileInfo>
-            </BoldInfo>
-            <BoldInfo data-testid="Following">
+            </BasicText>
+            <BasicText
+              fontWeight="700"
+              fontSize="1.4rem"
+              cursor="pointer"
+              data-testid="Followers"
+              onClick={changeFollowersModalStatus}
+            >
+              {followers.length} <ProfileInfo>followers</ProfileInfo>
+            </BasicText>
+            <BasicText
+              fontWeight="700"
+              fontSize="1.4rem"
+              cursor="pointer"
+              data-testid="Following"
+              onClick={changeFollowingModalStatus}
+            >
               {profileUser.following?.length}{" "}
               <ProfileInfo>following</ProfileInfo>
-            </BoldInfo>
+            </BasicText>
           </ProfileUserInfo>
           <InformationContainer>
-            <BoldInfo data-testid="Full Name">{profileUser.fullName}</BoldInfo>
+            <BasicText
+              fontWeight="700"
+              fontSize="1.4rem"
+              cursor="pointer"
+              data-testid="Full Name"
+            >
+              {profileUser.fullName}
+            </BasicText>
             <ProfileInfo data-testid="Biography">
               {profileUser.biography}
             </ProfileInfo>
@@ -168,6 +200,24 @@ const Profile = () => {
       {showEditProfileModal ? (
         <EditProfileModal toggleEditProfileModal={toggleEditProfileModal} />
       ) : null}
+      {followersModalStatus === true && (
+        <Modal
+          name="Followers"
+          usersID={followers}
+          changeModalStatus={changeFollowersModalStatus}
+          noUsersMessage="This user has no followers."
+          data-testid="Followers Modal"
+        />
+      )}
+      {followingModalStatus === true && (
+        <Modal
+          name="Following"
+          usersID={profileUser.following}
+          changeModalStatus={changeFollowingModalStatus}
+          noUsersMessage="This user is not following anyone."
+          data-testid="Following MOdal"
+        />
+      )}
       {postToShow !== null && (
         <SelectedPostWrapper key={postToShow.id}>
           <ReturnBack name="Posts" onClick={() => changePostToShow(null)} />
@@ -318,9 +368,6 @@ const ProfileInfo = styled.div`
   @media only screen and (min-width: 540px) {
     font-size: 1.5rem;
   }
-`;
-const BoldInfo = styled(ProfileInfo)`
-  font-weight: bold;
 `;
 
 const ProfileButton = styled.button<{ following?: boolean }>`

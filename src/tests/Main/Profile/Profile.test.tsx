@@ -56,7 +56,15 @@ jest.mock("../../../components/Main/Profile/ProfilePosts", () => {
     </div>
   );
 });
-
+jest.mock("../../../components/Main/Posts/Modal", () => {
+  return ({
+    name,
+    changeModalStatus,
+  }: {
+    name: string;
+    changeModalStatus: () => void;
+  }) => <div data-testid={`${name} Modal`} onClick={changeModalStatus}></div>;
+});
 jest.mock("../../../components/Main/Posts/StandardPost", () => {
   return ({ changePostToShow, post }: mockProps) => (
     <div
@@ -428,5 +436,43 @@ describe("Profile Component", () => {
     expect(
       screen.queryByText("Standard Post Component")
     ).not.toBeInTheDocument();
+  });
+  it("is able to show the followers in the Modal when the followers info is clicked", async () => {
+    await act(async () => {
+      render(
+        <ThemeProvider theme={Theme}>
+          <Provider store={store}>
+            <Profile />
+          </Provider>
+        </ThemeProvider>
+      );
+    });
+    expect(screen.queryByTestId("Followers Modal")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("Following Modal")).not.toBeInTheDocument();
+    userEvent.click(screen.getByText("following"));
+    expect(screen.getByTestId("Following Modal")).toBeInTheDocument();
+    expect(screen.queryByTestId("Followers Modal")).not.toBeInTheDocument();
+    userEvent.click(screen.getByTestId("Following Modal"));
+    expect(screen.queryByTestId("Followers Modal")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("Following Modal")).not.toBeInTheDocument();
+  });
+  it("is able to show the followers in the Modal when the followers info is clicked", async () => {
+    await act(async () => {
+      render(
+        <ThemeProvider theme={Theme}>
+          <Provider store={store}>
+            <Profile />
+          </Provider>
+        </ThemeProvider>
+      );
+    });
+    expect(screen.queryByTestId("Followers Modal")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("Following Modal")).not.toBeInTheDocument();
+    userEvent.click(screen.getByText("followers"));
+    expect(screen.getByTestId("Followers Modal")).toBeInTheDocument();
+    expect(screen.queryByTestId("Following Modal")).not.toBeInTheDocument();
+    userEvent.click(screen.getByTestId("Followers Modal"));
+    expect(screen.queryByTestId("Followers Modal")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("Following Modal")).not.toBeInTheDocument();
   });
 });
