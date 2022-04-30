@@ -2,9 +2,11 @@ import styled from "styled-components";
 import Post from "../../utils/PostInterface";
 import { User } from "../../../features/user/userSlice";
 import Comment from "./Comment";
-import { doc, getDoc, getFirestore, Timestamp } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 import { useState, useEffect } from "react";
 import React from "react";
+import { selectAllUsers } from "../../../features/users/usersSlice";
+import { useAppSelector } from "../../../app/hooks";
 interface IProps {
   post: Post;
 }
@@ -18,21 +20,23 @@ const Comments = React.memo(
   ({ post }: IProps) => {
     console.log("COMMENTS :))");
     const [comments, setComments] = useState<CommentData[]>([]);
+    const users = useAppSelector(selectAllUsers);
 
     useEffect(() => {
-      const loadComments = async () => {
-        const postComments: CommentData[] = await Promise.all(
-          post.comments.map(async (comment): Promise<CommentData> => {
-            const userDoc = doc(getFirestore(), `users/${comment.user}`);
-            const userSnapshot = await getDoc(userDoc);
+      const loadComments = () => {
+        const postComments: CommentData[] = post.comments.map(
+          (comment): CommentData => {
+            const commentUser = users.filter(
+              (user) => user.id === comment.user
+            )[0] as User;
 
             return {
               content: comment.content,
               timestamp: comment.timestamp as Timestamp,
-              user: userSnapshot.data() as User,
+              user: commentUser,
               id: comment.id,
             };
-          })
+          }
         );
         setComments(postComments);
       };

@@ -23,12 +23,14 @@ import { PostText } from "../../utils/Texts";
 import Suggestions from "./Suggestions";
 import SuggestionsList from "./SuggestionsList";
 import Post from "../../utils/PostInterface";
+import { selectAllUsers } from "../../../features/users/usersSlice";
 interface PostQuery {
   post: Post;
   postUser: User;
 }
 const Home = () => {
   const user = useAppSelector(selectUser);
+  const users = useAppSelector(selectAllUsers);
   const [showNoMorePostsText, setShowNoMorePostsText] = useState(false);
   const [showLoadMoreButton, setShowLoadMoreButton] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
@@ -50,18 +52,15 @@ const Home = () => {
       limit(8)
     );
     const postQueryDocs = await getDocs(postsQueryDocs);
-    const postsQueryData = await Promise.all(
-      postQueryDocs.docs
-        .map((doc) => doc.data() as Post)
-        .map(async (post) => {
-          const userDoc = doc(getFirestore(), `users/${post.postedBy}`);
-          const userData = (await getDoc(userDoc)).data() as User;
-          return {
-            post: post,
-            postUser: userData,
-          } as PostQuery;
-        })
-    );
+    const postsQueryData = postQueryDocs.docs
+      .map((doc) => doc.data() as Post)
+      .map((post) => {
+        const postUser = users.filter((user) => user.id === post.postedBy)[0];
+        return {
+          post: post,
+          postUser,
+        } as PostQuery;
+      });
     if (postsQueryData.length === 0) {
       setShowNoMorePostsText(true);
     } else if (postsQueryData.length < 8) {
@@ -83,18 +82,16 @@ const Home = () => {
         limit(5)
       );
       const postQueryDocs = await getDocs(postsQueryDocs);
-      const postsQueryData = await Promise.all(
-        postQueryDocs.docs
-          .map((doc) => doc.data() as Post)
-          .map(async (post) => {
-            const userDoc = doc(getFirestore(), `users/${post.postedBy}`);
-            const userData = (await getDoc(userDoc)).data() as User;
-            return {
-              post: post,
-              postUser: userData,
-            } as PostQuery;
-          })
-      );
+      const postsQueryData = postQueryDocs.docs
+        .map((doc) => doc.data() as Post)
+        .map((post) => {
+          const postUser = users.filter((user) => user.id === post.postedBy)[0];
+          return {
+            post: post,
+            postUser,
+          } as PostQuery;
+        });
+
       if (postsQueryData.length === 0) {
         setShowSuggestionsList(true);
       } else if (postsQueryData.length < 5) {

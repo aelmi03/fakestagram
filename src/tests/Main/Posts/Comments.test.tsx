@@ -11,7 +11,7 @@ const fakePost: Post = {
     {
       content: "this is the first comment",
       id: "firstCommentID",
-      user: "randomID",
+      user: "fakeUserID",
       timestamp: {
         toDate: () => new Date("2021-09-26T00:00:00.000Z"),
       } as unknown as Timestamp,
@@ -19,7 +19,7 @@ const fakePost: Post = {
     {
       content: "this is the second comment",
       id: "secondCommentID",
-      user: "randomID",
+      user: "fakeUserID",
       timestamp: {
         toDate: () => new Date("2022-09-26T00:00:00.000Z"),
       } as unknown as Timestamp,
@@ -27,7 +27,7 @@ const fakePost: Post = {
     {
       content: "this is the third comment",
       id: "thirdCommentID",
-      user: "randomID",
+      user: "fakeUserID",
       timestamp: {
         toDate: () => new Date("2022-09-26T00:00:00.000Z"),
       } as unknown as Timestamp,
@@ -51,11 +51,7 @@ const fakeUser: User = {
 jest.mock("firebase/firestore", () => {
   return {
     doc: jest.fn(),
-    getDoc: jest.fn(() => {
-      return {
-        data: () => fakeUser,
-      };
-    }),
+    getDoc: jest.fn(),
     getFirestore: jest.fn(),
   };
 });
@@ -64,15 +60,24 @@ jest.mock("react-router-dom", () => {
     useNavigate: jest.fn(() => {}),
   };
 });
+jest.mock("../../../app/hooks", () => {
+  return {
+    useAppSelector: (func: () => void) => func(),
+  };
+});
+
+jest.mock("../../../features/users/usersSlice", () => {
+  return {
+    selectAllUsers: () => [fakeUser],
+  };
+});
 describe("Comments component", () => {
-  it("renders the correct amount of comments with the corerct information", async () => {
-    await act(async () => {
-      render(
-        <ThemeProvider theme={Theme}>
-          <Comments post={fakePost} />
-        </ThemeProvider>
-      );
-    });
+  it("renders the correct amount of comments with the corerct information", () => {
+    render(
+      <ThemeProvider theme={Theme}>
+        <Comments post={fakePost} />
+      </ThemeProvider>
+    );
     expect(screen.getByTestId("Comments Wrapper").children.length).toBe(3);
     expect(screen.getByText("this is the first comment")).toBeInTheDocument();
     expect(screen.getByText("this is the second comment")).toBeInTheDocument();

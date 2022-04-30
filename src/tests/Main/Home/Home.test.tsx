@@ -10,6 +10,8 @@ import Post from "../../../components/utils/PostInterface";
 import { signOut } from "firebase/auth";
 import { User } from "../../../features/user/userSlice";
 import Theme from "../../../Themes/Theme";
+import { selectAllUsers } from "../../../features/users/usersSlice";
+import { selectUser } from "../../../features/user/userSlice";
 import Home from "../../../components/Main/Home";
 const originalInnerWidth = global.innerWidth;
 const mockFirstPost: Post = { id: "firstPost" } as Post;
@@ -44,7 +46,18 @@ jest.mock("../../../components/Main/Posts/StandardPost", () => {
 });
 jest.mock("../../../app/hooks", () => {
   return {
-    useAppSelector: () => mockUser,
+    useAppSelector: (func: () => void) => func(),
+  };
+});
+jest.mock("../../../features/user/userSlice", () => {
+  return {
+    ...jest.requireActual("../../../features/user/userSlice"),
+    selectUser: () => mockUser,
+  };
+});
+jest.mock("../../../features/users/usersSlice", () => {
+  return {
+    selectAllUsers: () => [mockUser],
   };
 });
 jest.mock("firebase/firestore", () => {
@@ -55,7 +68,7 @@ jest.mock("firebase/firestore", () => {
     where: jest.fn(),
     getDocs: () => mockedPosts,
     doc: jest.fn(),
-    getDoc: jest.fn().mockResolvedValue({ data: () => mockUser }),
+    getDoc: jest.fn(),
     limit: jest.fn(),
     QuerySnapshot: jest.fn(),
     startAfter: jest.fn(),
