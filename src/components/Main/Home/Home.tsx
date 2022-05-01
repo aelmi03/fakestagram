@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { selectUser, User } from "../../../features/user/userSlice";
-import { useAppSelector } from "../../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import React, { useState, useEffect } from "react";
 import {
   query,
@@ -23,21 +23,22 @@ import Loader from "../../utils/Loader";
 import { PostText } from "../../utils/Texts";
 import Suggestions from "./Suggestions";
 import SuggestionsList from "./SuggestionsList";
-import { selectHomePosts } from "../../../features/homePosts/homePostsSlice";
+import {
+  selectHomePosts,
+  setHomePosts,
+} from "../../../features/homePosts/homePostsSlice";
 import Post from "../../utils/PostInterface";
 import { selectAllUsers } from "../../../features/users/usersSlice";
-interface PostQuery {
-  post: Post;
-  postUser: User;
-}
+
 const Home = () => {
   const user = useAppSelector(selectUser);
-  const homePostDocs = useAppSelector(selectHomePosts);
+  const homePostsData = useAppSelector(selectHomePosts);
   const users = useAppSelector(selectAllUsers);
   const [showNoMorePostsText, setShowNoMorePostsText] = useState(false);
+  const dispatch = useAppDispatch();
   const [showLoadMoreButton, setShowLoadMoreButton] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
-  const [homePosts, setHomePosts] = useState<PostQuery[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [showSuggestionsList, setShowSuggestionsList] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
   const [recentSnapshot, setRecentSnapshot] = useState<
@@ -55,58 +56,62 @@ const Home = () => {
       limit(8)
     );
     const postQueryDocs = await getDocs(postsQuery);
-    const postsQueryData = postQueryDocs.docs
-      .map((doc) => doc.data() as Post)
-      .map((post) => {
-        const postUser = users.filter((user) => user.id === post.postedBy)[0];
-        return {
-          post: post,
-          postUser,
-        } as PostQuery;
-      });
+    const postsQueryData = postQueryDocs.docs.map((doc) => doc.data() as Post);
+
     if (postsQueryData.length === 0) {
       setShowNoMorePostsText(true);
     } else if (postsQueryData.length < 8) {
-      setHomePosts([...homePosts, ...postsQueryData]);
+      setPosts([...posts, ...postsQueryData]);
       setShowNoMorePostsText(true);
     } else {
-      setHomePosts([...homePosts, ...postsQueryData]);
+      setPosts([...posts, ...postsQueryData]);
       setShowLoadMoreButton(true);
     }
     setRecentSnapshot(postQueryDocs);
     setShowLoading(false);
   };
-  const getInitialDocs = async () => {
-    let postsQuery: Promise<QuerySnapshot<unknown>>;
+  const getNewPosts = async () => {
+    const postsQuery = query(
+      collection(getFirestore(), "posts"),
+      where("postedBy", "in", [...user.following]),
+      orderBy("timestamp", "desc"),
+      limit(8)
+    );
+    const postQueryDocs = await getDocs(postsQuery);
+    const postsQueryData = postQueryDocs.docs.map((doc) => doc.data() as Post);
+
+    if (postsQueryData.length === 0) {
+      setShowSuggestionsList(true);
+    } else if (postsQueryData.length < 8) {
+      setShowNoMorePostsText(true);
+    } else {
+      setShowLoadMoreButton(true);
+    }
+    setRecentSnapshot(postQueryDocs);
+    setPosts(postsQueryData);
+  };
+  const getHomePosts = async () => {
+    const homePosts = homePostsData.posts;
+    if (homePosts.length === 0) {
+      setShowSuggestionsList(true);
+    } else if (homePosts.length < homePostsData.postsRequested) {
+      setShowNoMorePostsText(true);
+    } else {
+      setShowLoadMoreButton(true);
+    }
+    setRecentSnapshot(homePostsData.recentSnapshot!);
+    setPosts(homePosts);
   };
   useEffect(() => {
     const loadInitialPosts = async () => {
-      let postsQuery: Query<DocumentData> = query(
-        collection(getFirestore(), "posts"),
-        where("postedBy", "in", [...user.following]),
-        orderBy("timestamp", "desc"),
-        limit(5)
-      );
-      const postQueryDocs = await getDocs(postsQuery);
-      const postsQueryData = postQueryDocs.docs
-        .map((doc) => doc.data() as Post)
-        .map((post) => {
-          const postUser = users.filter((user) => user.id === post.postedBy)[0];
-          return {
-            post: post,
-            postUser,
-          } as PostQuery;
-        });
-
-      if (postsQueryData.length === 0) {
-        setShowSuggestionsList(true);
-      } else if (postsQueryData.length < 5) {
-        setShowNoMorePostsText(true);
+      if (homePostsData.recentSnapshot) {
+        console.log("GETTING HOME POSTS");
+        getHomePosts();
       } else {
-        setShowLoadMoreButton(true);
+        console.log("GETTING NEW POSTS");
+
+        getNewPosts();
       }
-      setRecentSnapshot(postQueryDocs);
-      setHomePosts(postsQueryData);
     };
     loadInitialPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -121,6 +126,20 @@ const Home = () => {
       window.removeEventListener("resize", handleResizeWindow);
     };
   }, []);
+
+  useEffect(() => {
+    if (!recentSnapshot) {
+      return;
+    } else {
+      dispatch(
+        setHomePosts({
+          posts,
+          recentSnapshot,
+          postsRequested: homePostsData.postsRequested + 8,
+        })
+      );
+    }
+  }, [recentSnapshot, posts]);
   return (
     <HomeContainer showSuggestionsList={showSuggestionsList}>
       {showSuggestionsList ? (
@@ -128,12 +147,12 @@ const Home = () => {
       ) : (
         <React.Fragment>
           <PostFeedWrapper data-testid="PostFeed Wrapper">
-            {homePosts.map((homePost) => (
+            {posts.map((post) => (
               <StandardPost
-                post={homePost.post}
-                postUser={homePost.postUser}
+                post={post}
+                postUser={users.filter((user) => user.id === post.postedBy)[0]}
                 isOnHomePosts={true}
-                key={homePost.post.id}
+                key={post.id}
               />
             ))}
             {showLoadMoreButton === true ? (
@@ -144,7 +163,7 @@ const Home = () => {
               <PostText>No more posts to show.</PostText>
             ) : null}
           </PostFeedWrapper>
-          {width >= 1024 && homePosts.length !== 0 ? <Suggestions /> : null}
+          {width >= 1024 && posts.length !== 0 ? <Suggestions /> : null}
         </React.Fragment>
       )}
     </HomeContainer>

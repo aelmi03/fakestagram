@@ -1,36 +1,40 @@
 import styled, { css } from "styled-components";
-import { User } from "../../../features/user/userSlice";
+import { selectUser, User } from "../../../features/user/userSlice";
 import { Timestamp } from "firebase/firestore";
 import { formatDistanceToNow } from "date-fns";
 import { useNavigate } from "react-router-dom";
+import { Comment as PostComment } from "../../utils/PostInterface";
 import FlexContainer from "../../utils/FlexContainer";
 import { PostText, PostGreyText, PostTextBold } from "../../utils/Texts";
+import { selectAllUsers } from "../../../features/users/usersSlice";
+import { useAppSelector } from "../../../app/hooks";
 interface IProps {
-  timestamp: Timestamp;
-  content: string;
-  user: User;
+  comment: PostComment;
 }
-const Comment = ({ timestamp, content, user }: IProps) => {
+const Comment = ({ comment }: IProps) => {
   console.log("LOL");
+  const users = useAppSelector(selectAllUsers);
+  const user = useAppSelector(selectUser);
+  const postUser = users.filter((user) => user.id === comment.user)[0] || user;
   const navigate = useNavigate();
   return (
     <FlexContainer direction="row" gap="1.5rem" alignItems="start">
       <CommentPicture
-        src={user.profilePicture}
+        src={postUser.profilePicture}
         alt="comment profile"
         cursor="pointer"
-        onClick={() => navigate(`/profile/${user.id}`, { replace: true })}
+        onClick={() => navigate(`/profile/${postUser.id}`, { replace: true })}
       />
       <FlexContainer direction="column" gap="0.3rem">
         <PostTextBold
           cursor="pointer"
-          onClick={() => navigate(`/profile/${user.id}`, { replace: true })}
+          onClick={() => navigate(`/profile/${postUser.id}`, { replace: true })}
         >
-          {user.username}
-          <PostText>&nbsp;&nbsp;{content}</PostText>
+          {postUser.username}
+          <PostText>&nbsp;&nbsp;{comment.content}</PostText>
         </PostTextBold>
         <SmallGreyText>{`${formatDistanceToNow(
-          timestamp.toDate()
+          (comment.timestamp as Timestamp).toDate()
         )} ago`}</SmallGreyText>
       </FlexContainer>
     </FlexContainer>

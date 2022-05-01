@@ -4,6 +4,7 @@ import { Timestamp } from "firebase/firestore";
 import { ThemeProvider } from "styled-components";
 import SmallModal from "../../../components/Main/Posts/SmallModal";
 import Post from "../../../components/utils/PostInterface";
+import { Comment as IComment } from "../../../components/utils/PostInterface";
 import { User } from "../../../features/user/userSlice";
 import Theme from "../../../Themes/Theme";
 
@@ -15,11 +16,27 @@ jest.mock("../../../components/Main/Posts/Comments", () => {
   return () => <div>Comments component</div>;
 });
 jest.mock("../../../components/Main/Posts/Comment", () => {
-  return ({ user, content }: { user: User; content: string }) => (
+  return ({ comment }: { comment: IComment }) => (
     <div>
-      <h1>{user.username}</h1> <h1>{content}</h1>
+      <h1>{comment.user}</h1> <h1>{comment.content}</h1>
     </div>
   );
+});
+jest.mock("../../../app/hooks", () => {
+  return {
+    useAppSelector: (func: () => void) => func(),
+  };
+});
+jest.mock("../../../features/user/userSlice", () => {
+  return {
+    ...jest.requireActual("../../../features/user/userSlice"),
+    selectUser: () => mockUser,
+  };
+});
+jest.mock("../../../features/users/usersSlice", () => {
+  return {
+    selectAllUsers: () => [mockUser],
+  };
 });
 jest.mock("date-fns", () => {
   return {
@@ -53,17 +70,13 @@ describe("Calls the prop function when the Back icon is clicked", () => {
     changeModalStatus = jest.fn();
     render(
       <ThemeProvider theme={Theme}>
-        <SmallModal
-          post={mockPost}
-          postUser={mockUser}
-          changeModalStatus={changeModalStatus}
-        />
+        <SmallModal post={mockPost} changeModalStatus={changeModalStatus} />
       </ThemeProvider>
     );
   });
-  it("renders the caption as a comment correctly with the correct username and caption content", () => {
+  it("renders the caption as a comment correctly with the correct user and caption content", () => {
     expect(screen.getByText("Went on a trip!")).toBeInTheDocument();
-    expect(screen.getByText("johnDoe23")).toBeInTheDocument();
+    expect(screen.getByText("fakeUserID")).toBeInTheDocument();
   });
   it("calls the changeModalStatus function when the Go Back icon is clicked in the ReturnBack component", () => {
     expect(changeModalStatus).toHaveBeenCalledTimes(0);

@@ -1,9 +1,9 @@
-import { act, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import Theme from "../../../Themes/Theme";
 import { ThemeProvider } from "styled-components";
 import Comments from "../../../components/Main/Posts/Comments";
-import { User } from "../../../features/user/userSlice";
 import { Timestamp } from "firebase/firestore";
+import { Comment as IComment } from "../../../components/utils/PostInterface";
 import Post from "../../../components/utils/PostInterface";
 const fakePost: Post = {
   postedBy: "randomID",
@@ -39,38 +39,10 @@ const fakePost: Post = {
   id: "fakePostID",
   imgSrc: "fakeImgSrc",
 };
-const fakeUser: User = {
-  fullName: "John Doe",
-  username: "johnDoe23",
-  following: [],
-  savedPosts: [],
-  id: "fakeUserID",
-  profilePicture: "path/to/photo/for/johnDoe23",
-  biography: "Love riding bicycles and going to the beach :)",
-};
-jest.mock("firebase/firestore", () => {
-  return {
-    doc: jest.fn(),
-    getDoc: jest.fn(),
-    getFirestore: jest.fn(),
-  };
-});
-jest.mock("react-router-dom", () => {
-  return {
-    useNavigate: jest.fn(() => {}),
-  };
-});
-jest.mock("../../../app/hooks", () => {
-  return {
-    useAppSelector: (func: () => void) => func(),
-  };
+jest.mock("../../../components/Main/Posts/Comment", () => {
+  return ({ comment }: { comment: IComment }) => <div>{comment.content}</div>;
 });
 
-jest.mock("../../../features/users/usersSlice", () => {
-  return {
-    selectAllUsers: () => [fakeUser],
-  };
-});
 describe("Comments component", () => {
   it("renders the correct amount of comments with the corerct information", () => {
     render(

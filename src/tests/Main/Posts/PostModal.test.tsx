@@ -39,7 +39,6 @@ describe("Post Modal Component", () => {
       <ThemeProvider theme={Theme}>
         <PostModal
           post={mockPost}
-          postUser={mockUser}
           changeModalStatus={changeModalStatus}
           changePostToShow={changePostToShow}
           changeLikesModalStatus={changeLikesModalStatus}
@@ -55,7 +54,6 @@ describe("Post Modal Component", () => {
       <ThemeProvider theme={Theme}>
         <PostModal
           post={mockPost}
-          postUser={mockUser}
           changeModalStatus={changeModalStatus}
           changePostToShow={changePostToShow}
           changeLikesModalStatus={changeLikesModalStatus}

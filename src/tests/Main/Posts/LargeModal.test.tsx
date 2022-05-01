@@ -6,6 +6,7 @@ import { deletePost } from "../../../components/utils/utilityFunctions";
 import LargeModal from "../../../components/Main/Posts/LargeModal";
 import Post from "../../../components/utils/PostInterface";
 import { User } from "../../../features/user/userSlice";
+import { Comment as IComment } from "../../../components/utils/PostInterface";
 import Theme from "../../../Themes/Theme";
 
 let mockUser: User = {
@@ -50,14 +51,25 @@ jest.mock("../../../components/Main/Posts/Comment", () => {
 });
 jest.mock("../../../app/hooks", () => {
   return {
-    useAppSelector: () => mockUser,
+    useAppSelector: (func: () => void) => func(),
+  };
+});
+jest.mock("../../../features/user/userSlice", () => {
+  return {
+    ...jest.requireActual("../../../features/user/userSlice"),
+    selectUser: () => mockUser,
+  };
+});
+jest.mock("../../../features/users/usersSlice", () => {
+  return {
+    selectAllUsers: () => [mockUser],
   };
 });
 jest.mock("../../../components/Main/Posts/Comments", () => {
   return () => <div>Comments Component</div>;
 });
 jest.mock("../../../components/Main/Posts/Comment", () => {
-  return ({ content }: fakeComment) => <div>{content}</div>;
+  return ({ comment }: { comment: IComment }) => <div>{comment.content}</div>;
 });
 jest.mock("../../../components/utils/utilityFunctions", () => {
   return {
@@ -84,7 +96,6 @@ describe("Large Modal component", () => {
       <ThemeProvider theme={Theme}>
         <LargeModal
           post={mockPost}
-          postUser={mockUser}
           changeLikesModalStatus={changeLikesModalStatus}
           changeModalStatus={changeModalStatus}
           changePostToShow={changePostToShow}
@@ -98,7 +109,6 @@ describe("Large Modal component", () => {
       <ThemeProvider theme={Theme}>
         <LargeModal
           post={mockPost}
-          postUser={mockUser}
           changeLikesModalStatus={changeLikesModalStatus}
           changeModalStatus={changeModalStatus}
           changePostToShow={changePostToShow}
@@ -118,7 +128,6 @@ describe("Large Modal component", () => {
       <ThemeProvider theme={Theme}>
         <LargeModal
           post={mockPost}
-          postUser={mockUser}
           changeModalStatus={changeModalStatus}
           changeLikesModalStatus={changeLikesModalStatus}
         />
@@ -134,7 +143,6 @@ describe("Large Modal component", () => {
       <ThemeProvider theme={Theme}>
         <LargeModal
           post={mockPost}
-          postUser={mockUser}
           changeLikesModalStatus={changeLikesModalStatus}
           changeModalStatus={changeModalStatus}
           changePostToShow={changePostToShow}
@@ -151,7 +159,6 @@ describe("Large Modal component", () => {
       <ThemeProvider theme={Theme}>
         <LargeModal
           post={mockPost}
-          postUser={mockUser}
           changeLikesModalStatus={changeLikesModalStatus}
           changeModalStatus={changeModalStatus}
           changePostToShow={changePostToShow}

@@ -5,7 +5,6 @@ import LargeModal from "./LargeModal";
 
 interface IProps {
   post: Post;
-  postUser: User;
   changeModalStatus: () => void;
   width: number;
   changePostToShow?: (post: Post | null) => void;
@@ -13,7 +12,6 @@ interface IProps {
 }
 const PostModal = ({
   post,
-  postUser,
   changeModalStatus,
   width,
   changePostToShow,
@@ -23,20 +21,13 @@ const PostModal = ({
     return (
       <LargeModal
         post={post}
-        postUser={postUser}
         changeModalStatus={changeModalStatus}
         changePostToShow={changePostToShow}
         changeLikesModalStatus={changeLikesModalStatus}
       />
     );
   }
-  return (
-    <SmallModal
-      post={post}
-      postUser={postUser}
-      changeModalStatus={changeModalStatus}
-    />
-  );
+  return <SmallModal post={post} changeModalStatus={changeModalStatus} />;
 };
 
 export default PostModal;

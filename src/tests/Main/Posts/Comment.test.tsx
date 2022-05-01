@@ -5,6 +5,9 @@ import { ThemeProvider } from "styled-components";
 import Comment from "../../../components/Main/Posts/Comment";
 import { User } from "../../../features/user/userSlice";
 import userEvent from "@testing-library/user-event";
+import { selectAllUsers } from "../../../features/users/usersSlice";
+import { selectUser } from "../../../features/user/userSlice";
+import { useAppSelector } from "../../../app/hooks";
 const mockUser: User = {
   fullName: "John Doe",
   username: "johnDoe23",
@@ -29,14 +32,33 @@ jest.mock("react-router-dom", () => {
     }),
   };
 });
+jest.mock("../../../app/hooks", () => {
+  return {
+    useAppSelector: (func: () => void) => func(),
+  };
+});
+jest.mock("../../../features/user/userSlice", () => {
+  return {
+    ...jest.requireActual("../../../features/user/userSlice"),
+    selectUser: () => mockUser,
+  };
+});
+jest.mock("../../../features/users/usersSlice", () => {
+  return {
+    selectAllUsers: () => [mockUser],
+  };
+});
 describe("Comment component", () => {
   it("correctly renders based on the props", () => {
     render(
       <ThemeProvider theme={Theme}>
         <Comment
-          timestamp={fakeTimestamp}
-          content={fakeContent}
-          user={mockUser}
+          comment={{
+            timestamp: fakeTimestamp,
+            content: fakeContent,
+            user: mockUser.id,
+            id: "commentID",
+          }}
         />
       </ThemeProvider>
     );
@@ -51,9 +73,12 @@ describe("Comment component", () => {
     render(
       <ThemeProvider theme={Theme}>
         <Comment
-          timestamp={fakeTimestamp}
-          content={fakeContent}
-          user={mockUser}
+          comment={{
+            timestamp: fakeTimestamp,
+            content: fakeContent,
+            user: mockUser.id,
+            id: "commentID",
+          }}
         />
       </ThemeProvider>
     );

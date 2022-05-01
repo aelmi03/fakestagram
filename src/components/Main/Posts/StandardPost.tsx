@@ -181,7 +181,6 @@ const StandardPost = React.memo(
         </FlexContainer>
         {showPostModal === true && (
           <PostModal
-            postUser={postUser}
             post={postInfo}
             changeModalStatus={changeModalStatus}
             width={width}

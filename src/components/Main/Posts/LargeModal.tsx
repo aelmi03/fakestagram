@@ -17,9 +17,10 @@ import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../../app/hooks";
 import DeletePostButton from "../../utils/DeletePostButton";
 import PostIcons from "./PostIcons";
+import { selectAllUsers } from "../../../features/users/usersSlice";
+import { nanoid } from "@reduxjs/toolkit";
 interface IProps {
   post: Post;
-  postUser: User;
   changeModalStatus: () => void;
   changePostToShow?: (post: Post | null) => void;
   changeLikesModalStatus: () => void;
@@ -27,7 +28,6 @@ interface IProps {
 const LargeModal = React.memo(
   ({
     post,
-    postUser,
     changeModalStatus,
     changePostToShow,
     changeLikesModalStatus,
@@ -35,6 +35,10 @@ const LargeModal = React.memo(
     console.log("large modal");
     const [showDeleteButton, setShowDeleteButton] = useState(false);
     const user = useAppSelector(selectUser, checkEquality);
+    const users = useAppSelector(selectAllUsers);
+    const postUser =
+      users.filter((user) => user.id === post.postedBy)[0] || user;
+    console.log(postUser, "post-user");
     const navigate = useNavigate();
     return (
       <ModalWrapper
@@ -114,9 +118,12 @@ const LargeModal = React.memo(
               flexGrow="1"
             >
               <Comment
-                content={post.caption}
-                timestamp={post.timestamp}
-                user={postUser}
+                comment={{
+                  content: post.caption,
+                  timestamp: post.timestamp,
+                  user: postUser.id,
+                  id: nanoid(),
+                }}
               />
               <Comments post={post} />
             </FlexContainer>
