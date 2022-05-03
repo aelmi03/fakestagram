@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { selectUser, User } from "../../../features/user/userSlice";
+import { selectUser } from "../../../features/user/userSlice";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
 import React, { useState, useEffect } from "react";
 import {
@@ -8,14 +8,11 @@ import {
   getFirestore,
   where,
   getDocs,
-  doc,
-  getDoc,
   limit,
   QuerySnapshot,
   startAfter,
   DocumentData,
   orderBy,
-  Query,
 } from "firebase/firestore";
 import StandardPost from "../Posts/StandardPost";
 import Button from "../../utils/Button";
@@ -41,6 +38,16 @@ const Home = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [showSuggestionsList, setShowSuggestionsList] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
+  const removePost = (postID: string) => {
+    console.log("REMOVING POST", postID);
+    const filteredPosts = posts.filter((post) => post.id !== postID);
+    setPosts(filteredPosts);
+    dispatch(
+      setHomePosts({
+        postsRequested: homePostsData.postsRequested - 1,
+      })
+    );
+  };
   const [recentSnapshot, setRecentSnapshot] = useState<
     QuerySnapshot<DocumentData>
   >({} as QuerySnapshot<DocumentData>);
@@ -53,14 +60,18 @@ const Home = () => {
       orderBy("timestamp", "desc"),
       where("postedBy", "in", [...user.following]),
       startAfter(lastVisible),
-      limit(8)
+      limit(4)
     );
     const postQueryDocs = await getDocs(postsQuery);
     const postsQueryData = postQueryDocs.docs.map((doc) => doc.data() as Post);
-
+    dispatch(
+      setHomePosts({
+        postsRequested: homePostsData.postsRequested + 4,
+      })
+    );
     if (postsQueryData.length === 0) {
       setShowNoMorePostsText(true);
-    } else if (postsQueryData.length < 8) {
+    } else if (postsQueryData.length < 4) {
       setPosts([...posts, ...postsQueryData]);
       setShowNoMorePostsText(true);
     } else {
@@ -70,48 +81,29 @@ const Home = () => {
     setRecentSnapshot(postQueryDocs);
     setShowLoading(false);
   };
-  const getNewPosts = async () => {
-    const postsQuery = query(
-      collection(getFirestore(), "posts"),
-      where("postedBy", "in", [...user.following]),
-      orderBy("timestamp", "desc"),
-      limit(8)
-    );
-    const postQueryDocs = await getDocs(postsQuery);
-    const postsQueryData = postQueryDocs.docs.map((doc) => doc.data() as Post);
 
-    if (postsQueryData.length === 0) {
-      setShowSuggestionsList(true);
-    } else if (postsQueryData.length < 8) {
-      setShowNoMorePostsText(true);
-    } else {
-      setShowLoadMoreButton(true);
-    }
-    setRecentSnapshot(postQueryDocs);
-    setPosts(postsQueryData);
-  };
-  const getHomePosts = async () => {
-    const homePosts = homePostsData.posts;
-    if (homePosts.length === 0) {
-      setShowSuggestionsList(true);
-    } else if (homePosts.length < homePostsData.postsRequested) {
-      setShowNoMorePostsText(true);
-    } else {
-      setShowLoadMoreButton(true);
-    }
-    setRecentSnapshot(homePostsData.recentSnapshot!);
-    setPosts(homePosts);
-  };
   useEffect(() => {
     const loadInitialPosts = async () => {
-      if (homePostsData.recentSnapshot) {
-        console.log("GETTING HOME POSTS");
-        getHomePosts();
-      } else {
-        console.log("GETTING NEW POSTS");
+      const postsQuery = query(
+        collection(getFirestore(), "posts"),
+        where("postedBy", "in", [...user.following]),
+        orderBy("timestamp", "desc"),
+        limit(homePostsData.postsRequested)
+      );
+      const postQueryDocs = await getDocs(postsQuery);
+      const postsQueryData = postQueryDocs.docs.map(
+        (doc) => doc.data() as Post
+      );
 
-        getNewPosts();
+      if (postsQueryData.length === 0) {
+        setShowSuggestionsList(true);
+      } else if (postsQueryData.length < homePostsData.postsRequested) {
+        setShowNoMorePostsText(true);
+      } else {
+        setShowLoadMoreButton(true);
       }
+      setRecentSnapshot(postQueryDocs);
+      setPosts(postsQueryData);
     };
     loadInitialPosts();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -127,19 +119,6 @@ const Home = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (!recentSnapshot) {
-      return;
-    } else {
-      dispatch(
-        setHomePosts({
-          posts,
-          recentSnapshot,
-          postsRequested: homePostsData.postsRequested + 8,
-        })
-      );
-    }
-  }, [recentSnapshot, posts]);
   return (
     <HomeContainer showSuggestionsList={showSuggestionsList}>
       {showSuggestionsList ? (
@@ -153,6 +132,7 @@ const Home = () => {
                 postUser={users.filter((user) => user.id === post.postedBy)[0]}
                 isOnHomePosts={true}
                 key={post.id}
+                removePost={removePost}
               />
             ))}
             {showLoadMoreButton === true ? (
@@ -160,7 +140,7 @@ const Home = () => {
             ) : null}
             {showLoading === true ? <Loader /> : null}
             {showNoMorePostsText === true ? (
-              <PostText>No more posts to show.</PostText>
+              <PostText>~End Of Your Feed~</PostText>
             ) : null}
           </PostFeedWrapper>
           {width >= 1024 && posts.length !== 0 ? <Suggestions /> : null}

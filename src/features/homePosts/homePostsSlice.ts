@@ -3,9 +3,7 @@ import { DocumentData, Query, QuerySnapshot } from "firebase/firestore";
 import Post from "../../components/utils/PostInterface";
 import { RootState } from "../../app/store";
 const initialState = {
-  posts: [] as Post[],
-  recentSnapshot: null as null | QuerySnapshot<DocumentData>,
-  postsRequested: 0,
+  postsRequested: 6,
 };
 export const homePostsSlice = createSlice({
   name: "users",

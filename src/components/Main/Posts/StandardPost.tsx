@@ -27,9 +27,10 @@ interface IProps {
   postUser: User;
   isOnHomePosts: boolean;
   changePostToShow?: (post: Post | null) => void;
+  removePost?: (postID: string) => void;
 }
 const StandardPost = React.memo(
-  ({ post, postUser, isOnHomePosts, changePostToShow }: IProps) => {
+  ({ post, postUser, isOnHomePosts, changePostToShow, removePost }: IProps) => {
     console.log("STANDARD POST");
     const user = useAppSelector(selectUser, checkEquality);
     const navigate = useNavigate();
@@ -60,12 +61,17 @@ const StandardPost = React.memo(
           hasFetched = true;
           return;
         }
-        if (!snapshot.exists()) {
+        if (!snapshot.exists() && removePost) {
+          removePost(postInfo.id);
+        } else if (!snapshot.exists()) {
+          console.log("second option");
           if (changePostToShow) {
             changePostToShow(null);
           }
+        } else {
+          setPostInfo(snapshot.data() as Post);
+          console.log("setting null info");
         }
-        setPostInfo(snapshot.data() as Post);
       });
       return () => {
         unsubscribe();
@@ -191,7 +197,7 @@ const StandardPost = React.memo(
         {showLikesModal === true && (
           <Modal
             name={"Likes"}
-            usersID={post.likes}
+            usersID={postInfo.likes}
             changeModalStatus={changeLikesModalStatus}
             noUsersMessage="There are no likes on this post"
           />
