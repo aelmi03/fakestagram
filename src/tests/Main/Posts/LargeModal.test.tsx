@@ -30,7 +30,6 @@ let mockPost: Post = {
   imgSrc: "fakeImgSrc",
 };
 
-type fakeComment = { content: string };
 let mockNavigateFunction = jest.fn();
 jest.mock("react-router-dom", () => {
   return {

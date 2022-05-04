@@ -3,7 +3,6 @@ import { ThemeProvider } from "styled-components";
 import Theme from "../../../Themes/Theme";
 import { render, screen } from "@testing-library/react";
 import Post from "../../../components/utils/PostInterface";
-import { User } from "../../../features/user/userSlice";
 import { Timestamp } from "firebase/firestore";
 
 const changeModalStatus = jest.fn();
@@ -18,15 +17,7 @@ const mockPost: Post = {
   id: "fakePostID",
   imgSrc: "fakeImgSrc",
 };
-const mockUser: User = {
-  fullName: "John Doe",
-  username: "johnDoe23",
-  following: [],
-  savedPosts: [],
-  id: "fakeUserID",
-  profilePicture: "path/to/photo/for/johnDoe23",
-  biography: "Love riding bicycles and going to the beach :)",
-};
+
 jest.mock("../../../components/Main/Posts/SmallModal", () => {
   return () => <div>Small Modal Component</div>;
 });
