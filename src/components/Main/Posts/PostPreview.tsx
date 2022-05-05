@@ -9,12 +9,16 @@ interface IProps {
 }
 const PostPreview = ({ post, changePostToShow }: IProps) => {
   return (
-    <ProfilePost
+    <PostPreviewContainer
       key={post.id}
       onClick={() => changePostToShow(post)}
       data-testid={`${post.id}`}
     >
-      <ProfilePostImage src={post.imgSrc} alt="profile" />
+      <PostPreviewImage
+        src={post.imgSrc}
+        alt="profile"
+        data-testid="Post Preview Image"
+      />
       <PostInformation>
         <FlexContainer direction="row" gap="0.7rem" alignItems="center">
           <AiFillHeart />
@@ -29,7 +33,7 @@ const PostPreview = ({ post, changePostToShow }: IProps) => {
           </PostInformationText>
         </FlexContainer>
       </PostInformation>
-    </ProfilePost>
+    </PostPreviewContainer>
   );
 };
 
@@ -68,12 +72,12 @@ const PostInformation = styled.div`
     width: max-content;
   }
 `;
-const ProfilePostImage = styled.img`
+const PostPreviewImage = styled.img`
   width: 100%;
   height: 100%;
   aspect-ratio: 1 / 1;
 `;
-const ProfilePost = styled.div`
+const PostPreviewContainer = styled.div`
   width: 100%;
   height: 100%;
   cursor: pointer;

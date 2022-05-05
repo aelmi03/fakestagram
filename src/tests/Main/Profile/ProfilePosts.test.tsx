@@ -5,7 +5,6 @@ import Post from "../../../components/utils/PostInterface";
 import { User } from "../../../features/user/userSlice";
 import ProfilePosts from "../../../components/Main/Profile/ProfilePosts";
 import { ThemeProvider } from "styled-components";
-import PostPreview from "../../../components/Main/Posts/PostPreview";
 import Theme from "../../../Themes/Theme";
 
 let mockUser: User = {
