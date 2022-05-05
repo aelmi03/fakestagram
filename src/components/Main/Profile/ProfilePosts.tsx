@@ -4,9 +4,7 @@ import { FaRegBookmark } from "react-icons/fa";
 import Post from "../../utils/PostInterface";
 import React, { useEffect, useState } from "react";
 import { selectUser, User } from "../../../features/user/userSlice";
-import { BsFillChatFill } from "react-icons/bs";
-import { AiFillHeart } from "react-icons/ai";
-
+import PostPreview from "../Posts/PostPreview";
 import {
   collection,
   getFirestore,
@@ -89,27 +87,7 @@ const ProfilePosts = React.memo(
         </FlexContainer>
         <PostsContainer data-testid="Posts Container">
           {profilePosts.map((post) => (
-            <ProfilePost
-              key={post.id}
-              onClick={() => changePostToShow(post)}
-              data-testid={`${post.id}`}
-            >
-              <ProfilePostImage src={post.imgSrc} alt="profile" />
-              <PostInformation>
-                <FlexContainer direction="row" gap="0.7rem" alignItems="center">
-                  <AiFillHeart />
-                  <PostInformationText data-testid="likes">
-                    {post.likes.length}
-                  </PostInformationText>
-                </FlexContainer>
-                <FlexContainer direction="row" gap="0.7rem" alignItems="center">
-                  <BsFillChatFill />
-                  <PostInformationText data-testid="comments">
-                    {post.comments.length}
-                  </PostInformationText>
-                </FlexContainer>
-              </PostInformation>
-            </ProfilePost>
+            <PostPreview post={post} changePostToShow={changePostToShow} />
           ))}
         </PostsContainer>
       </ProfilePostsWrapper>

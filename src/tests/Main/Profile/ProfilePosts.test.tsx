@@ -5,6 +5,7 @@ import Post from "../../../components/utils/PostInterface";
 import { User } from "../../../features/user/userSlice";
 import ProfilePosts from "../../../components/Main/Profile/ProfilePosts";
 import { ThemeProvider } from "styled-components";
+import PostPreview from "../../../components/Main/Posts/PostPreview";
 import Theme from "../../../Themes/Theme";
 
 let mockUser: User = {
@@ -198,6 +199,18 @@ jest.mock("firebase/firestore", () => {
     }),
     orderBy: jest.fn(),
   };
+});
+jest.mock("../../../components/Main/Posts/PostPreview", () => {
+  interface MockProps {
+    post: Post;
+    changePostToShow: (post: Post) => void;
+  }
+  return ({ post, changePostToShow }: MockProps) => (
+    <div data-testid={post.id} onClick={() => changePostToShow(post)}>
+      <h1 data-testid="likes">{post.likes.length}</h1>
+      <h1 data-testid="comments">{post.comments.length}</h1>
+    </div>
+  );
 });
 jest.mock("../../../app/hooks", () => {
   return {
