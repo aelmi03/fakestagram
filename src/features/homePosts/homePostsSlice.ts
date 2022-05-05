@@ -1,18 +1,17 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-const initialState = {
-  postsRequested: 8,
-};
+const initialState: number = 8;
 export const homePostsSlice = createSlice({
-  name: "users",
+  name: "homePosts",
   initialState,
   reducers: {
-    setHomePosts(state, action: PayloadAction<typeof initialState>) {
+    setHomePostsAmount(state, action: PayloadAction<typeof initialState>) {
       return action.payload;
     },
   },
 });
 
-export const selectHomePosts = (state: RootState) => state.homePosts;
-export const { setHomePosts } = homePostsSlice.actions;
+export const selectHomePostsAmount = (state: RootState) =>
+  state.homePostsRequested;
+export const { setHomePostsAmount } = homePostsSlice.actions;
 export default homePostsSlice.reducer;

@@ -21,15 +21,15 @@ import { PostText } from "../../utils/Texts";
 import Suggestions from "./Suggestions";
 import SuggestionsList from "./SuggestionsList";
 import {
-  selectHomePosts,
-  setHomePosts,
+  selectHomePostsAmount,
+  setHomePostsAmount,
 } from "../../../features/homePosts/homePostsSlice";
 import Post from "../../utils/PostInterface";
 import { selectAllUsers } from "../../../features/users/usersSlice";
 
 const Home = () => {
   const user = useAppSelector(selectUser);
-  const homePostsData = useAppSelector(selectHomePosts);
+  const homePostsAmount = useAppSelector(selectHomePostsAmount);
   const users = useAppSelector(selectAllUsers);
   const [showNoMorePostsText, setShowNoMorePostsText] = useState(false);
   const dispatch = useAppDispatch();
@@ -42,11 +42,7 @@ const Home = () => {
     console.log("REMOVING POST", postID);
     const filteredPosts = posts.filter((post) => post.id !== postID);
     setPosts(filteredPosts);
-    dispatch(
-      setHomePosts({
-        postsRequested: homePostsData.postsRequested - 1,
-      })
-    );
+    dispatch(setHomePostsAmount(homePostsAmount - 1));
   };
   const [recentSnapshot, setRecentSnapshot] = useState<
     QuerySnapshot<DocumentData>
@@ -64,11 +60,7 @@ const Home = () => {
     );
     const postQueryDocs = await getDocs(postsQuery);
     const postsQueryData = postQueryDocs.docs.map((doc) => doc.data() as Post);
-    dispatch(
-      setHomePosts({
-        postsRequested: homePostsData.postsRequested + 4,
-      })
-    );
+    dispatch(setHomePostsAmount(homePostsAmount + 4));
     if (postsQueryData.length === 0) {
       setShowNoMorePostsText(true);
     } else if (postsQueryData.length < 4) {
@@ -88,7 +80,7 @@ const Home = () => {
         collection(getFirestore(), "posts"),
         where("postedBy", "in", [...user.following]),
         orderBy("timestamp", "desc"),
-        limit(homePostsData.postsRequested)
+        limit(homePostsAmount)
       );
       const postQueryDocs = await getDocs(postsQuery);
       const postsQueryData = postQueryDocs.docs.map(
@@ -97,7 +89,7 @@ const Home = () => {
 
       if (postsQueryData.length === 0) {
         setShowSuggestionsList(true);
-      } else if (postsQueryData.length < homePostsData.postsRequested) {
+      } else if (postsQueryData.length < homePostsAmount) {
         setShowNoMorePostsText(true);
       } else {
         setShowLoadMoreButton(true);

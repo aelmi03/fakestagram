@@ -70,8 +70,8 @@ jest.mock("../../../features/users/usersSlice", () => {
 jest.mock("../../../features/homePosts/homePostsSlice", () => {
   return {
     ...jest.requireActual("../../../features/homePosts/homePostsSlice"),
-    selectHomePosts: () => {
-      return { postsRequested: mockPostsRequested };
+    selectHomePostsAmount: () => {
+      return mockPostsRequested;
     },
     __esModule: true,
   };
@@ -267,7 +267,7 @@ describe("Home component", () => {
       screen.getByRole("button", { name: "Load More" })
     ).toBeInTheDocument();
     expect(screen.getAllByText("StandardPost Component").length).toBe(12);
-    expect(store.getState().homePosts.postsRequested).toBe(12);
+    expect(store.getState().homePostsRequested).toBe(12);
   });
   it("will successfully render new posts when the Load More button is clicked to the posts list and will render No more posts to show text if it fetches less than 8 posts", async () => {
     await act(async () => {
