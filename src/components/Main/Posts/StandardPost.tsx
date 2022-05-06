@@ -113,6 +113,7 @@ const StandardPost = React.memo(
               width="max-content"
               alignItems="center"
               cursor="pointer"
+              padding="0.5rem 0rem 0rem 0rem"
               onClick={() =>
                 navigate(`/profile/${postUser.id}`, { replace: true })
               }

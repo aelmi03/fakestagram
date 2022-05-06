@@ -34,6 +34,7 @@ export const BasicText = styled.p<{
   wrapText?: boolean;
   fadeText?: boolean;
   cursor?: string;
+  textAlign?: string;
 }>`
   font-family: ${({ theme }) => theme.primaryFont};
   color: ${({ theme }) => theme.palette.primary.contrastText};
@@ -71,6 +72,11 @@ export const BasicText = styled.p<{
     cursor &&
     css`
       cursor: pointer;
+    `}
+    ${({ textAlign }) =>
+    textAlign &&
+    css`
+      text-align: ${textAlign};
     `}
 `;
 export const PostCommentText = styled(PostText)`

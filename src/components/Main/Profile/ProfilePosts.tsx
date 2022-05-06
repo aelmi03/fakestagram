@@ -125,52 +125,7 @@ const InfoText = styled.p`
   font-family: ${({ theme }) => theme.primaryFont};
   font-size: 1.3rem;
 `;
-const PostInformationText = styled.h4`
-  color: ${({ theme }) => theme.palette.common.white};
-  font-family: ${({ theme }) => theme.primaryFont};
-  font-size: 1.2rem;
-  font-weight: bold;
-  @media only screen and (min-width: 540px) {
-    font-size: 1.75rem;
-  }
-`;
-const ProfilePostImage = styled.img`
-  width: 100%;
-  height: 100%;
-  aspect-ratio: 1 / 1;
-`;
-const ProfilePost = styled.div`
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
-  position: relative;
-`;
-const PostInformation = styled.div`
-  position: absolute;
-  display: flex;
-  justify-content: space-evenly;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  &:hover {
-    opacity: 1;
-  }
-  svg {
-    color: ${({ theme }) => theme.palette.common.white};
-    height: 15px;
-    width: 15px;
-    @media only screen and (min-width: 540px) {
-      height: 25px;
-      width: 25px;
-    }
-  }
-  div {
-    width: max-content;
-  }
-`;
+
 const InfoContainer = styled.div<{ highlight: boolean }>`
   display: flex;
   flex-flow: row nowrap;

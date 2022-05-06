@@ -245,7 +245,7 @@ const ProfileWrapper = styled.div`
   }
 
   @media only screen and (min-width: 1024px) {
-    width: 85%;
+    max-width: 985px;
     margin: 0 auto;
   }
 `;
@@ -257,8 +257,6 @@ const SelectedPostWrapper = styled.div`
   bottom: 0;
   overflow: scroll;
   z-index: 35;
-  @media only screen and (min-width: 768px) {
-  }
 `;
 const ButtonsContainer = styled.div`
   display: flex;

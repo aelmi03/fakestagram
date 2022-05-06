@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import FlexContainer from "../../utils/FlexContainer";
 import { AiOutlineHome, AiFillHome, AiOutlinePlusCircle } from "react-icons/ai";
 import { BsFillChatFill, BsChat, BsPerson, BsPersonFill } from "react-icons/bs";
+import { MdOutlineExplore, MdExplore } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
@@ -24,6 +25,13 @@ const Links = ({ toggleAddPostModal }: IProps) => {
       <AiOutlinePlusCircle onClick={toggleAddPostModal} />
       <StyledLink to="/chats">
         {location.pathname.includes("chats") ? <BsFillChatFill /> : <BsChat />}
+      </StyledLink>
+      <StyledLink to="/explore">
+        {location.pathname.includes("explore") ? (
+          <MdExplore />
+        ) : (
+          <MdOutlineExplore />
+        )}
       </StyledLink>
 
       <StyledLink to={`/profile/${getAuth().currentUser!.uid}`}>

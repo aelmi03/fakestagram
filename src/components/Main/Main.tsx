@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Search from "./Navbar/Search";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Profile from "./Profile";
+import Explore from "./Explore";
 import Messages from "./Messages";
 import Home from "./Home";
 const Main = () => {
@@ -16,6 +17,7 @@ const Main = () => {
           <Route path="/search" element={<Search />} />
           <Route path="/home" element={<Home />} />
           <Route path="/chats" element={<Messages />} />
+          <Route path="/explore" element={<Explore />} />
         </Routes>
       </Router>
     </MainWrapper>
