@@ -67,7 +67,7 @@ const MessagesWrapper = styled.div`
   @media only screen and (min-width: 1024px) {
     height: calc(100vh - 55px - 5rem);
     border-top: 1px solid ${({ theme }) => theme.palette.common.grey};
-    width: 1100px;
+    width: 1024px;
     margin: 0 auto;
     margin-top: 2rem;
   }

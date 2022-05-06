@@ -63,11 +63,10 @@ const StandardPost = React.memo(
         }
         if (!snapshot.exists() && removePost) {
           removePost(postInfo.id);
-        } else if (!snapshot.exists()) {
+        }
+        if (!snapshot.exists() && changePostToShow) {
           console.log("second option");
-          if (changePostToShow) {
-            changePostToShow(null);
-          }
+          changePostToShow(null);
         } else {
           setPostInfo(snapshot.data() as Post);
           console.log("setting null info");
