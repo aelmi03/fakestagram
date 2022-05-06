@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import chatRoomReducer from "../features/chatRooms/chatRoomsSlice";
 import userReducer from "../features/user/userSlice";
 import usersReducer from "../features/users/usersSlice";
+import explorePostsReducer from "../features/explorePosts/explorePostsSlice";
 import homePostsReducer from "../features/homePosts/homePostsSlice";
 
 export const store = configureStore({
@@ -10,6 +11,7 @@ export const store = configureStore({
     users: usersReducer,
     chatRooms: chatRoomReducer,
     homePostsRequested: homePostsReducer,
+    explorePostsRequested: explorePostsReducer,
   },
 });
 
