@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-const initialState: number = 5;
+const initialState: number = 10;
 export const explorePostsSlice = createSlice({
   name: "explorePosts",
   initialState,
