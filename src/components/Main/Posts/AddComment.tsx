@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { selectUser } from "../../../features/user/userSlice";
 import { useAppSelector } from "../../../app/hooks";
 import Post, { Comment } from "../../utils/PostInterface";
-import { PostCommentText } from "../../utils/Texts";
+import { BasicText, PostCommentText } from "../../utils/Texts";
 import { nanoid } from "@reduxjs/toolkit";
 interface IProps {
   post: Post;
@@ -13,7 +13,7 @@ const AddComment = React.memo(({ post }: IProps) => {
   const user = useAppSelector(selectUser);
   const [comment, setComment] = useState("");
   const postComment = async () => {
-    if (!comment) return;
+    if (comment.replace(/ /g, "").length === 0) return;
     const postDoc = doc(getFirestore(), `posts/${post.id}`);
     const newComment: Comment = {
       user: user.id,
@@ -34,7 +34,16 @@ const AddComment = React.memo(({ post }: IProps) => {
         onChange={(e) => setComment((e.target as HTMLTextAreaElement).value)}
         name="Comment"
       />
-      <PostCommentText onClick={postComment}>Post</PostCommentText>
+      <BasicText
+        fontSize="1.4rem"
+        fontWeight="500"
+        cursor="pointer"
+        fadeText={comment.replace(/ /g, "").length === 0}
+        onClick={postComment}
+        color="blue"
+      >
+        Post
+      </BasicText>
     </PostCommentsContainer>
   );
 });
