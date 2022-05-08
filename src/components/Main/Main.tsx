@@ -1,13 +1,18 @@
 import Navbar from "./Navbar";
 import styled from "styled-components";
 import Search from "./Navbar/Search";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ReactRouterDom, {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
 import Profile from "./Profile";
 import Explore from "./Explore";
 import Messages from "./Messages";
 import Home from "./Home";
 const Main = () => {
   console.log("MAIN ");
+  console.log(Router);
   return (
     <MainWrapper>
       <Router>
