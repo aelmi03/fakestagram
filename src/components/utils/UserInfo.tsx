@@ -29,12 +29,19 @@ const UserInfo = ({
         src={user.profilePicture}
         alt="Profile Picture"
         largerImage={largerImage}
+        data-testid="UserInfo Image"
       />
       <FlexContainer direction="column" gap="0rem">
-        <OverflowContainer minimumSize={minimumSize}>
+        <OverflowContainer
+          minimumSize={minimumSize}
+          data-testid="First Overflow Container"
+        >
           <UsernameText>{user.username}</UsernameText>
         </OverflowContainer>
-        <OverflowContainer minimumSize={minimumSize}>
+        <OverflowContainer
+          minimumSize={minimumSize}
+          data-testid="Second Overflow Container"
+        >
           <FullNameText>{user.fullName}</FullNameText>
         </OverflowContainer>
       </FlexContainer>
