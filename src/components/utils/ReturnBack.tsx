@@ -44,11 +44,17 @@ const ReturnBack = ({
           data-testid="Profile Picture and Username Container"
           onClick={() => onChatAccountClicked(user)}
         >
-          <AccountImage size="30px" src={user.profilePicture} />
-          <NameText margin={false}>{name}</NameText>
+          <AccountImage
+            size="30px"
+            src={user.profilePicture}
+            data-testid="Account Image"
+          />
+          <NameText margin={false} data-testid="Name">
+            {name}
+          </NameText>
         </FlexContainer>
       ) : (
-        <NameText>{name}</NameText>
+        <NameText data-testid="Name">{name}</NameText>
       )}
       {onChatIconClick ? (
         <FaRegEdit onClick={onChatIconClick} data-testid="Chat Icon" />
