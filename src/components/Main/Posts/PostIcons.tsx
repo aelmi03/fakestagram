@@ -79,7 +79,6 @@ const PostIconsContainer = styled.div<{
   gap: 1.5rem;
   width: max-content;
   align-content: center;
-
   ${({ largeModal }) =>
     largeModal === true &&
     css`
