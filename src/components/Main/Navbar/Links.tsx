@@ -14,33 +14,45 @@ const Links = ({ toggleAddPostModal }: IProps) => {
   const location = useLocation();
   return (
     <LinksContainer direction="row" gap="0.5rem">
-      <StyledLink to="/home">
+      <StyledLink to="/home" data-testid="Home Link">
         {location.pathname.includes("home") ? (
-          <AiFillHome />
+          <AiFillHome data-testid="Filled Home Icon" />
         ) : (
-          <AiOutlineHome />
+          <AiOutlineHome data-testid="Unfilled Home Icon" />
         )}
       </StyledLink>
-      <StyledLink to="/search">{<FiSearch />}</StyledLink>
-      <AiOutlinePlusCircle onClick={toggleAddPostModal} />
-      <StyledLink to="/chats">
-        {location.pathname.includes("chats") ? <BsFillChatFill /> : <BsChat />}
+      <StyledLink to="/search" data-testid="Search Link">
+        {<FiSearch />}
       </StyledLink>
-      <StyledLink to="/explore">
-        {location.pathname.includes("explore") ? (
-          <MdExplore />
+      <AiOutlinePlusCircle
+        onClick={toggleAddPostModal}
+        data-testid="Add Post Icon"
+      />
+      <StyledLink to="/chats" data-testid="Chats Link">
+        {location.pathname.includes("chats") ? (
+          <BsFillChatFill data-testid="Filled Chats Icon" />
         ) : (
-          <MdOutlineExplore />
+          <BsChat data-testid="Unfilled Chats Icon" />
+        )}
+      </StyledLink>
+      <StyledLink to="/explore" data-testid="Explore Link">
+        {location.pathname.includes("explore") ? (
+          <MdExplore data-testid="Filled Explore Icon" />
+        ) : (
+          <MdOutlineExplore data-testid="Unfilled Explore Icon" />
         )}
       </StyledLink>
 
-      <StyledLink to={`/profile/${getAuth().currentUser!.uid}`}>
+      <StyledLink
+        to={`/profile/${getAuth().currentUser!.uid}`}
+        data-testid="Profile Link"
+      >
         {location.pathname.includes(
           `profile/${getAuth()!.currentUser!.uid}`
         ) ? (
-          <BsPersonFill />
+          <BsPersonFill data-testid="Filled Profile Icon" />
         ) : (
-          <BsPerson />
+          <BsPerson data-testid="Unfilled Profile Icon" />
         )}
       </StyledLink>
     </LinksContainer>
